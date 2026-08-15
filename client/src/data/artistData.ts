@@ -212,7 +212,13 @@ export const releases: readonly Track[] = [
   { id: "23", slug: "zyklus-der-gewalt-gym", title: "ZYKLUS DER GEWALT (GYM)", mood: "Iron / force", themes: ["Disziplin", "Kraft", "Kreislauf"], visualTheme: "strength", coverStyle: "track-gym", cover: originalCovers["23"], note: "Eisen, Atem, Wiederholung. Kein Werbeversprechen.", sunoId: "aa77f9ba-5263-454e-a263-c23e96a4b041" },
 ];
 
-export const discoveryPaths = [
+export type DiscoveryPath = {
+  label: string;
+  title: string;
+  trackSlug: string;
+};
+
+export const discoveryPaths: readonly DiscoveryPath[] = [
   { label: "Emotional", title: "Für den Moment, der hängen bleibt.", trackSlug: "dein-name-auf-nem-stein" },
   { label: "Dark", title: "Wenn die Rolle mehr Platz braucht als der Raum.", trackSlug: "maskenball" },
   { label: "Unfiltered", title: "Für den Blick hinter die glatte Oberfläche.", trackSlug: "ungefiltert" },
@@ -220,6 +226,34 @@ export const discoveryPaths = [
   { label: "Identity", title: "Für den Unterschied zwischen Spiegel und Gesicht.", trackSlug: "wer-bin-ich" },
   { label: "Drive", title: "Wenn Widerstand wieder nach vorne zieht.", trackSlug: "diamanten-im-staub" },
 ] as const;
+
+export const DISCOVERY_ROTATION_INTERVAL_MS = 10_000;
+export const DISCOVERY_SLOT_COUNT = 6;
+
+/**
+ * Creates a fresh six-track discovery edit. The previous six tracks are excluded when
+ * possible, so the next cut is visibly different and never repeats a card in the same grid.
+ */
+export function getRotatingDiscoveryPaths(
+  previousSlugs: readonly string[] = [],
+  random: () => number = Math.random,
+): readonly DiscoveryPath[] {
+  const previous = new Set(previousSlugs);
+  const candidates = releases.filter((track) => !previous.has(track.slug));
+  const source = candidates.length >= DISCOVERY_SLOT_COUNT ? candidates : releases;
+  const shuffled = [...source];
+
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const selectedIndex = Math.floor(random() * (index + 1));
+    [shuffled[index], shuffled[selectedIndex]] = [shuffled[selectedIndex]!, shuffled[index]!];
+  }
+
+  return shuffled.slice(0, DISCOVERY_SLOT_COUNT).map((track) => ({
+    label: track.mood.split("/")[0]!.trim().toUpperCase(),
+    title: track.note,
+    trackSlug: track.slug,
+  }));
+}
 
 export function getTrackBySlug(slug?: string) {
   return releases.find((track) => track.slug === slug);
