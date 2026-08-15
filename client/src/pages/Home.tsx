@@ -1,0 +1,365 @@
+/**
+ * NOIR CUT DESIGN REMINDER — Treat this page as a vertical film edit: black frames,
+ * high-contrast editorial typography, Cut Red registers, intentionally irregular pacing,
+ * and accessible motion that never obscures the artist or calls to action.
+ */
+
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import "../noirSequence.css";
+import {
+  ArrowDown,
+  ArrowUpRight,
+  Download,
+  Menu,
+  Plus,
+  X,
+} from "lucide-react";
+import { useEffect, useState } from "react";
+import { AlbumIntroPlayer } from "@/components/AlbumIntroPlayer";
+import { shouldShowIntroPreview } from "@/lib/introPreview";
+import { Marquee } from "@/components/Marquee";
+import { DiscoveryRail } from "@/components/DiscoveryRail";
+import { BookingForm } from "@/components/BookingForm";
+import { SectionLabel } from "@/components/SectionLabel";
+import { TrackDialog } from "@/components/TrackDialog";
+import { VideoDialog } from "@/components/VideoDialog";
+import {
+  assets,
+  artistProfile,
+  artistManifest,
+  booking,
+  featuredVisual,
+  gallery,
+  latestRelease,
+  pressKitItems,
+  primaryNav,
+  releases,
+  sitePath,
+  socialLinks,
+  visuals,
+} from "@/data/artistData";
+
+const reveal = {
+  hidden: { opacity: 0, y: 28 },
+  visible: { opacity: 1, y: 0 },
+};
+
+export default function Home() {
+  const reduceMotion = useReducedMotion();
+  const introPreview = typeof window !== "undefined" && shouldShowIntroPreview(window.location.search);
+  const [introVisible, setIntroVisible] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [headerSolid, setHeaderSolid] = useState(false);
+  const [notice, setNotice] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (introPreview || (!reduceMotion && window.sessionStorage.getItem("p34nuts-intro-seen") !== "true")) {
+      setIntroVisible(true);
+    }
+  }, [introPreview, reduceMotion]);
+
+  useEffect(() => {
+    if (!introVisible || introPreview) return;
+    const introTimer = window.setTimeout(() => {
+      window.sessionStorage.setItem("p34nuts-intro-seen", "true");
+      setIntroVisible(false);
+    }, 1250);
+    return () => window.clearTimeout(introTimer);
+  }, [introPreview, introVisible]);
+
+  useEffect(() => {
+    const scrollToHashTarget = () => {
+      const targetId = window.location.hash.slice(1);
+      if (!targetId || introVisible || !["send-the-frame", "social"].includes(targetId)) return;
+      window.requestAnimationFrame(() => {
+        document.getElementById(targetId)?.scrollIntoView({
+          behavior: reduceMotion ? "auto" : "smooth",
+          block: "start",
+        });
+      });
+    };
+
+    scrollToHashTarget();
+    window.addEventListener("hashchange", scrollToHashTarget);
+    return () => window.removeEventListener("hashchange", scrollToHashTarget);
+  }, [introVisible, reduceMotion]);
+
+  useEffect(() => {
+    const onScroll = () => setHeaderSolid(window.scrollY > 36);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [menuOpen]);
+
+  useEffect(() => {
+    if (!notice) return;
+    const timer = window.setTimeout(() => setNotice(null), 3600);
+    return () => window.clearTimeout(timer);
+  }, [notice]);
+
+  const showPlaceholder = (message: string) => setNotice(message);
+
+  const dismissIntro = () => {
+    window.sessionStorage.setItem("p34nuts-intro-seen", "true");
+    setIntroVisible(false);
+  };
+
+  return (
+    <div className="site-shell">
+      <AnimatePresence>
+        {introVisible && (
+          <motion.div
+            className="intro-screen"
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0, transition: { duration: 0.38 } }}
+          >
+            <div className="intro-mark"><img src={assets.mark} alt="" /></div>
+            <div className="intro-wordmark" aria-label="P34nuts"><span>P34</span><i>nuts</i></div>
+            <button type="button" onClick={dismissIntro}>SKIP INTRO</button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+        <a className="skip-link" href="#main-content">Zum Inhalt springen</a>
+        <header className={`site-header ${headerSolid || menuOpen ? "site-header-solid" : ""}`}>
+        <a href={sitePath("/")} className="brand-lockup brand-home-wordmark" aria-label="P34nuts, zur Startseite">
+          <img src={assets.headerWordmark} alt="P34nuts" />
+        </a>
+        <nav className="desktop-nav" aria-label="Hauptnavigation">
+          {primaryNav.map((item) => <a key={item.href} href={item.href}>{item.label}</a>)}
+        </nav>
+        <button type="button" className="menu-toggle" onClick={() => setMenuOpen((open) => !open)} aria-expanded={menuOpen} aria-controls="mobile-menu">
+          <span>{menuOpen ? "Close" : "Menu"}</span>{menuOpen ? <X size={19} /> : <Menu size={20} />}
+        </button>
+      </header>
+
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.nav
+            id="mobile-menu"
+            className="mobile-menu"
+            aria-label="Mobile Hauptnavigation"
+            initial={reduceMotion ? false : { opacity: 0, clipPath: "inset(0 0 100% 0)" }}
+            animate={{ opacity: 1, clipPath: "inset(0 0 0% 0)" }}
+            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, clipPath: "inset(0 0 100% 0)" }}
+            transition={{ duration: 0.46, ease: [0.77, 0, 0.175, 1] }}
+          >
+            <p>Navigate / P34nuts</p>
+            <div>
+              {primaryNav.map((item, index) => (
+                <a key={item.href} href={item.href} onClick={() => setMenuOpen(false)}>
+                  <span>0{index + 1}</span>{item.label}<ArrowUpRight size={22} />
+                </a>
+              ))}
+            </div>
+            <small>NO BOX. NO MASK. NO FILTER.</small>
+          </motion.nav>
+        )}
+      </AnimatePresence>
+
+      <main id="main-content">
+        <section className="hero" aria-labelledby="hero-title">
+          <motion.img
+            className="hero-image hero-depth-image hero-skyline-layer"
+            src={assets.hero}
+            alt="P34nuts in Rückenansicht vor einer regennassen Skyline bei Nacht"
+            fetchPriority="high"
+            initial={reduceMotion ? false : { opacity: 0, scale: 1.045 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: reduceMotion ? 0 : 1.9, delay: reduceMotion ? 0 : 1.15, ease: [0.23, 1, 0.32, 1] }}
+          />
+          <motion.img
+            className="hero-image hero-depth-image hero-subject-layer"
+            src={assets.hero}
+            alt=""
+            aria-hidden="true"
+            initial={reduceMotion ? false : { opacity: 0, y: 14, scale: 1.018 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: reduceMotion ? 0 : 0.46, delay: reduceMotion ? 0 : 0.08, ease: [0.23, 1, 0.32, 1] }}
+          />
+          <div className="hero-veil" aria-hidden="true" />
+          <div className="hero-register">00 / opening frame <span /></div>
+          <motion.div
+            className="hero-copy"
+            initial={reduceMotion ? false : { opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.62, delay: reduceMotion ? 0 : 0.22, ease: [0.23, 1, 0.32, 1] }}
+          >
+            <p className="eyebrow">Independent artist / music archive</p>
+            <h1 id="hero-title" className="hero-wordmark"><img src={assets.heroWordmark} alt="P34nuts" /></h1>
+            <p className="hero-line">Musik zwischen Maske, <i>Wahrheit und Frequenz.</i></p>
+            <a href="#start-here" className="hero-cta">START WITH MUSIC <ArrowDown size={17} /></a>
+          </motion.div>
+          <div className="hero-bottom"><span>Scroll to enter</span><span>01:01 / no autoplay</span></div>
+        </section>
+
+        <Marquee text="P34NUTS — NEW MUSIC — NO FILTER —" />
+
+        <section className="release-section section-wrap" id="release" aria-labelledby="release-title">
+          <SectionLabel index="01" label="Album intro / direct playback" />
+          <motion.div className="release-layout" initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.22 }} transition={{ staggerChildren: 0.1 }}>
+            <motion.div className="release-cover-wrap" variants={reveal} transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}>
+              <img src={assets.releaseCover} alt="P34nuts vor industrieller Kulisse bei dramatischem Himmel" className="release-cover" />
+              <span className="cover-stamp">ALBUM INTRO / AUDIO</span>
+            </motion.div>
+            <motion.div className="release-copy" variants={reveal} transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}>
+              <p className="eyebrow">{latestRelease.eyebrow}</p>
+              <h2 id="release-title">{latestRelease.title}</h2>
+              <div className="release-meta"><span>{latestRelease.artist}</span><span>{latestRelease.date}</span></div>
+              <p className="release-description">{latestRelease.description}</p>
+              <AlbumIntroPlayer src={assets.albumIntro} />
+            </motion.div>
+          </motion.div>
+        </section>
+
+        <DiscoveryRail />
+
+        <section className="statement-section" aria-label="Artist statement">
+          <div className="statement-rule" />
+          <p>Zwischen <em>Gefühl</em>, Systemtheorie<br />und Berliner <em>Alltag.</em></p>
+          <span className="statement-note">Kein Posen um des Posens willen: Haltung, Humor und das, was darunter liegt.</span>
+        </section>
+
+        <section className="manifest-section" aria-labelledby="manifest-title">
+          <div className="section-wrap manifest-layout">
+            <div className="manifest-intro"><p className="eyebrow">{artistManifest.eyebrow}</p><h2 id="manifest-title">NO BOX.<br /><em>NO MASK.</em><br />NO FILTER.</h2></div>
+            <div className="manifest-copy"><p>{artistManifest.lede}</p><ol>{artistManifest.principles.map((principle, index) => <li key={principle}><span>0{index + 1}</span>{principle}</li>)}</ol><a href={sitePath("/music")} className="text-link">ENTER THE ARCHIVE <ArrowUpRight size={14} /></a></div>
+          </div>
+        </section>
+
+        <section id="music" className="music-section section-wrap" aria-labelledby="music-title">
+          <SectionLabel index="02" label="Music / structure ready" align="right" />
+          <div className="section-heading split-heading">
+            <h2 id="music-title">ALL<br /><em>FRAMES.</em></h2>
+            <p>23 visuelle Trackkader: Jeder Song ist direkt als vollständige Suno-Version verfügbar – ohne Plattformwechsel.</p>
+          </div>
+          <div className="release-grid visual-discography">
+            {releases.map((release) => (
+              <TrackDialog key={release.id} track={release} onListenRequest={(track) => showPlaceholder(`${track.title}: Streaming-Link wird nach Bestätigung ergänzt.`)} />
+            ))}
+          </div>
+        </section>
+
+        <section className="featured-section" aria-labelledby="featured-title">
+          <img src={featuredVisual.poster} alt="" />
+          <div className="featured-veil" />
+          <div className="featured-caption">
+            <p className="eyebrow">Featured video / official upload</p>
+            <h2 id="featured-title">WATCH<br /><em>THE CUT.</em></h2>
+          </div>
+          <VideoDialog {...featuredVisual} className="featured-open" />
+        </section>
+
+        <section id="about" className="about-section section-wrap" aria-labelledby="about-title">
+          <SectionLabel index="03" label="About / Artist profile" />
+          <div className="about-layout">
+            <motion.h2 id="about-title" initial={reduceMotion ? false : { opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.4 }} transition={{ duration: 0.6 }}>NOT<br />A <em>NOISE.</em></motion.h2>
+            <figure className="about-visual"><img src={assets.mirror} alt="P34nuts im Studio mit konzentrierter, nachdenklicher Pose" loading="lazy" /><figcaption>WHO AM I / STUDIO STUDY</figcaption></figure>
+            <div className="about-copy">
+              <p className="about-lede">{artistProfile.intro}</p>
+              <p>{artistProfile.positioning}</p>
+              <div className="about-pillars" aria-label="Drei Säulen der Kunst von P34nuts">
+                {artistProfile.pillars.map((pillar, index) => <article key={pillar.title}><span>0{index + 1}</span><h3>{pillar.title}</h3><p>{pillar.text}</p></article>)}
+              </div>
+              <span className="draft-tag"><Plus size={13} /> ARTIST PROFILE / APPROVED</span>
+            </div>
+          </div>
+        </section>
+
+        <section className="contrast-section" aria-labelledby="contrast-title">
+          <div className="section-wrap contrast-layout">
+            <SectionLabel index="03.5" label="The contrast / human behind the mask" align="right" />
+            <div className="contrast-head"><h2 id="contrast-title">LOUD<br /><em>/ QUIET</em></h2><p>Haltung und Zweifel müssen nicht erklärt werden. Sie teilen sich einen Kader.</p></div>
+            <div className="contrast-frames"><figure><img src={assets.raw} alt="P34nuts neben einem Fahrzeug auf nasser Straße bei Nacht" loading="lazy" /><figcaption>PRESSURE / OUTSIDE</figcaption></figure><figure><img src={assets.human} alt="P34nuts in nach innen gerichteter Pose vor nächtlicher Stadt und Transit" loading="lazy" /><figcaption>TRUTH / INSIDE</figcaption></figure></div>
+          </div>
+        </section>
+
+        <Marquee text="THE NEXT FRAME IS ALREADY RUNNING —" reverse />
+
+        <section id="visuals" className="visuals-section section-wrap" aria-labelledby="visuals-title">
+          <SectionLabel index="04" label="Visual archive" align="right" />
+          <div className="section-heading compact-heading"><h2 id="visuals-title">VISUALS</h2><p>Offizielle Musikvideos als bewegte Kader. Der Player wird erst durch deinen Klick geladen und bleibt direkt in diesem Fenster.</p></div>
+          <div className="visual-grid">
+            {visuals.map((visual) => (
+              <VideoDialog key={visual.id} {...visual} className={visual.size} />
+            ))}
+          </div>
+        </section>
+
+        <section className="gallery-section" aria-labelledby="gallery-title">
+          <div className="section-wrap gallery-heading"><SectionLabel index="05" label="Image archive" /><h2 id="gallery-title">NO<br /><em>STATIC.</em></h2></div>
+          <div className="gallery-grid">
+            {gallery.map((image) => (
+              <figure className={image.className} key={image.id} data-frame={image.id}>
+                <img src={image.src} alt={image.caption} loading="lazy" />
+                <figcaption><span>{image.id}</span>{image.category} / {image.caption}</figcaption>
+              </figure>
+            ))}
+          </div>
+          <p className="gallery-note">Die ersten und nachfolgenden Bilder sind als austauschbare Bildslots angelegt. Das Hero-, Cover- und Portraitmotiv sind eigens für diesen Auftritt entwickelt.</p>
+        </section>
+
+        <section id="live" className="live-section section-wrap" aria-labelledby="live-title">
+          <img className="live-frame-art" src={assets.liveFrame} alt="" loading="lazy" />
+          <SectionLabel index="06" label="Live / announcements" />
+          <div className="live-layout">
+            <h2 id="live-title">LIVE<br /><em>FRAMES.</em></h2>
+            <div className="show-empty">
+              <span>NO DATES ANNOUNCED</span>
+              <p>No date stamp yet. Neue Städte, Venues und Ticketlinks erscheinen erst, wenn der Termin wirklich steht.</p>
+              <button type="button" onClick={() => showPlaceholder("Aktuell sind keine bestätigten Shows hinterlegt.")}>GET SHOW UPDATES <ArrowUpRight size={16} /></button>
+            </div>
+          </div>
+        </section>
+
+        <section id="contact" className="contact-section" aria-labelledby="contact-title">
+          <div className="section-wrap contact-layout">
+            <SectionLabel index="07" label="Contact / booking + social" />
+            <div className="contact-headline"><h2 id="contact-title">BOOK<br /><em>/ FOLLOW.</em></h2><p>Für Live-Bookings, Kollaborationen und Business-Anfragen. Ein direkter Kontaktweg und die offiziellen Kanäle – ohne Umwege.</p></div>
+            <div className="contact-grid">
+              <article className="booking-panel">
+                <img className="booking-panel-art" src={assets.bookingStage} alt="" loading="lazy" />
+                <p className="contact-kicker">Direct booking / email</p>
+                <h3>MAKE<br /><em>CONTACT.</em></h3>
+                <a href={`mailto:${booking.email}?subject=Booking-Anfrage%20P34nuts`} className="booking-mail"><span>{booking.email}</span><ArrowUpRight size={23} /></a>
+                <p>{booking.note}</p>
+              </article>
+              <article id="social" className="social-contact-panel">
+                <p className="contact-kicker">Official channels / 03</p>
+                <h3>FIND THE<br /><em>SIGNAL.</em></h3>
+                <div className="contact-social-list">
+                  {socialLinks.map((item, index) => <a key={item.label} href={item.href} target="_blank" rel="noreferrer"><span>0{index + 1}</span><strong>{item.label}</strong><small>{item.detail}</small><ArrowUpRight size={17} /></a>)}
+                </div>
+              </article>
+            </div>
+            <BookingForm recipient={booking.email} />
+          </div>
+        </section>
+
+        <section className="press-section section-wrap" aria-labelledby="press-title">
+          <div className="press-box">
+            <img className="press-frame-art" src={assets.pressFrame} alt="" loading="lazy" />
+            <div><p className="eyebrow">Press / epk archive</p><h2 id="press-title">PRESS<br /><em>KIT.</em></h2></div>
+            <div className="press-content"><p>Die EPK-Struktur ist vorbereitet. Eine Datei wird erst verlinkt, wenn die finalen Materialien vorhanden sind.</p><div className="press-items">{pressKitItems.map((item) => <span key={item}>{item}</span>)}</div><a href={sitePath("/press")}>OPEN PRESS FRAME <Download size={15} /></a></div>
+          </div>
+        </section>
+      </main>
+
+      <footer className="site-footer">
+        <div className="footer-wordmark"><img src={assets.mark} alt="P34nuts" /></div>
+        <div className="footer-meta"><strong>NO BOX. NO MASK. NO FILTER.</strong><span>© {new Date().getFullYear()} P34nuts / official digital home</span></div>
+        <div className="footer-legal"><a href={sitePath("/music")}>Music</a><a href={sitePath("/booking")}>Booking</a><a href={sitePath("/press")}>Press</a><a href={sitePath("/impressum")}>Impressum</a><a href={sitePath("/datenschutz")}>Datenschutz</a></div>
+      </footer>
+
+      <AnimatePresence>
+        {notice && <motion.div className="notice" role="status" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 12 }}>{notice}<button type="button" onClick={() => setNotice(null)} aria-label="Hinweis schließen"><X size={15} /></button></motion.div>}
+      </AnimatePresence>
+    </div>
+  );
+}
