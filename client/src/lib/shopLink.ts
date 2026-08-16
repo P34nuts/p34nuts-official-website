@@ -18,3 +18,4 @@ function getConfiguredShopHref(): string {
  * switch every navigation surface by providing an HTTPS VITE_SHOP_URL.
  */
 export const shopHref = getConfiguredShopHref();
+export const isExternalShopHref = shopHref !== fallbackShopHref;

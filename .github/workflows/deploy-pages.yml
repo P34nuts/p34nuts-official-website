@@ -36,6 +36,7 @@ jobs:
         env:
           VITE_BASE_PATH: /${{ github.event.repository.name }}/
           VITE_TRPC_API_ORIGIN: https://p34nutsart-jjmeco2k.manus.space
+          VITE_SHOP_URL: https://p34nuts-merch-store.onrender.com/shop
           GITHUB_PAGES_SITE_ORIGIN: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
         run: pnpm build:github-pages && cp dist/public/index.html dist/public/404.html
       - name: Upload Pages artifact
