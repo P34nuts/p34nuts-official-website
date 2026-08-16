@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { Link } from "wouter";
 import { assets, booking } from "@/data/artistData";
 
-type InfoKind = "booking" | "press" | "impressum" | "datenschutz";
+type InfoKind = "booking" | "press" | "shop" | "impressum" | "datenschutz";
 type InfoSection = { heading: string; copy: string; value?: string };
 type InfoContent = { label: string; title: string; copy: string; action: string; href?: string; notice?: string; sections?: InfoSection[] };
 
@@ -21,6 +21,17 @@ export const infoPageContent: Record<InfoKind, InfoContent> = {
     title: "THE PRESS\nFRAME IS\nREADY.",
     copy: "Bildwelt, Basisinformationen und ein Downloadbereich sind vorbereitet. Ein EPK wird erst nach Freigabe verlinkt.",
     action: "EPK / IN FREIGABE",
+  },
+  shop: {
+    label: "Merch / independent storefront",
+    title: "NO//SIGNAL\nMERCH\nARCHIVE.",
+    copy: "Der P34nuts-Merch-Shop wird als eigenständige Storefront betrieben. Dieser Einstieg bleibt Teil des Artist-Universums, während Katalog, Warenkorb, Bestellungen und Fulfillment technisch getrennt und abgesichert laufen.",
+    action: "BACK TO HOME",
+    sections: [
+      { heading: "Storefront", copy: "Die Shopanwendung erhält einen eigenen serverfähigen Betrieb. Dadurch bleiben der Artist-Auftritt, die Musikarchive und die Commerce-Prozesse voneinander getrennt." },
+      { heading: "Katalog", copy: "Caps, T-Shirts und Hoodies werden über die eigenständige Merch-Storefront bereitgestellt. Der sichtbare SHOP-Einstieg auf dieser Website bleibt der direkte Zugangspunkt zur Kollektion." },
+      { heading: "Checkout", copy: "Der Kaufstart erfolgt erst nach abgeschlossener Shop-Bereitstellung sowie geprüfter Zahlungs- und Fulfillment-Konfiguration. Bis dahin werden keine Zahlungs- oder Bestelldaten über die Künstlerhomepage verarbeitet." },
+    ],
   },
   impressum: {
     label: "Legal / Angaben ergänzen",
@@ -53,7 +64,7 @@ export const infoPageContent: Record<InfoKind, InfoContent> = {
 
 export default function InfoPage({ kind }: { kind: InfoKind }) {
   const page = infoPageContent[kind];
-  const hasPortrait = kind === "booking";
+  const hasPortrait = kind === "booking" || kind === "shop";
 
   useEffect(() => {
     document.title = `${page.label} — P34nuts`;

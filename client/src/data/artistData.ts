@@ -3,6 +3,8 @@
  * Confirmed URLs and legal data remain intentionally empty until supplied by the artist.
  */
 
+import { shopHref } from "@/lib/shopLink";
+
 export const sitePath = (path: string) => `${import.meta.env.BASE_URL.replace(/\/$/, "")}${path}`;
 
 const masterAsset = (path: string) => sitePath(path);
@@ -81,6 +83,7 @@ export const originalCovers = {
 
 export const primaryNav = [
   { label: "Music", href: sitePath("/music") },
+  { label: "Shop", href: shopHref },
   { label: "Visuals", href: sitePath("/#visuals") },
   { label: "About", href: sitePath("/#about") },
   { label: "Booking", href: sitePath("/booking") },

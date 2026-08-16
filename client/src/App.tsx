@@ -31,6 +31,7 @@ function Router() {
           <Route path="/" component={Home} />
           <Route path="/music"><Suspense fallback={<RouteFallback />}><MusicLanding /></Suspense></Route>
           <Route path="/music/:slug"><Suspense fallback={<RouteFallback />}><TrackDetail /></Suspense></Route>
+          <Route path="/shop"><Suspense fallback={<RouteFallback />}><InfoPage kind="shop" /></Suspense></Route>
           <Route path="/booking"><Suspense fallback={<RouteFallback />}><InfoPage kind="booking" /></Suspense></Route>
           <Route path="/press"><Suspense fallback={<RouteFallback />}><InfoPage kind="press" /></Suspense></Route>
           <Route path="/impressum"><Suspense fallback={<RouteFallback />}><InfoPage kind="impressum" /></Suspense></Route>

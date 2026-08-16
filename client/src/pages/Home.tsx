@@ -17,6 +17,7 @@ import {
 import { useEffect, useState } from "react";
 import { AlbumIntroPlayer } from "@/components/AlbumIntroPlayer";
 import { shouldShowIntroPreview } from "@/lib/introPreview";
+import { shopHref } from "@/lib/shopLink";
 import { Marquee } from "@/components/Marquee";
 import { DiscoveryRail } from "@/components/DiscoveryRail";
 import { BookingForm } from "@/components/BookingForm";
@@ -354,7 +355,7 @@ export default function Home() {
       <footer className="site-footer">
         <div className="footer-wordmark"><img src={assets.mark} alt="P34nuts" /></div>
         <div className="footer-meta"><strong>NO BOX. NO MASK. NO FILTER.</strong><span>© {new Date().getFullYear()} P34nuts / official digital home</span></div>
-        <div className="footer-legal"><a href={sitePath("/music")}>Music</a><a href={sitePath("/booking")}>Booking</a><a href={sitePath("/press")}>Press</a><a href={sitePath("/impressum")}>Impressum</a><a href={sitePath("/datenschutz")}>Datenschutz</a></div>
+        <div className="footer-legal"><a href={sitePath("/music")}>Music</a><a href={shopHref}>Shop</a><a href={sitePath("/booking")}>Booking</a><a href={sitePath("/press")}>Press</a><a href={sitePath("/impressum")}>Impressum</a><a href={sitePath("/datenschutz")}>Datenschutz</a></div>
       </footer>
 
       <AnimatePresence>
