@@ -30,7 +30,7 @@ jobs:
           
           rsync -a --delete --exclude=.git --exclude=.github --exclude=.manus --exclude=node_modules --exclude=dist --exclude=github-pages-media --exclude='.env*' /tmp/i/official/ ./
           
-          unzip -q /tmp/m -d .
+          unzip -qo /tmp/m -d .
           
           git config user.name import; git config user.email import@users.noreply.github.com
           
