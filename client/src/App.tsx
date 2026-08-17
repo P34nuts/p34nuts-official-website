@@ -18,6 +18,7 @@ const InfoPage = lazy(() => import("@/pages/InfoPage"));
 const MusicLanding = lazy(() => import("@/pages/MusicLanding"));
 const ShopRedirect = lazy(() => import("@/pages/ShopRedirect"));
 const TrackDetail = lazy(() => import("@/pages/TrackDetail"));
+const Admin = lazy(() => import("@/pages/Admin"));
 
 function RouteFallback() {
   return <main className="route-fallback" aria-live="polite">LOADING / NEXT FRAME</main>;
@@ -33,6 +34,7 @@ function Router() {
           <Route path="/music"><Suspense fallback={<RouteFallback />}><MusicLanding /></Suspense></Route>
           <Route path="/music/:slug"><Suspense fallback={<RouteFallback />}><TrackDetail /></Suspense></Route>
           <Route path="/shop"><Suspense fallback={<RouteFallback />}><ShopRedirect /></Suspense></Route>
+          <Route path="/admin"><Suspense fallback={<RouteFallback />}><Admin /></Suspense></Route>
           <Route path="/booking"><Suspense fallback={<RouteFallback />}><InfoPage kind="booking" /></Suspense></Route>
           <Route path="/press"><Suspense fallback={<RouteFallback />}><InfoPage kind="press" /></Suspense></Route>
           <Route path="/impressum"><Suspense fallback={<RouteFallback />}><InfoPage kind="impressum" /></Suspense></Route>

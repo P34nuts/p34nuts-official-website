@@ -1,4 +1,4 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import { int, mysqlEnum, mysqlTable, primaryKey, text, timestamp, varchar } from "drizzle-orm/mysql-core";
 
 /**
  * Core user table backing auth flow.
@@ -44,6 +44,46 @@ export const bookingSubmissions = mysqlTable("booking_submissions", {
 
 export type BookingSubmission = typeof bookingSubmissions.$inferSelect;
 export type InsertBookingSubmission = typeof bookingSubmissions.$inferInsert;
+
+export const guestbookEntries = mysqlTable("guestbook_entries", {
+  id: int("id").autoincrement().primaryKey(),
+  message: varchar("message", { length: 600 }).notNull(),
+  status: mysqlEnum("status", ["pending", "approved", "rejected"]).default("pending").notNull(),
+  heartCount: int("heart_count").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  moderatedAt: timestamp("moderated_at"),
+});
+
+export type GuestbookEntry = typeof guestbookEntries.$inferSelect;
+export type InsertGuestbookEntry = typeof guestbookEntries.$inferInsert;
+
+export const siteSettings = mysqlTable("site_settings", {
+  key: varchar("key", { length: 64 }).primaryKey(),
+  value: text("value").notNull(),
+  updatedBy: int("updated_by").notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(),
+});
+
+export type SiteSetting = typeof siteSettings.$inferSelect;
+export type InsertSiteSetting = typeof siteSettings.$inferInsert;
+
+export const guestbookHearts = mysqlTable("guestbook_hearts", {
+  entryId: int("entry_id").notNull(),
+  fingerprint: varchar("fingerprint", { length: 64 }).notNull(),
+}, table => ({
+  primaryKey: primaryKey({ columns: [table.entryId, table.fingerprint] }),
+}));
+
+export const guestbookReactions = mysqlTable("guestbook_reactions", {
+  entryId: int("entry_id").notNull(),
+  reaction: mysqlEnum("reaction", ["heart", "love", "laugh", "fire", "thumbsUp", "wow", "sad"]).notNull(),
+  fingerprint: varchar("fingerprint", { length: 64 }).notNull(),
+}, table => ({
+  primaryKey: primaryKey({ columns: [table.entryId, table.reaction, table.fingerprint] }),
+}));
+
+export type GuestbookReaction = typeof guestbookReactions.$inferSelect;
+export type InsertGuestbookReaction = typeof guestbookReactions.$inferInsert;
 
 /**
  * Stores only a salted, irreversible booking-request fingerprint. It allows the

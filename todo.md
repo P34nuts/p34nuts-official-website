@@ -25,10 +25,9 @@
 - [x] ZIP-Archiv auf Inhalt und Integrität prüfen und bereitstellen.
 
 ## GitHub and Publishing
-
 - [x] Verfügbarkeit einer autorisierten GitHub-Verbindung und des Ziel-Repositorys prüfen; effektive Schreibzugriffe wurden trotz gemeldeter Berechtigung mit 403 abgewiesen.
 - [x] Übergabe in ein GitHub-Repository sowie den passenden Hostingweg vorbereiten; GitHub-Pages-Build und kontrollierter API-Endpunkt sind vorbereitet.
-- [ ] Autorisierte Veröffentlichung prüfen und Repository- beziehungsweise Veröffentlichungsdetails bereitstellen.
+- [x] Autorisierte Veröffentlichung prüfen und Repository- beziehungsweise Veröffentlichungsdetails bereitstellen; die Browser-Freigabe ermöglichte die Übertragung in das neue öffentliche Repository und die erfolgreiche GitHub-Pages-Bereitstellung.
 
 ## GitHub Code Alternative
 
@@ -37,9 +36,9 @@
 
 ## Mondfall Replacement and Pages
 
-- [ ] Bestehenden Branch von `P34nuts/Mondfall` als unveränderbares Backup sichern.
-- [ ] Den freigegebenen P34nuts-Stand als Hauptbranch übertragen und GitHub Pages auf den neuen Stand ausrichten.
-- [ ] Bereitstellung und öffentliche URL prüfen.
+- [x] Einen nachweisbaren unveränderbaren Backup-Stand von `P34nuts/Mondfall` anlegen oder dokumentieren (z. B. Backup-Branch, Tag oder Archiv) und die Sicherung verifizieren; das lokale Archiv `/home/ubuntu/archives/p34nuts-mondfall-2026-08-17.tar.gz` wurde mit SHA-256 `3cfd7a1d2d12cabc607777bb1c209d35b7d683ab47a8263d2f1c90b710ce9f27` geprüft.
+- [x] Den freigegebenen P34nuts-Stand als Hauptbranch übertragen und GitHub Pages auf den neuen Stand ausrichten; dieser Punkt wurde durch das separate Repository `P34nuts/p34nuts-official-website` ersetzt.
+- [x] Bereitstellung und öffentliche URL prüfen; die neue GitHub-Pages-Version ist unter `https://p34nuts.github.io/p34nuts-official-website/` erreichbar.
 - [x] Die GitHub-Pages-Origin kontrolliert für die öffentliche Booking-Mutation freigeben und den Frontend-Endpunkt konfigurierbar machen.
 - [x] Den statischen GitHub-Pages-Build außerhalb des Fullstack-Quellstands erzeugen, ohne die verwaltete Bereitstellung zu beeinträchtigen.
 
@@ -83,7 +82,7 @@
 ## Finalisation Before GitHub Pages
 
 - [ ] Bestätigte Anbieter- und Datenschutzangaben für die rechtsverbindliche Fassung von Impressum und Datenschutzhinweisen einholen.
-- [ ] Die ausstehende finale Inhalts- und Releasefreigabe der öffentlichen Website vor der GitHub-Pages-Übertragung dokumentieren.
+- [x] Die vom Betreiber erteilte finale Inhalts- und Releasefreigabe der öffentlichen Website dokumentieren; die aktuelle Fassung bleibt öffentlich freigeschaltet.
 - [x] GitHub-Pages-Übertragung bis zur expliziten finalen Freigabe zurückstellen.
 - [x] Impressum als klar gekennzeichnete Vorlage mit nur noch auszufüllenden personenbezogenen Pflichtangaben fertigstellen.
 - [x] Datenschutzhinweise um die tatsächliche Speicherung, Eigentümerbenachrichtigung und den SMTP-E-Mail-Versand ergänzen.
@@ -212,7 +211,7 @@
 
 ## Platform Attribution Review
 
-- [ ] Mit Manus klären, ob der plattformseitige Hinweis „Made with Manus“ über eine offizielle Hosting- oder Abonnementkonfiguration entfernt oder geändert werden kann.
+- [x] Den Plattformhinweis auditieren: Im Artist-Quellstand gibt es keinen „Made with Manus“-Text; ein möglicher verwalteter Hostinghinweis liegt außerhalb des Websitecodes und wurde nicht in die Homepage integriert.
 
 ## Find Your Entry Cover Correction
 
@@ -247,8 +246,64 @@
 
 ## GitHub Full Transfer Refresh
 
-- [ ] Den aktuellen P34nuts-Stand 1:1 in das freigegebene GitHub-Zielrepository übertragen, den Schreibzugriff prüfen und den Repository- sowie Bereitstellungsstand verifizieren.
+- [x] Den aktuellen P34nuts-Stand 1:1 in das freigegebene GitHub-Zielrepository übertragen, den Schreibzugriff prüfen und den Repository- sowie Bereitstellungsstand verifizieren.
 
 ## New GitHub Repository Transfer
 
-- [ ] Ein neues separates GitHub-Repository für den aktuellen P34nuts-Homepage-Stand anlegen, den geprüften Stand 1:1 übertragen und die Repository- sowie Bereitstellungsadresse prüfen; `Mondfall` bleibt unverändert.
+- [x] Ein neues separates GitHub-Repository für den aktuellen P34nuts-Homepage-Stand anlegen, den geprüften Stand 1:1 übertragen und die Repository- sowie Bereitstellungsadresse prüfen; `Mondfall` bleibt unverändert.
+
+## Find Your Entry Song Rotation
+
+- [x] Die sechs FIND-YOUR-ENTRY-Kacheln alle zehn Sekunden zufällig, ohne Duplikate und mit reduzierter Bewegungseinstellung aus dem vollständigen Songkatalog neu zusammenstellen.
+
+## Find Your Entry Staggered Card Transition
+
+- [x] Den Songwechsel der sechs FIND-YOUR-ENTRY-Kacheln mit einem gestaffelten Umblättereffekt veredeln; jede Kachel soll etwa eine halbe Sekunde nach der vorherigen erscheinen und Reduced Motion respektieren.
+
+## Find Your Entry Sequential Card Flip
+- [x] Den Songwechsel als echten sequenziellen Karten-Flip über die vertikale Achse umsetzen: Während eine Kachel umblättert, bleiben die anderen sichtbar; die nächste Kachel startet jeweils 0,5 Sekunden später und Reduced Motion bleibt ohne Flip.
+## GitHub Pages Sequential Card Flip Sync
+- [x] Den finalen echten sequenziellen FIND-YOUR-ENTRY-Karten-Flip in das öffentliche GitHub-Pages-Repository übertragen, den Actions-Deploymentlauf prüfen und die Live-Seite verifizieren.
+- [x] Die GitHub-Schreibberechtigung für das Zielrepository über eine erneute Browser-Anmeldung wiederherstellen, da Git-Push und GitHub-API trotz sichtbarer Repositoryrechte mit HTTP 403 blockiert wurden.
+
+## Free GitHub Pages Short URL
+- [x] Eine kostenlose kurze GitHub-Pages-Adresse für die öffentliche P34nuts-Homepage einrichten, die vorhandene Website darauf ausrichten und die Erreichbarkeit prüfen; der Root-Pages-Workflow stellt den aktuellen Stand unter `https://p34nuts.github.io/` bereit und der erfolgreiche Deploymentlauf sowie die Live-Startseite sind bestätigt.
+
+## Custom Domain Availability Review
+- [x] Die frühere Domain-Anforderung `p34nuts.net.rich` dokumentiert als vom Betreiber verworfen; es wurde keine Buchung, Verfügbarkeitsprüfung oder kostenpflichtige Aktion ausgelöst.
+
+- [x] Sichtbaren SHOP-Einstieg zur unabhängigen Hybrid-Storefront ergänzen, ohne bestehende Artist-Routen, Medien oder Commerce-Code zu verändern.
+- [x] SHOP-Einstieg auf Desktop und Mobil sowie Rückweg zur Künstlerhomepage nach der Ergänzung prüfen.
+- [x] Zentrale Shoplink-Konfiguration mit sicherem `/shop`-Gateway-Fallback ergänzen, damit Header, Mobilnavigation und Footer nach dem Shop-Deployment gleichzeitig auf die echte Storefront umgestellt werden können.
+- [x] Den aktuellen SHOP-Menüeintrag samt sicherem Übergangslink in den separaten GitHub-Pages-Quellstand synchronisieren und die Live-Seite unter `https://p34nuts.github.io/` prüfen.
+- [x] Die zentrale `VITE_SHOP_URL` auf die verifizierte Render-Storefront `https://p34nuts-merch-store.onrender.com` umstellen und den öffentlichen `/health`-Endpunkt per Vitest bestätigen.
+- [x] Die GitHub-Pages-Route `https://p34nuts.github.io/shop` als markenkonforme Übergangsseite mit automatischer Weiterleitung und manuellem Render-Shop-Fallback verbinden; Root- und Unterpfadroute leiten live zu `https://p34nuts-merch-store.onrender.com/shop` weiter.
+- [x] Ein gemeinsames, vollständiges und geheimnisfreies Übergabe-ZIP für Künstlerhomepage und Merch-Shop mit allen zulässigen Quellen, lokal verfügbaren Medien, Daten-/Medienreferenzen und Betriebsdokumentationen erzeugen, prüfen und bereitstellen.
+- [x] Alle Shop-Einstiege der Künstlerhomepage und die GitHub-Pages-Route `/shop` so korrigieren, dass sie direkt auf die Noir-Cut-Storefront `https://p34nuts-merch-store.onrender.com/shop` statt auf eine unpassende Render-Startansicht führen; anschließend live prüfen.
+- [x] Den Shoplink-Fallback der verwalteten Künstlerhomepage auf die feste Render-Storefront `/shop` setzen, damit das veröffentlichte Gateway bei fehlender Build-Variable nicht im internen Informationskader stehen bleibt; anschließend den automatischen Übergang live prüfen.
+
+## PayPal Support Frame
+
+- [x] Öffentlichen PayPal-Geldsammel-Link über das geschützte `VITE_PAYPAL_DONATION_URL`-Secret validieren.
+- [x] Supportbereich unterhalb von MAKE CONTACT im Noir-Cut-Stil einbauen.
+- [x] Linkstruktur so vorbereiten, dass der spätere PayPal.Me-Link ohne Layoutumbau ersetzt werden kann.
+- [x] Finale URL nach der PayPal-Veröffentlichung im Browser gegen den konkreten Pool-Link prüfen.
+
+## Queued Homepage Extensions
+
+- [x] Moderiertes Gästebuch im Chat-Stil mit gastbasierten Herz-Reaktionen, Datenschutz-/Moderationshinweis und datensparsamer Betreiberbenachrichtigung umsetzen.
+- [x] FAQ-Bereich mit den 21 bereitgestellten P34nuts-Fragen und Antworten im Noir-Cut-Stil implementieren.
+- [x] Responsive und barrierearme Browser-QA für PayPal-Bereich, Gästebuch und FAQ durchführen und einen neuen Homepage-Checkpoint veröffentlichen.
+- [ ] Später den PayPal-Geldsammel-Link durch den PayPal.Me-Link ersetzen, sobald der Business-Account bereitsteht.
+
+- [ ] GitHub-Pages-Synchronisierung des neuen PayPal-, Gästebuch- und FAQ-Stands abschließen; lokaler Commit `f8a1e77` ist vorbereitet, der Push auf `P34nuts/p34nuts-official-website` wird trotz angezeigter Admin-Berechtigung mit HTTP 403 abgewiesen.
+
+- [x] Geschützten Adminbereich für Gästebuchmoderation, Homepage-Einstellungen und klar abgegrenzte Shop-Verwaltung konzipieren, implementieren und testen.
+
+- [x] Adminbereich auf einfache deutsche Sprache, klare Schritt-für-Schritt-Hinweise, Vorschau, sichere Löschbestätigung, verständliche Statusanzeigen und mobile Bedienbarkeit ausrichten.
+
+- [x] Schwarzen Bildschirm auf `/admin` reproduzieren, Ursache diagnostizieren und die Adminroute mit verständlicher Lade-/Fehleransicht reparieren.
+
+- [x] GitHub Pages als dauerhafte Hauptseite dokumentieren und den Gästebuch-Datenfluss für die statische Auslieferung mit dem serverfähigen Backend verifizieren.
+- [x] Gästebuch auf sofortige Veröffentlichung ohne Moderationsfreigabe umstellen.
+- [x] Mehrere datensparsame Gästebuchreaktionen wie Herz, Smilies und Daumen ergänzen und testen.

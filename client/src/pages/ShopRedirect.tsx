@@ -2,18 +2,13 @@ import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { useEffect } from "react";
 import { Link } from "wouter";
 import { assets } from "@/data/artistData";
-import { isExternalShopHref, shopHref } from "@/lib/shopLink";
+import { shopHref } from "@/lib/shopLink";
 
 const redirectDelayMs = 1200;
 
-/**
- * A branded handoff between the static artist site and the isolated commerce app.
- * The fallback remains inert when no trusted external shop URL was built in.
- */
+/** A brief Noir-Cut transition before the independent server storefront opens. */
 export default function ShopRedirect() {
   useEffect(() => {
-    if (!isExternalShopHref) return;
-
     const timeout = window.setTimeout(() => {
       window.location.replace(shopHref);
     }, redirectDelayMs);
@@ -34,11 +29,7 @@ export default function ShopRedirect() {
           <p className="eyebrow">Merch / independent storefront</p>
           <h1><span>NO//SIGNAL<br /></span><span>MERCH<br /></span><span>ARCHIVE.</span></h1>
           <p>Der Merch-Store öffnet in einem eigenen, serverfähigen Frame. Katalog, Warenkorb und spätere Bestellprozesse bleiben technisch vom Artist-Archiv getrennt.</p>
-          {isExternalShopHref ? (
-            <p className="info-page-notice" aria-live="polite">SHOP-SIGNAL AKTIV. Die Storefront öffnet automatisch.</p>
-          ) : (
-            <p className="info-page-notice">Die Storefront wird vorbereitet. Dieser sichere Übergang bleibt auf der Artist-Seite, bis eine externe Shopadresse hinterlegt ist.</p>
-          )}
+          <p className="info-page-notice" aria-live="polite">SHOP-SIGNAL AKTIV. Die Storefront öffnet automatisch.</p>
           <a href={shopHref} className="info-page-action">SHOP JETZT ÖFFNEN <ArrowUpRight size={17} /></a>
         </div>
       </section>

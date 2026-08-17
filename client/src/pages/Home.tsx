@@ -9,9 +9,17 @@ import "../noirSequence.css";
 import {
   ArrowDown,
   ArrowUpRight,
+  ChevronDown,
   Download,
+  Flame,
+  Frown,
+  Heart,
+  Laugh,
   Menu,
   Plus,
+  Send,
+  Sparkles,
+  ThumbsUp,
   X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -24,6 +32,8 @@ import { BookingForm } from "@/components/BookingForm";
 import { SectionLabel } from "@/components/SectionLabel";
 import { TrackDialog } from "@/components/TrackDialog";
 import { VideoDialog } from "@/components/VideoDialog";
+import { trpc } from "@/lib/trpc";
+import { faqItems } from "@/data/faqData";
 import {
   assets,
   artistProfile,
@@ -45,6 +55,17 @@ const reveal = {
   visible: { opacity: 1, y: 0 },
 };
 
+const paypalDonationUrl = import.meta.env.VITE_PAYPAL_DONATION_URL as string | undefined;
+const guestbookReactions = [
+  { key: "heart", label: "Herz", symbol: "♥", Icon: Heart },
+  { key: "love", label: "Liebe", symbol: "❤", Icon: Sparkles },
+  { key: "laugh", label: "Lachen", symbol: "☺", Icon: Laugh },
+  { key: "fire", label: "Feuer", symbol: "🔥", Icon: Flame },
+  { key: "thumbsUp", label: "Daumen hoch", symbol: "👍", Icon: ThumbsUp },
+  { key: "wow", label: "Wow", symbol: "✦", Icon: Sparkles },
+  { key: "sad", label: "Berührt", symbol: "☹", Icon: Frown },
+] as const;
+
 export default function Home() {
   const reduceMotion = useReducedMotion();
   const introPreview = typeof window !== "undefined" && shouldShowIntroPreview(window.location.search);
@@ -52,6 +73,28 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [headerSolid, setHeaderSolid] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
+  const [guestbookMessage, setGuestbookMessage] = useState("");
+  const [guestbookWebsite, setGuestbookWebsite] = useState("");
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const trpcUtils = trpc.useUtils();
+  const guestbookQuery = trpc.guestbook.list.useQuery();
+  const settingsQuery = trpc.settings.public.useQuery();
+  const publicSettings = settingsQuery.data ?? [];
+  const publicSupportUrl = publicSettings.find(item => item.key === "supportUrl")?.value || paypalDonationUrl;
+  const announcementEnabled = publicSettings.find(item => item.key === "announcementEnabled")?.value === "true";
+  const announcementText = publicSettings.find(item => item.key === "announcementText")?.value;
+  const submitGuestbook = trpc.guestbook.submit.useMutation({
+    onSuccess: () => {
+      setGuestbookMessage("");
+      setGuestbookWebsite("");
+      setNotice("Danke. Dein Eintrag ist jetzt sichtbar.");
+    },
+    onError: error => setNotice(error.message),
+  });
+  const reactGuestbook = trpc.guestbook.react.useMutation({
+    onSuccess: () => trpcUtils.guestbook.list.invalidate(),
+    onError: error => setNotice(error.message),
+  });
 
   useEffect(() => {
     if (introPreview || (!reduceMotion && window.sessionStorage.getItem("p34nuts-intro-seen") !== "true")) {
@@ -319,6 +362,8 @@ export default function Home() {
           </div>
         </section>
 
+      {announcementEnabled && announcementText ? <div className="section-wrap" role="status"><div className="rounded-sm border border-red-400/40 bg-red-950/20 px-5 py-4 text-sm text-white">{announcementText}</div></div> : null}
+
         <section id="contact" className="contact-section" aria-labelledby="contact-title">
           <div className="section-wrap contact-layout">
             <SectionLabel index="07" label="Contact / booking + social" />
@@ -339,7 +384,69 @@ export default function Home() {
                 </div>
               </article>
             </div>
+            <article className="donation-panel" aria-labelledby="donation-title">
+              <div className="donation-panel-copy">
+                <SectionLabel index="07.1" label="Support / independent release" />
+                <p className="contact-kicker">Keep the signal alive</p>
+                <h3 id="donation-title">SUPPORT<br /><em>THE FRAME.</em></h3>
+              </div>
+              <div className="donation-panel-action">
+                <p>Neue Musik braucht Zeit, Energie und viele Nächte. Wenn dir P34nuts etwas gibt, kannst du die nächsten Releases freiwillig unterstützen. Jeder Beitrag hilft, neue Tracks und Visuals unabhängig zu realisieren – danke für deinen Support.</p>
+                {publicSupportUrl ? (
+                  <a className="donation-link" href={publicSupportUrl} target="_blank" rel="noreferrer" data-paypal-donation-link>
+                    <span>GELD SAMMELN / PAYPAL</span><ArrowUpRight size={20} />
+                  </a>
+                ) : (
+                  <button className="donation-link donation-link-disabled" type="button" onClick={() => showPlaceholder("Der PayPal-Link wird gerade vorbereitet.")}>PAYPAL LINK FOLGT <ArrowUpRight size={20} /></button>
+                )}
+                <small>Freiwillige Unterstützung über PayPal. Kein Kauf und keine Gegenleistung erforderlich.</small>
+              </div>
+            </article>
             <BookingForm recipient={booking.email} />
+          </div>
+        </section>
+
+        <section id="guestbook" className="guestbook-section section-wrap" aria-labelledby="guestbook-title">
+          <SectionLabel index="08" label="Guestbook / moderated signal" />
+          <div className="guestbook-heading">
+            <div><p className="eyebrow">Leave a trace / no registration</p><h2 id="guestbook-title">SIGN<br /><em>THE WALL.</em></h2></div>
+            <p>Hinterlasse etwas Nettes. Neue Einträge werden direkt sichtbar. Du brauchst dafür kein Konto; Reaktionen sind ebenfalls ohne Registrierung möglich.</p>
+          </div>
+          <div className="guestbook-layout">
+            <div className="guestbook-stream" aria-live="polite">
+              {guestbookQuery.isLoading && <p className="guestbook-state">Lade veröffentlichte Einträge …</p>}
+              {!guestbookQuery.isLoading && guestbookQuery.data?.length === 0 && <p className="guestbook-state">Noch keine Einträge. Vielleicht bist du der erste gute Vibe.</p>}
+              {guestbookQuery.data?.map(entry => (
+                <article className="guestbook-entry" key={entry.id}>
+                  <div className="guestbook-entry-meta"><span>ENTRY / {String(entry.id).padStart(3, "0")}</span><time dateTime={new Date(entry.createdAt).toISOString()}>{new Date(entry.createdAt).toLocaleDateString("de-DE")}</time></div>
+                  <p>{entry.message}</p>
+                  <div className="guestbook-reactions" aria-label={`Reaktionen für Eintrag ${entry.id}`}>
+                    {guestbookReactions.map(({ key, label, symbol, Icon }) => <button key={key} className="guestbook-reaction" type="button" onClick={() => reactGuestbook.mutate({ entryId: entry.id, reaction: key })} disabled={reactGuestbook.isPending} aria-label={`${label} für Eintrag ${entry.id} geben`}><Icon size={14} aria-hidden="true" /><span>{symbol}</span><strong>{entry.reactions?.[key] ?? 0}</strong></button>)}
+                  </div>
+                </article>
+              ))}
+            </div>
+            <form className="guestbook-form" onSubmit={event => { event.preventDefault(); submitGuestbook.mutate({ message: guestbookMessage, website: guestbookWebsite }); }}>
+              <p className="contact-kicker">Drop a line / direct signal</p>
+              <label htmlFor="guestbook-message">Deine Nachricht</label>
+              <textarea id="guestbook-message" value={guestbookMessage} onChange={event => setGuestbookMessage(event.target.value)} maxLength={600} minLength={2} required placeholder="Etwas Nettes, ein Gedanke, ein Signal …" />
+              <label className="guestbook-honeypot" aria-hidden="true">Website<input tabIndex={-1} autoComplete="off" value={guestbookWebsite} onChange={event => setGuestbookWebsite(event.target.value)} /></label>
+              <div className="guestbook-submit-row"><small>Dein Eintrag wird direkt sichtbar. Bitte keine privaten Daten posten.</small><button type="submit" disabled={submitGuestbook.isPending || guestbookMessage.trim().length < 2}><span>{submitGuestbook.isPending ? "WIRD GESENDET" : "SIGNAL SENDEN"}</span><Send size={16} /></button></div>
+            </form>
+          </div>
+        </section>
+
+        <section className="faq-section section-wrap" aria-labelledby="faq-title">
+          <SectionLabel index="09" label="FAQ / no box no mask" align="right" />
+          <div className="faq-heading"><h2 id="faq-title">ASK<br /><em>PEANUTS.</em></h2><p>Zwischen Adiletten, Abgründen und 126 BPM: die Antworten auf die Fragen, die sowieso irgendwann kommen.</p></div>
+          <div className="faq-list">
+            {faqItems.map((item, index) => {
+              const isOpen = openFaq === index;
+              return <article className={`faq-item${isOpen ? " is-open" : ""}`} key={item.question}>
+                <button type="button" className="faq-trigger" aria-expanded={isOpen} aria-controls={`faq-answer-${index}`} onClick={() => setOpenFaq(isOpen ? null : index)}><span>0{index + 1}</span><strong>{item.question}</strong><ChevronDown size={18} /></button>
+                <div id={`faq-answer-${index}`} className="faq-answer" hidden={!isOpen}><p>{item.answer}</p></div>
+              </article>;
+            })}
           </div>
         </section>
 
