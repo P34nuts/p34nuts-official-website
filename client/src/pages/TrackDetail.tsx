@@ -15,7 +15,15 @@ export default function TrackDetail() {
     if (!track) return;
     document.title = `${track.title} — P34nuts`;
     document.querySelector('meta[name="description"]')?.setAttribute("content", `${track.title} von P34nuts: ${track.note}`);
+    // Wouter keeps the SPA document alive between detail routes. Reset immediately
+    // and once after the next paint so every discovery card starts at the top,
+    // including on mobile browsers that restore the previous scroll position.
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    const resetAfterPaint = window.requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    });
     rememberTrack(track);
+    return () => window.cancelAnimationFrame(resetAfterPaint);
   }, [track]);
   if (!track) return <NotFound />;
   const related = getRelatedTracks(track);

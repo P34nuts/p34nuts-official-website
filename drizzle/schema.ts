@@ -47,6 +47,7 @@ export type InsertBookingSubmission = typeof bookingSubmissions.$inferInsert;
 
 export const guestbookEntries = mysqlTable("guestbook_entries", {
   id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 80 }).notNull().default("Gast"),
   message: varchar("message", { length: 600 }).notNull(),
   status: mysqlEnum("status", ["pending", "approved", "rejected"]).default("pending").notNull(),
   heartCount: int("heart_count").notNull().default(0),

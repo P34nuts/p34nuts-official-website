@@ -14,14 +14,27 @@ export function DiscoveryRail() {
   const reduceMotion = useReducedMotion();
   const [paths, setPaths] = useState(() => discoveryPaths);
   const [flippingSlots, setFlippingSlots] = useState<number[]>([]);
+  const [navigationLocked, setNavigationLocked] = useState(false);
   const pathsRef = useRef(paths);
   const flipTimeoutsRef = useRef<number[]>([]);
+
+  const prepareTopNavigation = () => {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  };
+
+  const handleDiscoveryClick = () => {
+    prepareTopNavigation();
+    setNavigationLocked(true);
+  };
 
   useEffect(() => {
     pathsRef.current = paths;
   }, [paths]);
 
   useEffect(() => {
+    if (navigationLocked) return;
     const clearFlipTimeouts = () => {
       flipTimeoutsRef.current.forEach((timeout) => window.clearTimeout(timeout));
       flipTimeoutsRef.current = [];
@@ -68,7 +81,7 @@ export function DiscoveryRail() {
       window.clearInterval(interval);
       clearFlipTimeouts();
     };
-  }, [reduceMotion]);
+  }, [navigationLocked, reduceMotion]);
 
   return (
     <section id="start-here" className="discovery-section" aria-labelledby="discovery-title">
@@ -79,7 +92,7 @@ export function DiscoveryRail() {
             const track = getTrackBySlug(path.trackSlug);
             if (!track) return null;
             const isFlipping = flippingSlots.includes(index);
-            return <Link key={index} href={`/music/${track.slug}`} className={`discovery-card discovery-card--cover ${isFlipping ? "discovery-card--flipping" : ""} ${track.coverStyle}`}><img className="discovery-card-cover" src={track.cover} alt="" loading="lazy" decoding="async" /><span>0{index + 1} / {path.label}</span><strong>{track.title}</strong><p>{path.title}</p><ArrowUpRight size={17} /></Link>;
+            return <Link key={index} href={`/music/${track.slug}`} onPointerDown={prepareTopNavigation} onClick={handleDiscoveryClick} className={`discovery-card discovery-card--cover ${isFlipping ? "discovery-card--flipping" : ""} ${track.coverStyle}`}><img className="discovery-card-cover" src={track.cover} alt="" loading="lazy" decoding="async" /><span>0{index + 1} / {path.label}</span><strong>{track.title}</strong><p>{path.title}</p><ArrowUpRight size={17} /></Link>;
           })}
         </div>
       </div>

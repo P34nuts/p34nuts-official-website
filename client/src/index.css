@@ -171,10 +171,15 @@ button:focus-visible, a:focus-visible { outline: 2px solid #ff3b30; outline-offs
 .guestbook-heading h2 em, .faq-heading h2 em { font-family: "Bodoni Moda", serif; font-weight: 500; }
 .guestbook-heading > p, .faq-heading > p { max-width: 28rem; margin: 0 0 .7rem; color: rgba(241,238,229,.68); font-size: .9rem; line-height: 1.65; }
 .guestbook-layout { display: grid; grid-template-columns: minmax(0,1.1fr) minmax(18rem,.9fr); gap: clamp(2rem, 7vw, 7rem); margin-top: clamp(3rem, 7vw, 6rem); }
-.guestbook-stream { border-top: 1px solid rgba(241,238,229,.25); }
+.guestbook-stream { max-height: min(46rem, 66vh); overflow-y: auto; overscroll-behavior: contain; padding-right: .9rem; border-top: 1px solid rgba(241,238,229,.25); scrollbar-width: thin; scrollbar-color: rgba(255,59,48,.75) rgba(241,238,229,.08); }
+.guestbook-stream::-webkit-scrollbar { width: .45rem; }
+.guestbook-stream::-webkit-scrollbar-track { background: rgba(241,238,229,.08); }
+.guestbook-stream::-webkit-scrollbar-thumb { background: rgba(255,59,48,.75); }
+.guestbook-stream:focus-visible { outline: 1px solid #ff3b30; outline-offset: .4rem; }
 .guestbook-state { margin: 0; padding: 1.2rem 0; color: rgba(241,238,229,.54); font-family: monospace; font-size: .65rem; letter-spacing: .05em; }
 .guestbook-entry { position: relative; padding: 1.35rem 0 1.2rem; border-bottom: 1px solid rgba(241,238,229,.2); }
 .guestbook-entry-meta { display: flex; justify-content: space-between; gap: 1rem; color: rgba(241,238,229,.42); font-family: monospace; font-size: .55rem; letter-spacing: .06em; text-transform: uppercase; }
+.guestbook-entry-name { margin: .7rem 0 0; color: #ff8178; font-family: monospace; font-size: .66rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
 .guestbook-entry > p { max-width: 40rem; margin: .8rem 0 1rem; color: #f1eee5; font-size: clamp(1rem, 1.55vw, 1.35rem); line-height: 1.35; }
 .guestbook-reactions { display: flex; flex-wrap: wrap; gap: .35rem; }
 .guestbook-reaction { display: inline-flex; align-items: center; gap: .25rem; min-height: 2rem; padding: .28rem .42rem; border: 1px solid rgba(241,238,229,.18); border-radius: 999px; background: rgba(241,238,229,.04); color: rgba(241,238,229,.68); font-family: monospace; font-size: .63rem; cursor: pointer; transition: border-color .2s ease, color .2s ease, background .2s ease, transform .16s ease; }
@@ -185,6 +190,8 @@ button:focus-visible, a:focus-visible { outline: 2px solid #ff3b30; outline-offs
 .guestbook-form { align-self: start; padding: clamp(1.4rem, 3vw, 2.4rem); background: #e9e4d9; color: #101012; }
 .guestbook-form .contact-kicker { color: rgba(16,16,18,.6); }
 .guestbook-form > label:not(.guestbook-honeypot) { display: block; margin-top: 2rem; font-family: monospace; font-size: .58rem; letter-spacing: .08em; text-transform: uppercase; }
+.guestbook-form .guestbook-name-input { display: block; width: 100%; margin-top: .55rem; padding: .8rem 0; border: 0; border-bottom: 1px solid rgba(16,16,18,.45); border-radius: 0; outline: 0; background: transparent; color: #101012; font: inherit; font-size: 1rem; line-height: 1.5; }
+.guestbook-form .guestbook-name-input:focus-visible { border-color: #ff3b30; box-shadow: 0 2px 0 #ff3b30; }
 .guestbook-form textarea { display: block; width: 100%; min-height: 11rem; margin-top: .55rem; padding: .8rem 0; border: 0; border-bottom: 1px solid rgba(16,16,18,.45); border-radius: 0; outline: 0; background: transparent; color: #101012; font: inherit; font-size: 1rem; line-height: 1.5; resize: vertical; }
 .guestbook-form textarea:focus-visible { border-color: #ff3b30; box-shadow: 0 2px 0 #ff3b30; }
 .guestbook-honeypot { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

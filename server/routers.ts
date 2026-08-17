@@ -12,6 +12,7 @@ import { createBookingRateLimiter, getRequestFingerprint } from "./bookingRateLi
 import { addGuestbookHeart, addGuestbookReaction, createBookingSubmission, createGuestbookEntry, deleteGuestbookEntry, listApprovedGuestbookEntries, listGuestbookEntriesForAdmin, listSiteSettings, moderateGuestbookEntry, upsertSiteSetting } from "./db";
 
 export const guestbookEntrySchema = z.object({
+  name: z.string().trim().min(2).max(80),
   message: z.string().trim().min(2).max(600),
   website: z.string().max(0).optional(),
 });
@@ -85,10 +86,10 @@ export const appRouter = router({
         throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "Bitte versuche es später erneut." });
       }
       try {
-        const entry = await createGuestbookEntry({ message: input.message, status: "approved" });
+        const entry = await createGuestbookEntry({ name: input.name, message: input.message, status: "approved" });
         await notifyOwner({
           title: "Neuer Gästebuch-Eintrag · P34nuts",
-          content: `Ein neuer Gästebuch-Eintrag wurde direkt veröffentlicht: ${input.message.slice(0, 600)}`,
+          content: `${input.name} hat einen Gästebuch-Eintrag direkt veröffentlicht: ${input.message.slice(0, 600)}`,
         });
         return { accepted: true, entryId: entry.id } as const;
       } catch (error) {

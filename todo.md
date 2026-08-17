@@ -296,7 +296,7 @@
 - [x] Responsive und barrierearme Browser-QA für PayPal-Bereich, Gästebuch und FAQ durchführen und einen neuen Homepage-Checkpoint veröffentlichen.
 - [ ] Später den PayPal-Geldsammel-Link durch den PayPal.Me-Link ersetzen, sobald der Business-Account bereitsteht.
 
-- [ ] GitHub-Pages-Synchronisierung des neuen PayPal-, Gästebuch- und FAQ-Stands abschließen; lokaler Commit `f8a1e77` ist vorbereitet, der Push auf `P34nuts/p34nuts-official-website` wird trotz angezeigter Admin-Berechtigung mit HTTP 403 abgewiesen.
+- [x] GitHub-Pages-Synchronisierung des neuen PayPal-, Gästebuch- und FAQ-Stands abschließen; der vollständige aktuelle Quell- und Medienstand wurde über einen einmaligen verifizierten Import nach `P34nuts/p34nuts-official-website` übertragen und öffentlich gebaut.
 
 - [x] Geschützten Adminbereich für Gästebuchmoderation, Homepage-Einstellungen und klar abgegrenzte Shop-Verwaltung konzipieren, implementieren und testen.
 
@@ -307,3 +307,13 @@
 - [x] GitHub Pages als dauerhafte Hauptseite dokumentieren und den Gästebuch-Datenfluss für die statische Auslieferung mit dem serverfähigen Backend verifizieren.
 - [x] Gästebuch auf sofortige Veröffentlichung ohne Moderationsfreigabe umstellen.
 - [x] Mehrere datensparsame Gästebuchreaktionen wie Herz, Smilies und Daumen ergänzen und testen.
+- [x] Den aktuellen Homepage-, Gästebuch- und Medienstand auf die dauerhafte GitHub-Root-Adresse `https://p34nuts.github.io/` übertragen und öffentlich verifizieren.
+
+- [x] Vorläufigen PayPal-Link auf der dauerhaften GitHub-Pages-Homepage wieder sichtbar machen, Root-Build aktualisieren und Live-Ausgabe verifizieren. Root-Workflow-Commit `6459bb6` erfolgreich; Live-Homepage zeigt `GELD SAMMELN / PAYPAL`.
+
+- [x] FIND-YOUR-ENTRY-Songbuttons beim Wechsel auf Songdetailseiten zuverlässig an den Seitenanfang setzen und Desktop-/Mobile-Verhalten testen. Regressionstest und Produktionsbuild erfolgreich; ein vollständiger Testlauf blieb bei bestehenden externen Store-, PayPal- und SMTP-Prüfungen hängen.
+
+- [x] Merch-Storefront fachlich auditieren: öffentliche Nutzerführung, Produktdetailseiten, Warenkorb, Login, Stripe-Sandbox, Printful-Grenzen, Mobile UX, Barrierefreiheit und sichere Verbesserungsroadmap dokumentieren. Bericht: `premium-streetwear-shop/docs/merch-store-improvement-audit-2026-08-17.md`; Live-Prüfung war wegen eines temporären Render-Proxy-/Firewallfehlers eingeschränkt.
+
+- [x] FIND-YOUR-ENTRY-Klickpfad in der realen Homepage reproduzieren und jeden Wechsel auf eine Songdetailseite zuverlässig am oberen Seitenanfang starten lassen. Der reale Browserklick landete auf `/music/dein-name-auf-nem-stein` mit `scrollY = 0`; globaler Routenreset, Klickschutz und Regressionstest sichern den Flow.
+- [x] Gästebuch um sichtbaren Namen sowie lokales Datum und Uhrzeit jedes Beitrags erweitern und den Eintragsfeed mit zugänglicher, scrollbar begrenzter Höhe versehen. Migration `0005_mixed_maddog.sql` ergänzt den rückwärtskompatiblen Standardnamen `Gast`; QA-Notiz: `docs/find-entry-guestbook-qa-2026-08-17.md`.

@@ -73,6 +73,7 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [headerSolid, setHeaderSolid] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
+  const [guestbookName, setGuestbookName] = useState("");
   const [guestbookMessage, setGuestbookMessage] = useState("");
   const [guestbookWebsite, setGuestbookWebsite] = useState("");
   const [openFaq, setOpenFaq] = useState<number | null>(0);
@@ -85,6 +86,7 @@ export default function Home() {
   const announcementText = publicSettings.find(item => item.key === "announcementText")?.value;
   const submitGuestbook = trpc.guestbook.submit.useMutation({
     onSuccess: () => {
+      setGuestbookName("");
       setGuestbookMessage("");
       setGuestbookWebsite("");
       setNotice("Danke. Dein Eintrag ist jetzt sichtbar.");
@@ -413,12 +415,13 @@ export default function Home() {
             <p>Hinterlasse etwas Nettes. Neue Einträge werden direkt sichtbar. Du brauchst dafür kein Konto; Reaktionen sind ebenfalls ohne Registrierung möglich.</p>
           </div>
           <div className="guestbook-layout">
-            <div className="guestbook-stream" aria-live="polite">
+            <div className="guestbook-stream" aria-live="polite" aria-label="Veröffentlichte Gästebuch-Einträge" tabIndex={0}>
               {guestbookQuery.isLoading && <p className="guestbook-state">Lade veröffentlichte Einträge …</p>}
               {!guestbookQuery.isLoading && guestbookQuery.data?.length === 0 && <p className="guestbook-state">Noch keine Einträge. Vielleicht bist du der erste gute Vibe.</p>}
               {guestbookQuery.data?.map(entry => (
                 <article className="guestbook-entry" key={entry.id}>
-                  <div className="guestbook-entry-meta"><span>ENTRY / {String(entry.id).padStart(3, "0")}</span><time dateTime={new Date(entry.createdAt).toISOString()}>{new Date(entry.createdAt).toLocaleDateString("de-DE")}</time></div>
+                  <div className="guestbook-entry-meta"><span>ENTRY / {String(entry.id).padStart(3, "0")}</span><time dateTime={new Date(entry.createdAt).toISOString()}>{new Date(entry.createdAt).toLocaleString("de-DE", { dateStyle: "medium", timeStyle: "short" })}</time></div>
+                  <p className="guestbook-entry-name">{entry.name}</p>
                   <p>{entry.message}</p>
                   <div className="guestbook-reactions" aria-label={`Reaktionen für Eintrag ${entry.id}`}>
                     {guestbookReactions.map(({ key, label, symbol, Icon }) => <button key={key} className="guestbook-reaction" type="button" onClick={() => reactGuestbook.mutate({ entryId: entry.id, reaction: key })} disabled={reactGuestbook.isPending} aria-label={`${label} für Eintrag ${entry.id} geben`}><Icon size={14} aria-hidden="true" /><span>{symbol}</span><strong>{entry.reactions?.[key] ?? 0}</strong></button>)}
@@ -426,12 +429,14 @@ export default function Home() {
                 </article>
               ))}
             </div>
-            <form className="guestbook-form" onSubmit={event => { event.preventDefault(); submitGuestbook.mutate({ message: guestbookMessage, website: guestbookWebsite }); }}>
+            <form className="guestbook-form" onSubmit={event => { event.preventDefault(); submitGuestbook.mutate({ name: guestbookName, message: guestbookMessage, website: guestbookWebsite }); }}>
               <p className="contact-kicker">Drop a line / direct signal</p>
+              <label htmlFor="guestbook-name">Dein Name</label>
+              <input id="guestbook-name" className="guestbook-name-input" value={guestbookName} onChange={event => setGuestbookName(event.target.value)} maxLength={80} minLength={2} required autoComplete="name" placeholder="Wie dürfen wir dich nennen?" />
               <label htmlFor="guestbook-message">Deine Nachricht</label>
               <textarea id="guestbook-message" value={guestbookMessage} onChange={event => setGuestbookMessage(event.target.value)} maxLength={600} minLength={2} required placeholder="Etwas Nettes, ein Gedanke, ein Signal …" />
               <label className="guestbook-honeypot" aria-hidden="true">Website<input tabIndex={-1} autoComplete="off" value={guestbookWebsite} onChange={event => setGuestbookWebsite(event.target.value)} /></label>
-              <div className="guestbook-submit-row"><small>Dein Eintrag wird direkt sichtbar. Bitte keine privaten Daten posten.</small><button type="submit" disabled={submitGuestbook.isPending || guestbookMessage.trim().length < 2}><span>{submitGuestbook.isPending ? "WIRD GESENDET" : "SIGNAL SENDEN"}</span><Send size={16} /></button></div>
+              <div className="guestbook-submit-row"><small>Dein Eintrag wird direkt sichtbar. Bitte nenne nur den Namen, unter dem du erscheinen möchtest, und poste keine privaten Daten.</small><button type="submit" disabled={submitGuestbook.isPending || guestbookName.trim().length < 2 || guestbookMessage.trim().length < 2}><span>{submitGuestbook.isPending ? "WIRD GESENDET" : "SIGNAL SENDEN"}</span><Send size={16} /></button></div>
             </form>
           </div>
         </section>

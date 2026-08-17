@@ -94,6 +94,7 @@ export async function listApprovedGuestbookEntries() {
   if (!db) throw new Error("Guestbook storage is temporarily unavailable");
   const entries = await db.select({
     id: guestbookEntries.id,
+    name: guestbookEntries.name,
     message: guestbookEntries.message,
     heartCount: guestbookEntries.heartCount,
     createdAt: guestbookEntries.createdAt,

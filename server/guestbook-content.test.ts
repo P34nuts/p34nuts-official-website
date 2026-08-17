@@ -5,16 +5,18 @@ import { faqItems } from "../client/src/data/faqData";
 import { guestbookEntrySchema } from "./routers";
 
 describe("guestbook safeguards", () => {
-  it("accepts a short public message and optional empty honeypot", () => {
-    expect(guestbookEntrySchema.parse({ message: "Danke für die Musik", website: "" })).toEqual({
+  it("accepts a public name, short message and optional empty honeypot", () => {
+    expect(guestbookEntrySchema.parse({ name: "Mika", message: "Danke für die Musik", website: "" })).toEqual({
+      name: "Mika",
       message: "Danke für die Musik",
       website: "",
     });
   });
 
   it("rejects a filled honeypot and oversized messages", () => {
-    expect(() => guestbookEntrySchema.parse({ message: "Guter Vibe", website: "https://spam.example" })).toThrow();
-    expect(() => guestbookEntrySchema.parse({ message: "x".repeat(601) })).toThrow();
+    expect(() => guestbookEntrySchema.parse({ name: "M", message: "Guter Vibe", website: "" })).toThrow();
+    expect(() => guestbookEntrySchema.parse({ name: "Mika", message: "Guter Vibe", website: "https://spam.example" })).toThrow();
+    expect(() => guestbookEntrySchema.parse({ name: "Mika", message: "x".repeat(601) })).toThrow();
   });
 
   it("publishes new messages immediately and exposes the reaction band", () => {
@@ -24,6 +26,10 @@ describe("guestbook safeguards", () => {
     expect(router).toContain('"heart", "love", "laugh", "fire", "thumbsUp", "wow", "sad"');
     expect(home).toContain("Dein Eintrag wird direkt sichtbar");
     expect(home).toContain("guestbook-reactions");
+    expect(home).toContain("guestbook-name");
+    expect(home).toContain('timeStyle: "short"');
+    expect(home).toContain("guestbook-entry-name");
+    expect(readFileSync(path.join(process.cwd(), "client/src/index.css"), "utf8")).toContain("overflow-y: auto");
   });
 
   it("keeps the FAQ corpus complete without fabricated guest content", () => {
