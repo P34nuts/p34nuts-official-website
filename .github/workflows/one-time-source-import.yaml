@@ -8,10 +8,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
-          curl -fsSL -o z https://files.manuscdn.com/user_upload_by_module/session_file/310519663893057976/QkHUXgHUPNaiwvjz.zip
-          echo '2bea5a90dca6676ecb5b0031ec8a784970ece38f1e5956a37dc524f9af44d813  z' | sha256sum -c -
-          unzip -q z -d i
-          rsync -a --delete --exclude=.git --exclude=.github --exclude=.manus --exclude=node_modules --exclude=dist --exclude='.env*' i/official/ ./
+          curl -fsSL -o /tmp/z https://files.manuscdn.com/user_upload_by_module/session_file/310519663893057976/QkHUXgHUPNaiwvjz.zip
+          echo '2bea5a90dca6676ecb5b0031ec8a784970ece38f1e5956a37dc524f9af44d813  /tmp/z' | sha256sum -c -
+          unzip -q /tmp/z -d /tmp/i
+          rsync -a --delete --exclude=.git --exclude=.github --exclude=.manus --exclude=node_modules --exclude=dist --exclude='.env*' /tmp/i/official/ ./
           git config user.name import; git config user.email import@users.noreply.github.com
           git add -A; git diff --cached --quiet || git commit -m 'Publish direct guestbook and reactions'
           git push
