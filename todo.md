@@ -317,3 +317,4 @@
 
 - [x] FIND-YOUR-ENTRY-Klickpfad in der realen Homepage reproduzieren und jeden Wechsel auf eine Songdetailseite zuverlässig am oberen Seitenanfang starten lassen. Der reale Browserklick landete auf `/music/dein-name-auf-nem-stein` mit `scrollY = 0`; globaler Routenreset, Klickschutz und Regressionstest sichern den Flow.
 - [x] Gästebuch um sichtbaren Namen sowie lokales Datum und Uhrzeit jedes Beitrags erweitern und den Eintragsfeed mit zugänglicher, scrollbar begrenzter Höhe versehen. Migration `0005_mixed_maddog.sql` ergänzt den rückwärtskompatiblen Standardnamen `Gast`; QA-Notiz: `docs/find-entry-guestbook-qa-2026-08-17.md`.
+- [x] Den mobilen FIND-YOUR-ENTRY-Scroll-Sprung bei bloßer Berührung einer rotierenden Karte unterbinden: Die Top-Position wird nur noch bei einem echten Klick vorbereitet. Regressionstest und GitHub-Pages-Build erfolgreich.

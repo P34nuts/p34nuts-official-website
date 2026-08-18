@@ -92,7 +92,7 @@ export function DiscoveryRail() {
             const track = getTrackBySlug(path.trackSlug);
             if (!track) return null;
             const isFlipping = flippingSlots.includes(index);
-            return <Link key={index} href={`/music/${track.slug}`} onPointerDown={prepareTopNavigation} onClick={handleDiscoveryClick} className={`discovery-card discovery-card--cover ${isFlipping ? "discovery-card--flipping" : ""} ${track.coverStyle}`}><img className="discovery-card-cover" src={track.cover} alt="" loading="lazy" decoding="async" /><span>0{index + 1} / {path.label}</span><strong>{track.title}</strong><p>{path.title}</p><ArrowUpRight size={17} /></Link>;
+            return <Link key={index} href={`/music/${track.slug}`} onClick={handleDiscoveryClick} className={`discovery-card discovery-card--cover ${isFlipping ? "discovery-card--flipping" : ""} ${track.coverStyle}`}><img className="discovery-card-cover" src={track.cover} alt="" loading="lazy" decoding="async" /><span>0{index + 1} / {path.label}</span><strong>{track.title}</strong><p>{path.title}</p><ArrowUpRight size={17} /></Link>;
           })}
         </div>
       </div>

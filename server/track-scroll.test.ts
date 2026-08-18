@@ -6,11 +6,11 @@ const app = readFileSync(new URL("../client/src/App.tsx", import.meta.url), "utf
 const discoveryRail = readFileSync(new URL("../client/src/components/DiscoveryRail.tsx", import.meta.url), "utf8");
 
 describe("track detail scroll reset", () => {
-  it("resets retained scroll globally and at the six rotating discovery-card click targets", () => {
+  it("resets retained scroll globally and only after an intentional rotating discovery-card click", () => {
     expect(trackDetail).toContain('window.scrollTo({ top: 0, left: 0, behavior: "auto" });');
     expect(app).toContain('window.history.scrollRestoration = "manual"');
     expect(app).toContain("useLayoutEffect");
-    expect(discoveryRail).toContain("onPointerDown={prepareTopNavigation}");
+    expect(discoveryRail).not.toContain("onPointerDown={prepareTopNavigation}");
     expect(discoveryRail).toContain("onClick={handleDiscoveryClick}");
     expect(discoveryRail).toContain("setNavigationLocked(true)");
   });
