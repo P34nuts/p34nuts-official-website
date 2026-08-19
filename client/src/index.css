@@ -328,3 +328,36 @@ button:focus-visible, a:focus-visible { outline: 2px solid #ff3b30; outline-offs
     font-size: .68rem;
   }
 }
+
+/* Mobile dialog close safety: keep the close control below the fixed site header and inside the modal's safe reading area. */
+@media (max-width: 640px) {
+  .track-dialog {
+    padding-top: max(3.75rem, calc(env(safe-area-inset-top) + 2.75rem)) !important;
+  }
+  .track-dialog .dialog-close {
+    top: max(2.85rem, calc(env(safe-area-inset-top) + 1.85rem));
+    right: .75rem;
+    z-index: 8;
+    width: 2.65rem;
+    height: 2.65rem;
+    border-color: rgba(255,59,48,.72);
+    background: #101012;
+    color: #f1eee5;
+  }
+  .track-dialog .dialog-close:focus-visible,
+  .track-dialog .dialog-close:hover {
+    background: #ff3b30;
+    color: #101012;
+  }
+}
+
+@keyframes relatedCutIn {
+  from { opacity: .35; transform: translateY(.45rem); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.related-track--rotating {
+  animation: relatedCutIn .32s cubic-bezier(.23,1,.32,1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .related-track--rotating { animation: none; }
+}
