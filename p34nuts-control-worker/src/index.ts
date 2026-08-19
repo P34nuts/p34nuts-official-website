@@ -8,6 +8,7 @@ const ALLOWED_PATHS = new Set([
   "client/src/data/artistData.ts",
   "content/homepage.json",
   "content/homepage-links.json",
+  "client/src/index.css",
 ]);
 const SESSION_COOKIE = "p34nuts_control_session";
 
@@ -140,10 +141,11 @@ export default {
       if (!stored || stored !== state || !(await verifyState(state, env))) return json({ error: "invalid_oauth_state" }, 400);
       const code = url.searchParams.get("code");
       if (!code) return json({ error: "missing_oauth_code" }, 400);
-      const tokenResponse = await fetch(`${GITHUB_OAUTH}/access_token`, { method: "POST", headers: { accept: "application/json", "content-type": "application/json", "user-agent": "p34nuts-control-center" }, body: JSON.stringify({ client_id: env.GITHUB_CLIENT_ID, client_secret: env.GITHUB_CLIENT_SECRET, code }) });
+      const tokenResponse = await fetch(`${GITHUB_OAUTH}/access_token`, { method: "POST", headers: { accept: "application/json", "content-type": "application/x-www-form-urlencoded", "user-agent": "p34nuts-control-center" }, body: new URLSearchParams({ client_id: env.GITHUB_CLIENT_ID, client_secret: env.GITHUB_CLIENT_SECRET, code }).toString() });
       if (!tokenResponse.ok) return json({ error: "oauth_exchange_failed" }, 502);
-      const accessToken = (await tokenResponse.json() as { access_token?: string }).access_token;
-      if (!accessToken) return json({ error: "oauth_token_missing" }, 502);
+      const tokenPayload = await tokenResponse.json() as { access_token?: string; error?: string };
+      const accessToken = tokenPayload.access_token;
+      if (!accessToken) return json({ error: "oauth_token_missing", providerError: tokenPayload.error ?? "unknown" }, 502);
       const userResponse = await fetch(`${GITHUB_API}/user`, { headers: { authorization: `Bearer ${accessToken}`, accept: "application/vnd.github+json", "user-agent": "p34nuts-control-center" } });
       if (!userResponse.ok) return json({ error: "github_user_lookup_failed" }, 502);
       const user = await userResponse.json() as { login?: string };
@@ -154,6 +156,21 @@ export default {
     const session = await readSession(request, env);
     if (!session) return json({ error: "authentication_required" }, 401, origin);
     if (url.pathname === "/session" && request.method === "GET") return json({ authenticated: true, login: session.login, expiresAt: session.exp }, 200, origin);
+    if (url.pathname === "/file" && request.method === "GET") {
+      const repository = url.searchParams.get("repository") ?? "";
+      const path = url.searchParams.get("path") ?? "";
+      if (!ALLOWED_REPOSITORIES.has(repository)) return json({ error: "repository_not_allowed" }, 403, origin);
+      if (!ALLOWED_PATHS.has(path)) return json({ error: "path_not_allowed" }, 403, origin);
+      const [owner, repo] = repository.split("/");
+      const response = await githubFetch(`/repos/${owner}/${repo}/contents/${path}?ref=main`, { method: "GET" }, env);
+      if (!response.ok) return json({ error: "current_content_unavailable" }, 502, origin);
+      const file = await response.json() as { content?: string; encoding?: string; sha?: string };
+      if (file.encoding !== "base64" || typeof file.content !== "string") return json({ error: "file_content_unavailable" }, 502, origin);
+      const bytes = Uint8Array.from(atob(file.content.replace(/\\s/g, "")), char => char.charCodeAt(0));
+      const content = new TextDecoder().decode(bytes);
+      if (content.length > 200_000) return json({ error: "content_invalid" }, 502, origin);
+      return json({ ok: true, repository, path, content, sha: file.sha }, 200, origin);
+    }
     if (url.pathname === "/commit" && request.method === "POST") {
       let body: { repository?: string; path?: string; content?: string; message?: string };
       try { body = await request.json(); } catch { return json({ error: "invalid_json" }, 400, origin); }
