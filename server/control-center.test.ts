@@ -15,10 +15,14 @@ describe("GitHub Control Center", () => {
 
   it("exposes only safe editing paths and states the backend boundary", () => {
     expect(page).toContain("/edit/main/client/src/data/artistData.ts");
-    expect(page).toContain("/actions/workflows/deploy-root-pages.yml");
+    expect(page).toContain("/actions/workflows/deploy-pages.yml");
+    expect(page).not.toContain("/actions/workflows/deploy-root-pages.yml");
+    expect(page).toContain("/file?");
+    expect(page).toContain("/commit");
+    expect(page).toContain("Lokale Vorschau vor dem Commit");
     expect(page).toContain("/admin/printful-catalog");
     expect(page).toContain("Private GitHub-, Stripe- und Printful-Daten");
-    expect(page).toContain("sie wird niemals in diesem Pages-Bundle ausgeliefert");
+    expect(page).toContain("Private GitHub-App-Schlüssel werden niemals in diesem Pages-Bundle ausgeliefert");
     expect(page).not.toContain("P34NUTS_GITHUB_APP_PRIVATE_KEY");
   });
 });
