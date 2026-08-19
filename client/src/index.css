@@ -268,3 +268,63 @@ button:focus-visible, a:focus-visible { outline: 2px solid #ff3b30; outline-offs
     max-width: none;
   }
 }
+
+/* Song dialog actions: make the two primary destinations unmistakably interactive on desktop and touch screens. */
+.track-dialog-copy .text-link,
+.track-dialog-copy .suno-player-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .55rem;
+  min-height: 2.9rem;
+  padding: .8rem 1rem;
+  border: 1px solid rgba(241,238,229,.58);
+  font-family: monospace;
+  font-size: .64rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  line-height: 1.1;
+  text-decoration: none;
+  transition: background .18s ease, border-color .18s ease, color .18s ease, transform .18s ease;
+}
+.track-dialog-copy .text-link {
+  margin-top: 1rem;
+  background: #f1eee5;
+  color: #101012;
+}
+.track-dialog-copy .text-link:hover,
+.track-dialog-copy .text-link:focus-visible {
+  border-color: #ff3b30;
+  background: #ff3b30;
+  color: #101012;
+}
+.track-dialog-copy .suno-player-trigger {
+  margin-top: .65rem;
+  border-color: #ff3b30;
+  background: #ff3b30;
+  color: #101012;
+  cursor: pointer;
+}
+.track-dialog-copy .suno-player-trigger:hover,
+.track-dialog-copy .suno-player-trigger:focus-visible {
+  border-color: #f1eee5;
+  background: #f1eee5;
+  color: #101012;
+}
+.track-dialog-copy .text-link:active,
+.track-dialog-copy .suno-player-trigger:active {
+  transform: scale(.98);
+}
+.track-dialog-copy .text-link:focus-visible,
+.track-dialog-copy .suno-player-trigger:focus-visible {
+  outline: 2px solid #ff3b30;
+  outline-offset: 3px;
+}
+@media (max-width: 640px) {
+  .track-dialog-copy .text-link,
+  .track-dialog-copy .suno-player-trigger {
+    width: 100%;
+    min-height: 3.25rem;
+    font-size: .68rem;
+  }
+}
