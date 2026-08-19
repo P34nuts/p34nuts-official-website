@@ -277,7 +277,7 @@ export function getAdjacentTracks(track: Track) {
   };
 }
 
-export function getRelatedTracks(track: Track) {
+export function getRelatedTracks(track: Track, limit = 3) {
   const related = releases
     .filter((candidate) => candidate.id !== track.id)
     .map((candidate) => ({ candidate, score: candidate.themes.filter((theme) => track.themes.includes(theme)).length }))
@@ -285,7 +285,7 @@ export function getRelatedTracks(track: Track) {
     .filter((entry) => entry.score > 0)
     .map((entry) => entry.candidate);
   const fallback = releases.filter((candidate) => candidate.id !== track.id && !related.includes(candidate));
-  return [...related, ...fallback].slice(0, 3);
+  return [...related, ...fallback].slice(0, Math.max(3, limit));
 }
 
 export const featuredVisual = {
