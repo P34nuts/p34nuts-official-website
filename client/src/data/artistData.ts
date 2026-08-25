@@ -35,6 +35,7 @@ export const artistPortraitSet02 = {
 export const assets = {
   hero: artistPortraitSet.skylineHero,
   headerWordmark: masterAsset("/manus-storage/p34nuts-header-wordmark-transparent_40231558.png"),
+  shopHeaderWordmark: masterAsset("/manus-storage/p34nuts-shop-header.png"),
   heroWordmark: masterAsset("/manus-storage/p34nuts-header-wordmark_60ae815f.png"),
   releaseCover: artistPortraitSet02.currentFrameDiscipline,
   featuredVideo: artistPortraitSet.sunsetFeature,
@@ -316,6 +317,7 @@ export const socialLinks = [
   { label: "Instagram", detail: "@p34nuts_official", href: "https://www.instagram.com/p34nuts_official?igsh=MTI1cW4xMXd2cGFrdA==" },
   { label: "YouTube", detail: "@p34nuts_official", href: "https://youtube.com/@p34nuts_official" },
   { label: "X", detail: "@p34nutsofficial", href: "https://x.com/p34nutsofficial" },
+  { label: "TikTok", detail: "P34nuts", href: "https://pro.tiktok.com/t/ZG9BFUgVXkFkN-8sClc/" },
 ] as const;
 
 export const booking = {

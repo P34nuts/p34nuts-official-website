@@ -174,9 +174,14 @@ export default function Home() {
 
         <a className="skip-link" href="#main-content">Zum Inhalt springen</a>
         <header className={`site-header ${headerSolid || menuOpen ? "site-header-solid" : ""}`}>
-        <a href={sitePath("/")} className="brand-lockup brand-home-wordmark" aria-label="P34nuts, zur Startseite">
-          <img src={assets.headerWordmark} alt="P34nuts" />
-        </a>
+        <div className="header-brand-group">
+          <a href={sitePath("/")} className="brand-lockup brand-home-wordmark" aria-label="P34nuts, zur Startseite">
+            <img src={assets.headerWordmark} alt="P34nuts" />
+          </a>
+          <a href={shopHref} className="brand-lockup brand-shop-wordmark" aria-label="P34nuts Shop, zur Shop-Startseite">
+            <img src={assets.shopHeaderWordmark} alt="P34nuts Shop" />
+          </a>
+        </div>
         <nav className="desktop-nav" aria-label="Hauptnavigation">
           {primaryNav.map((item) => <a key={item.href} href={item.href}>{item.label}</a>)}
         </nav>
@@ -443,16 +448,21 @@ export default function Home() {
 
         <section className="faq-section section-wrap" aria-labelledby="faq-title">
           <SectionLabel index="09" label="FAQ / no box no mask" align="right" />
-          <div className="faq-heading"><h2 id="faq-title">ASK<br /><em>PEANUTS.</em></h2><p>Zwischen Adiletten, Abgründen und 126 BPM: die Antworten auf die Fragen, die sowieso irgendwann kommen.</p></div>
-          <div className="faq-list">
-            {faqItems.map((item, index) => {
-              const isOpen = openFaq === index;
-              return <article className={`faq-item${isOpen ? " is-open" : ""}`} key={item.question}>
-                <button type="button" className="faq-trigger" aria-expanded={isOpen} aria-controls={`faq-answer-${index}`} onClick={() => setOpenFaq(isOpen ? null : index)}><span>0{index + 1}</span><strong>{item.question}</strong><ChevronDown size={18} /></button>
-                <div id={`faq-answer-${index}`} className="faq-answer" hidden={!isOpen}><p>{item.answer}</p></div>
-              </article>;
-            })}
-          </div>
+          <details className="faq-disclosure">
+            <summary className="faq-disclosure-summary">
+              <div className="faq-heading"><h2 id="faq-title">ASK<br /><em>P34NUTS.</em></h2><p>Zwischen Adiletten, Abgründen und 126 BPM: die Antworten auf die Fragen, die sowieso irgendwann kommen.</p></div>
+              <ChevronDown size={20} aria-hidden="true" />
+            </summary>
+            <div className="faq-list">
+              {faqItems.map((item, index) => {
+                const isOpen = openFaq === index;
+                return <article className={`faq-item${isOpen ? " is-open" : ""}`} key={item.question}>
+                  <button type="button" className="faq-trigger" aria-expanded={isOpen} aria-controls={`faq-answer-${index}`} onClick={() => setOpenFaq(isOpen ? null : index)}><span>0{index + 1}</span><strong>{item.question}</strong><ChevronDown size={18} /></button>
+                  <div id={`faq-answer-${index}`} className="faq-answer" hidden={!isOpen}><p>{item.answer}</p></div>
+                </article>;
+              })}
+            </div>
+          </details>
         </section>
 
         <section className="press-section section-wrap" aria-labelledby="press-title">
