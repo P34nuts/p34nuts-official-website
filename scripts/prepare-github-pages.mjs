@@ -31,6 +31,7 @@ const sourceFiles = [
   path.join(projectRoot, "client", "src", "data", "artistData.ts"),
   path.join(projectRoot, "client", "index.html"),
 ];
+const basicSoftstyleManifestPath = path.join(mediaRoot, "basic-softstyle-mockups-manifest.json");
 
 const sourceText = await Promise.all(sourceFiles.map(file => readFile(file, "utf8")));
 const referencedAssets = [...new Set(sourceText
@@ -59,13 +60,33 @@ if (unresolved.length > 0) {
   throw new Error(`Missing GitHub Pages media: ${unresolved.join(", ")}`);
 }
 
+// The merch shop references real Printful front mockups through the same
+// permanent Pages origin. The manifest is generated from the validated task
+// ledger and guards against accidentally publishing arbitrary media files.
+const basicSoftstyleManifest = JSON.parse(await readFile(basicSoftstyleManifestPath, "utf8"));
+if (basicSoftstyleManifest.entryCount !== 952 || basicSoftstyleManifest.records?.length !== 952)
+  throw new Error("Expected exactly 952 verified Basic Softstyle mockup assets.");
+const basicPaths = new Set();
+for (const record of basicSoftstyleManifest.records) {
+  if (typeof record.relativePath !== "string" || !record.relativePath.startsWith("basic-softstyle-mockups/"))
+    throw new Error("Invalid Basic Softstyle mockup asset path in manifest.");
+  if (basicPaths.has(record.relativePath))
+    throw new Error(`Duplicate Basic Softstyle mockup asset path: ${record.relativePath}`);
+  basicPaths.add(record.relativePath);
+  const source = path.join(mediaRoot, record.relativePath);
+  const destination = path.join(outputMediaRoot, record.relativePath);
+  await mkdir(path.dirname(destination), { recursive: true });
+  await cp(source, destination);
+}
+
 const indexPath = path.join(outputRoot, "index.html");
 const index = await readFile(indexPath, "utf8");
 await writeFile(indexPath, index.replaceAll(manusOrigin, siteOrigin));
 
 const outputMediaCount = (await collectFiles(outputMediaRoot)).length;
-if (outputMediaCount !== referencedAssets.length) {
-  throw new Error(`Expected ${referencedAssets.length} media files, found ${outputMediaCount}.`);
+const expectedMediaCount = referencedAssets.length + basicPaths.size;
+if (outputMediaCount !== expectedMediaCount) {
+  throw new Error(`Expected ${expectedMediaCount} media files, found ${outputMediaCount}.`);
 }
 
 const outputInfo = await stat(indexPath);
@@ -73,4 +94,4 @@ if (outputInfo.size === 0) {
   throw new Error("GitHub Pages index.html is empty.");
 }
 
-console.log(`Prepared ${outputMediaCount} GitHub Pages media files for ${siteOrigin}.`);
+console.log(`Prepared ${outputMediaCount} GitHub Pages media files for ${siteOrigin}, including ${basicPaths.size} verified Basic Softstyle mockups.`);
