@@ -33,6 +33,7 @@ const sourceFiles = [
 ];
 const basicSoftstyleManifestPath = path.join(mediaRoot, "basic-softstyle-mockups-manifest.json");
 const finishedProductManifestPath = path.join(mediaRoot, "finished-product-mockups-manifest.json");
+const mugCrewneckManifestPath = path.join(mediaRoot, "mug-crewneck-corrected-manifest.json");
 
 const sourceText = await Promise.all(sourceFiles.map(file => readFile(file, "utf8")));
 const referencedAssets = [...new Set(sourceText
@@ -98,12 +99,30 @@ for (const record of finishedProductManifest.records) {
   await cp(source, destination);
 }
 
+const mugCrewneckManifest = JSON.parse(await readFile(mugCrewneckManifestPath, "utf8"));
+if (mugCrewneckManifest.entryCount !== 86 || mugCrewneckManifest.entries?.length !== 86 || mugCrewneckManifest.errors?.length !== 0)
+  throw new Error("Expected exactly 86 verified Mug/Crewneck correction assets without errors.");
+const mugCrewneckPaths = new Set();
+for (const record of mugCrewneckManifest.entries) {
+  if (typeof record.relativePath !== "string" || !record.relativePath.startsWith("mug-crewneck-corrected/") || record.imageRole !== "front")
+    throw new Error("Invalid Mug/Crewneck correction asset path or image role in manifest.");
+  if (!Number.isInteger(record.syncProductId) || !record.key || !record.sourceUrl?.startsWith("https://files.cdn.printful.com/"))
+    throw new Error("Invalid Mug/Crewneck correction asset identity or source URL in manifest.");
+  if (mugCrewneckPaths.has(record.relativePath))
+    throw new Error(`Duplicate Mug/Crewneck correction asset path: ${record.relativePath}`);
+  mugCrewneckPaths.add(record.relativePath);
+  const source = path.join(mediaRoot, record.relativePath);
+  const destination = path.join(outputMediaRoot, record.relativePath);
+  await mkdir(path.dirname(destination), { recursive: true });
+  await cp(source, destination);
+}
+
 const indexPath = path.join(outputRoot, "index.html");
 const index = await readFile(indexPath, "utf8");
 await writeFile(indexPath, index.replaceAll(manusOrigin, siteOrigin));
 
 const outputMediaCount = (await collectFiles(outputMediaRoot)).length;
-const expectedMediaCount = referencedAssets.length + basicPaths.size + finishedProductPaths.size;
+const expectedMediaCount = referencedAssets.length + basicPaths.size + finishedProductPaths.size + mugCrewneckPaths.size;
 if (outputMediaCount !== expectedMediaCount) {
   throw new Error(`Expected ${expectedMediaCount} media files, found ${outputMediaCount}.`);
 }
@@ -113,4 +132,4 @@ if (outputInfo.size === 0) {
   throw new Error("GitHub Pages index.html is empty.");
 }
 
-console.log(`Prepared ${outputMediaCount} GitHub Pages media files for ${siteOrigin}, including ${basicPaths.size} verified Basic Softstyle mockups and ${finishedProductPaths.size} verified finished product mockups.`);
+console.log(`Prepared ${outputMediaCount} GitHub Pages media files for ${siteOrigin}, including ${basicPaths.size} verified Basic Softstyle mockups, ${finishedProductPaths.size} verified finished product mockups, and ${mugCrewneckPaths.size} corrected Mug/Crewneck previews.`);
