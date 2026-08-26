@@ -32,6 +32,7 @@ const sourceFiles = [
   path.join(projectRoot, "client", "index.html"),
 ];
 const basicSoftstyleManifestPath = path.join(mediaRoot, "basic-softstyle-mockups-manifest.json");
+const finishedProductManifestPath = path.join(mediaRoot, "finished-product-mockups-manifest.json");
 
 const sourceText = await Promise.all(sourceFiles.map(file => readFile(file, "utf8")));
 const referencedAssets = [...new Set(sourceText
@@ -79,12 +80,30 @@ for (const record of basicSoftstyleManifest.records) {
   await cp(source, destination);
 }
 
+const finishedProductManifest = JSON.parse(await readFile(finishedProductManifestPath, "utf8"));
+if (finishedProductManifest.entryCount !== 1538 || finishedProductManifest.records?.length !== 1538)
+  throw new Error("Expected exactly 1538 verified finished product mockup assets.");
+const finishedProductPaths = new Set();
+for (const record of finishedProductManifest.records) {
+  if (typeof record.relativePath !== "string" || !record.relativePath.startsWith("finished-product-mockups/"))
+    throw new Error("Invalid finished product mockup asset path in manifest.");
+  if (!Number.isInteger(record.syncProductId) || !["front", "back"].includes(record.imageRole))
+    throw new Error("Invalid finished product mockup identity or image role in manifest.");
+  if (finishedProductPaths.has(record.relativePath))
+    throw new Error(`Duplicate finished product mockup asset path: ${record.relativePath}`);
+  finishedProductPaths.add(record.relativePath);
+  const source = path.join(mediaRoot, record.relativePath);
+  const destination = path.join(outputMediaRoot, record.relativePath);
+  await mkdir(path.dirname(destination), { recursive: true });
+  await cp(source, destination);
+}
+
 const indexPath = path.join(outputRoot, "index.html");
 const index = await readFile(indexPath, "utf8");
 await writeFile(indexPath, index.replaceAll(manusOrigin, siteOrigin));
 
 const outputMediaCount = (await collectFiles(outputMediaRoot)).length;
-const expectedMediaCount = referencedAssets.length + basicPaths.size;
+const expectedMediaCount = referencedAssets.length + basicPaths.size + finishedProductPaths.size;
 if (outputMediaCount !== expectedMediaCount) {
   throw new Error(`Expected ${expectedMediaCount} media files, found ${outputMediaCount}.`);
 }
@@ -94,4 +113,4 @@ if (outputInfo.size === 0) {
   throw new Error("GitHub Pages index.html is empty.");
 }
 
-console.log(`Prepared ${outputMediaCount} GitHub Pages media files for ${siteOrigin}, including ${basicPaths.size} verified Basic Softstyle mockups.`);
+console.log(`Prepared ${outputMediaCount} GitHub Pages media files for ${siteOrigin}, including ${basicPaths.size} verified Basic Softstyle mockups and ${finishedProductPaths.size} verified finished product mockups.`);
