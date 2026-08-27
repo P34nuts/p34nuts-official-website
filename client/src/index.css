@@ -386,3 +386,11 @@ button:focus-visible, a:focus-visible { outline: 2px solid #ff3b30; outline-offs
 @media (max-width: 480px) { .booking-form-toggle { gap: .75rem; }.booking-form-toggle svg { width: 1.7rem; height: 1.7rem; }.booking-form-intro { margin-bottom: 1.3rem; } }
 .booking-form-section:not(.booking-form-section-open) { grid-template-columns: 1fr; padding-block: clamp(2rem, 3vw, 3.25rem); }
 .booking-form-section:not(.booking-form-section-open) .booking-form-heading h3 { margin-top: 1.5rem; }
+
+/* Explicit booking-form call-to-action: the expandable action must be obvious at a glance. */
+.booking-form-toggle-action { display: inline-flex !important; align-items: center; gap: .7rem; min-height: 2.8rem; padding: .75rem .9rem; background: #101012; color: #f1eee5; font-family: monospace; font-size: .62rem; font-weight: 600; letter-spacing: .085em; line-height: 1.2; text-transform: uppercase; white-space: nowrap; transition: background .18s ease, color .18s ease, transform .16s ease; }
+.booking-form-toggle-action span { display: block; }
+.booking-form-toggle-action svg { width: 1.1rem; height: 1.1rem; margin: 0; color: currentColor; stroke-width: 2; }
+.booking-form-toggle:hover .booking-form-toggle-action { background: #ff3b30; color: #101012; }
+.booking-form-toggle:active .booking-form-toggle-action { transform: scale(.97); }
+@media (max-width: 480px) { .booking-form-toggle { grid-template-columns: 1fr; align-items: start; gap: 1rem; }.booking-form-toggle-action { justify-self: start; min-height: 3rem; padding-inline: 1rem; } }

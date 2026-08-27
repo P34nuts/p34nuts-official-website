@@ -75,8 +75,11 @@ export function BookingForm({ recipient }: BookingFormProps) {
             aria-controls="booking-form-content"
             onClick={() => setIsOpen((open) => !open)}
           >
-            <span>SEND<br /><em>THE FRAME.</em></span>
-            <ChevronDown aria-hidden="true" />
+            <span className="booking-form-toggle-title">SEND<br /><em>THE FRAME.</em></span>
+            <span className="booking-form-toggle-action">
+              <span>{isOpen ? "FORMULAR SCHLIESSEN" : "BOOKING-FORMULAR ÖFFNEN"}</span>
+              <ChevronDown aria-hidden="true" />
+            </span>
           </button>
         </h3>
       </div>
