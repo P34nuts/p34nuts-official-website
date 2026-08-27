@@ -158,8 +158,8 @@ for (const record of zipHoodieMissingColorManifest.records) {
 }
 
 const shopHeroPortraitManifest = JSON.parse(await readFile(shopHeroPortraitManifestPath, "utf8"));
-if (shopHeroPortraitManifest.entryCount !== 6 || shopHeroPortraitManifest.records?.length !== 6)
-  throw new Error("Expected exactly 6 transparent shop hero portrait assets.");
+if (shopHeroPortraitManifest.entryCount !== 10 || shopHeroPortraitManifest.records?.length !== 10)
+  throw new Error("Expected exactly 10 transparent shop hero portrait assets.");
 const expectedHeroPortraitPaths = new Set([
   "shop-hero-portraits/p34nuts-hero-sit-forward.png",
   "shop-hero-portraits/p34nuts-hero-crouch-forward.png",
@@ -167,6 +167,10 @@ const expectedHeroPortraitPaths = new Set([
   "shop-hero-portraits/p34nuts-hero-throne.png",
   "shop-hero-portraits/p34nuts-hero-crown-seat.png",
   "shop-hero-portraits/p34nuts-hero-microphone.png",
+  "shop-hero-portraits/p34nuts-hero-kneel.png",
+  "shop-hero-portraits/p34nuts-hero-back-glass.png",
+  "shop-hero-portraits/p34nuts-hero-back-wings.png",
+  "shop-hero-portraits/p34nuts-hero-back-logo.png",
 ]);
 const shopHeroPortraitPaths = new Set();
 for (const record of shopHeroPortraitManifest.records) {
