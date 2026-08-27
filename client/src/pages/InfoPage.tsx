@@ -20,7 +20,7 @@ export const infoPageContent: Record<InfoKind, InfoContent> = {
   press: {
     label: "Press / EPK",
     title: "THE PRESS\nFRAME IS\nREADY.",
-    copy: "Bildwelt, Basisinformationen und ein Downloadbereich sind vorbereitet. Ein EPK wird erst nach Freigabe verlinkt.",
+    copy: "Hier entstehen Bildwelten, Basisinformationen und alles rund um Presseberichte. Außerdem folgt ein Download-Bereich. Ein EPK wird erst nach Freigabe verlinkt.",
     action: "EPK / IN FREIGABE",
   },
   shop: {

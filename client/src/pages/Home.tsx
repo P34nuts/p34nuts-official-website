@@ -360,7 +360,7 @@ export default function Home() {
               </figure>
             ))}
           </div>
-          <p className="gallery-note">Die ersten und nachfolgenden Bilder sind als austauschbare Bildslots angelegt. Das Hero-, Cover- und Portraitmotiv sind eigens für diesen Auftritt entwickelt.</p>
+
         </section>
 
         <section id="live" className="live-section section-wrap" aria-labelledby="live-title">
@@ -476,7 +476,7 @@ export default function Home() {
           <div className="press-box">
             <img className="press-frame-art" src={assets.pressFrame} alt="" loading="lazy" />
             <div><p className="eyebrow">Press / epk archive</p><h2 id="press-title">PRESS<br /><em>KIT.</em></h2></div>
-            <div className="press-content"><p>Die EPK-Struktur ist vorbereitet. Eine Datei wird erst verlinkt, wenn die finalen Materialien vorhanden sind.</p><div className="press-items">{pressKitItems.map((item) => <span key={item}>{item}</span>)}</div><a href={sitePath("/press")}>OPEN PRESS FRAME <Download size={15} /></a></div>
+            <div className="press-content"><div className="press-items">{pressKitItems.map((item) => <span key={item}>{item}</span>)}</div><a href={sitePath("/press")}>OPEN PRESS FRAME <Download size={15} /></a></div>
           </div>
         </section>
       </main>
