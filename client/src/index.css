@@ -394,3 +394,14 @@ button:focus-visible, a:focus-visible { outline: 2px solid #ff3b30; outline-offs
 .booking-form-toggle:hover .booking-form-toggle-action { background: #ff3b30; color: #101012; }
 .booking-form-toggle:active .booking-form-toggle-action { transform: scale(.97); }
 @media (max-width: 480px) { .booking-form-toggle { grid-template-columns: 1fr; align-items: start; gap: 1rem; }.booking-form-toggle-action { justify-self: start; min-height: 3rem; padding-inline: 1rem; } }
+
+/* Explicit ASK P34NUTS call-to-action: keep the FAQ compact while making the disclosure unmistakable. */
+.faq-disclosure-action { display: inline-flex; align-items: center; gap: .7rem; min-height: 2.8rem; margin-bottom: .7rem; padding: .75rem .9rem; background: #f1eee5; color: #101012; font-family: monospace; font-size: .62rem; font-weight: 600; letter-spacing: .085em; line-height: 1.2; text-transform: uppercase; white-space: nowrap; transition: background .18s ease, color .18s ease, transform .16s ease; }
+.faq-disclosure-action > span::before { content: "FAQ ÖFFNEN"; }
+.faq-disclosure-action svg { width: 1.1rem; height: 1.1rem; color: currentColor; stroke-width: 2; transition: transform .2s cubic-bezier(.23,1,.32,1); }
+.faq-disclosure-summary:hover .faq-disclosure-action { background: #ff3b30; color: #101012; }
+.faq-disclosure-summary:active .faq-disclosure-action { transform: scale(.97); }
+.faq-disclosure[open] .faq-disclosure-action > span::before { content: "FAQ SCHLIESSEN"; }
+.faq-disclosure[open] .faq-disclosure-action svg { transform: rotate(180deg); }
+@media (max-width: 820px) { .faq-disclosure-summary { grid-template-columns: 1fr; align-items: start; gap: 1.5rem; }.faq-disclosure-action { justify-self: start; margin-bottom: 0; } }
+@media (max-width: 480px) { .faq-disclosure-action { min-height: 3rem; padding-inline: 1rem; } }

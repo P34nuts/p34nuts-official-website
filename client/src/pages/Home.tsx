@@ -451,7 +451,7 @@ export default function Home() {
           <details className="faq-disclosure">
             <summary className="faq-disclosure-summary">
               <div className="faq-heading"><h2 id="faq-title">ASK<br /><em>P34NUTS.</em></h2><p>Zwischen Adiletten, Abgründen und 126 BPM: die Antworten auf die Fragen, die sowieso irgendwann kommen.</p></div>
-              <ChevronDown size={20} aria-hidden="true" />
+              <span className="faq-disclosure-action" aria-hidden="true"><span /><ChevronDown size={18} /></span>
             </summary>
             <div className="faq-list">
               {faqItems.map((item, index) => {
