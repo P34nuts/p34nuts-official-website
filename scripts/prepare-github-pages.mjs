@@ -35,6 +35,7 @@ const basicSoftstyleManifestPath = path.join(mediaRoot, "basic-softstyle-mockups
 const finishedProductManifestPath = path.join(mediaRoot, "finished-product-mockups-manifest.json");
 const mugCrewneckManifestPath = path.join(mediaRoot, "mug-crewneck-corrected-manifest.json");
 const pillowHoodie18500ManifestPath = path.join(mediaRoot, "pillow-hoodie18500-corrected-manifest.json");
+const zipHoodieMissingColorManifestPath = path.join(mediaRoot, "zip-hoodie-missing-color-mockups-manifest.json");
 
 const sourceText = await Promise.all(sourceFiles.map(file => readFile(file, "utf8")));
 const referencedAssets = [...new Set(sourceText
@@ -136,12 +137,31 @@ for (const record of pillowHoodie18500Manifest.entries) {
   await cp(source, destination);
 }
 
+const zipHoodieMissingColorManifest = JSON.parse(await readFile(zipHoodieMissingColorManifestPath, "utf8"));
+if (zipHoodieMissingColorManifest.entryCount !== 26 || zipHoodieMissingColorManifest.records?.length !== 26)
+  throw new Error("Expected exactly 26 verified Zip Hoodie missing-color mockup assets.");
+const expectedZipSyncProducts = new Set([457350442, 457351299]);
+const zipHoodieMissingColorPaths = new Set();
+for (const record of zipHoodieMissingColorManifest.records) {
+  if (typeof record.relativePath !== "string" || !record.relativePath.startsWith("zip-hoodie-missing-color-mockups/") || record.imageRole !== "back")
+    throw new Error("Invalid Zip Hoodie missing-color mockup asset path or image role in manifest.");
+  if (!expectedZipSyncProducts.has(record.syncProductId) || record.sourceType !== "printful_basic_mockup_download" || record.format !== "JPEG" || record.width !== 2000 || record.height !== 2000)
+    throw new Error("Invalid Zip Hoodie missing-color mockup identity, provenance, or technical metadata in manifest.");
+  if (zipHoodieMissingColorPaths.has(record.relativePath))
+    throw new Error(`Duplicate Zip Hoodie missing-color mockup asset path: ${record.relativePath}`);
+  zipHoodieMissingColorPaths.add(record.relativePath);
+  const source = path.join(mediaRoot, record.relativePath);
+  const destination = path.join(outputMediaRoot, record.relativePath);
+  await mkdir(path.dirname(destination), { recursive: true });
+  await cp(source, destination);
+}
+
 const indexPath = path.join(outputRoot, "index.html");
 const index = await readFile(indexPath, "utf8");
 await writeFile(indexPath, index.replaceAll(manusOrigin, siteOrigin));
 
 const outputMediaCount = (await collectFiles(outputMediaRoot)).length;
-const expectedMediaCount = referencedAssets.length + basicPaths.size + finishedProductPaths.size + mugCrewneckPaths.size + pillowHoodie18500Paths.size;
+const expectedMediaCount = referencedAssets.length + basicPaths.size + finishedProductPaths.size + mugCrewneckPaths.size + pillowHoodie18500Paths.size + zipHoodieMissingColorPaths.size;
 if (outputMediaCount !== expectedMediaCount) {
   throw new Error(`Expected ${expectedMediaCount} media files, found ${outputMediaCount}.`);
 }
@@ -151,4 +171,4 @@ if (outputInfo.size === 0) {
   throw new Error("GitHub Pages index.html is empty.");
 }
 
-console.log(`Prepared ${outputMediaCount} GitHub Pages media files for ${siteOrigin}, including ${basicPaths.size} verified Basic Softstyle mockups, ${finishedProductPaths.size} verified finished product mockups, ${mugCrewneckPaths.size} corrected Mug/Crewneck previews, and ${pillowHoodie18500Paths.size} corrected Pillow/Gildan 18500 previews.`);
+console.log(`Prepared ${outputMediaCount} GitHub Pages media files for ${siteOrigin}, including ${basicPaths.size} verified Basic Softstyle mockups, ${finishedProductPaths.size} verified finished product mockups, ${mugCrewneckPaths.size} corrected Mug/Crewneck previews, ${pillowHoodie18500Paths.size} corrected Pillow/Gildan 18500 previews, and ${zipHoodieMissingColorPaths.size} verified Zip Hoodie missing-color previews.`);
