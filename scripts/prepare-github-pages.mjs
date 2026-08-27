@@ -36,6 +36,7 @@ const finishedProductManifestPath = path.join(mediaRoot, "finished-product-mocku
 const mugCrewneckManifestPath = path.join(mediaRoot, "mug-crewneck-corrected-manifest.json");
 const pillowHoodie18500ManifestPath = path.join(mediaRoot, "pillow-hoodie18500-corrected-manifest.json");
 const zipHoodieMissingColorManifestPath = path.join(mediaRoot, "zip-hoodie-missing-color-mockups-manifest.json");
+const shopHeroPortraitManifestPath = path.join(mediaRoot, "shop-hero-portraits-manifest.json");
 
 const sourceText = await Promise.all(sourceFiles.map(file => readFile(file, "utf8")));
 const referencedAssets = [...new Set(sourceText
@@ -156,12 +157,38 @@ for (const record of zipHoodieMissingColorManifest.records) {
   await cp(source, destination);
 }
 
+const shopHeroPortraitManifest = JSON.parse(await readFile(shopHeroPortraitManifestPath, "utf8"));
+if (shopHeroPortraitManifest.entryCount !== 6 || shopHeroPortraitManifest.records?.length !== 6)
+  throw new Error("Expected exactly 6 transparent shop hero portrait assets.");
+const expectedHeroPortraitPaths = new Set([
+  "shop-hero-portraits/p34nuts-hero-sit-forward.png",
+  "shop-hero-portraits/p34nuts-hero-crouch-forward.png",
+  "shop-hero-portraits/p34nuts-hero-back-arms.png",
+  "shop-hero-portraits/p34nuts-hero-throne.png",
+  "shop-hero-portraits/p34nuts-hero-crown-seat.png",
+  "shop-hero-portraits/p34nuts-hero-microphone.png",
+]);
+const shopHeroPortraitPaths = new Set();
+for (const record of shopHeroPortraitManifest.records) {
+  if (typeof record.relativePath !== "string" || !expectedHeroPortraitPaths.has(record.relativePath) || record.hasAlpha !== true)
+    throw new Error("Invalid shop hero portrait asset manifest record.");
+  if (shopHeroPortraitPaths.has(record.relativePath))
+    throw new Error(`Duplicate shop hero portrait asset path: ${record.relativePath}`);
+  shopHeroPortraitPaths.add(record.relativePath);
+  const source = path.join(mediaRoot, record.relativePath);
+  const destination = path.join(outputMediaRoot, record.relativePath);
+  await mkdir(path.dirname(destination), { recursive: true });
+  await cp(source, destination);
+}
+if (shopHeroPortraitPaths.size !== expectedHeroPortraitPaths.size)
+  throw new Error("Shop hero portrait manifest does not contain the complete approved asset set.");
+
 const indexPath = path.join(outputRoot, "index.html");
 const index = await readFile(indexPath, "utf8");
 await writeFile(indexPath, index.replaceAll(manusOrigin, siteOrigin));
 
 const outputMediaCount = (await collectFiles(outputMediaRoot)).length;
-const expectedMediaCount = referencedAssets.length + basicPaths.size + finishedProductPaths.size + mugCrewneckPaths.size + pillowHoodie18500Paths.size + zipHoodieMissingColorPaths.size;
+const expectedMediaCount = referencedAssets.length + basicPaths.size + finishedProductPaths.size + mugCrewneckPaths.size + pillowHoodie18500Paths.size + zipHoodieMissingColorPaths.size + shopHeroPortraitPaths.size;
 if (outputMediaCount !== expectedMediaCount) {
   throw new Error(`Expected ${expectedMediaCount} media files, found ${outputMediaCount}.`);
 }
@@ -171,4 +198,4 @@ if (outputInfo.size === 0) {
   throw new Error("GitHub Pages index.html is empty.");
 }
 
-console.log(`Prepared ${outputMediaCount} GitHub Pages media files for ${siteOrigin}, including ${basicPaths.size} verified Basic Softstyle mockups, ${finishedProductPaths.size} verified finished product mockups, ${mugCrewneckPaths.size} corrected Mug/Crewneck previews, ${pillowHoodie18500Paths.size} corrected Pillow/Gildan 18500 previews, and ${zipHoodieMissingColorPaths.size} verified Zip Hoodie missing-color previews.`);
+console.log(`Prepared ${outputMediaCount} GitHub Pages media files for ${siteOrigin}, including ${basicPaths.size} verified Basic Softstyle mockups, ${finishedProductPaths.size} verified finished product mockups, ${mugCrewneckPaths.size} corrected Mug/Crewneck previews, ${pillowHoodie18500Paths.size} corrected Pillow/Gildan 18500 previews, ${zipHoodieMissingColorPaths.size} verified Zip Hoodie missing-color previews, and ${shopHeroPortraitPaths.size} transparent shop hero portraits.`);
