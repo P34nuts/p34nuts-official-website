@@ -12,7 +12,7 @@ const masterAsset = (path: string) => sitePath(path);
 /** First artist-approved portrait set. Each frame has a distinct editorial job on the homepage. */
 export const artistPortraitSet = {
   throneEditorial: masterAsset("/manus-storage/01-throne-editorial_5b96d963.png"),
-  skylineHero: masterAsset("/manus-storage/02-skyline-hero_311b4fb6.png"),
+  skylineHero: masterAsset("/manus-storage/p34nuts-hero-crown-red-rift_abfb9afa.png"),
   studioMicrophone: masterAsset("/manus-storage/03-studio-microphone_2b56f5ad.png"),
   stageBooking: masterAsset("/manus-storage/04-stage-booking_5ba2e741.png"),
   rainPressure: masterAsset("/manus-storage/05-rain-car-pressure_b380ff7c.png"),
