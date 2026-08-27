@@ -71,8 +71,8 @@ if (unresolved.length > 0) {
 // permanent Pages origin. The manifest is generated from the validated task
 // ledger and guards against accidentally publishing arbitrary media files.
 const basicSoftstyleManifest = JSON.parse(await readFile(basicSoftstyleManifestPath, "utf8"));
-if (basicSoftstyleManifest.entryCount !== 1034 || basicSoftstyleManifest.records?.length !== 1034)
-  throw new Error("Expected exactly 1034 verified Basic Softstyle mockup assets.");
+if (basicSoftstyleManifest.entryCount !== 1102 || basicSoftstyleManifest.records?.length !== 1102)
+  throw new Error("Expected exactly 1102 verified Basic Softstyle mockup assets.");
 const basicPaths = new Set();
 for (const record of basicSoftstyleManifest.records) {
   if (typeof record.relativePath !== "string" || !record.relativePath.startsWith("basic-softstyle-mockups/"))
