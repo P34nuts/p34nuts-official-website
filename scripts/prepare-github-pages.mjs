@@ -100,13 +100,13 @@ for (const record of finishedProductManifest.records) {
 }
 
 const mugCrewneckManifest = JSON.parse(await readFile(mugCrewneckManifestPath, "utf8"));
-if (mugCrewneckManifest.entryCount !== 86 || mugCrewneckManifest.entries?.length !== 86 || mugCrewneckManifest.errors?.length !== 0)
-  throw new Error("Expected exactly 86 verified Mug/Crewneck correction assets without errors.");
+if (mugCrewneckManifest.entryCount !== 581 || mugCrewneckManifest.entries?.length !== 581 || mugCrewneckManifest.errors?.length !== 0)
+  throw new Error("Expected exactly 581 verified Mug/Crewneck correction assets without errors.");
 const mugCrewneckPaths = new Set();
 for (const record of mugCrewneckManifest.entries) {
   if (typeof record.relativePath !== "string" || !record.relativePath.startsWith("mug-crewneck-corrected/") || record.imageRole !== "front")
     throw new Error("Invalid Mug/Crewneck correction asset path or image role in manifest.");
-  if (!Number.isInteger(record.syncProductId) || !record.key || !record.sourceUrl?.startsWith("https://files.cdn.printful.com/"))
+  if (!Number.isInteger(record.syncProductId) || !record.key || !["https://files.cdn.printful.com/", "https://printful-upload.s3-accelerate.amazonaws.com/"].some(prefix => record.sourceUrl?.startsWith(prefix)))
     throw new Error("Invalid Mug/Crewneck correction asset identity or source URL in manifest.");
   if (mugCrewneckPaths.has(record.relativePath))
     throw new Error(`Duplicate Mug/Crewneck correction asset path: ${record.relativePath}`);
