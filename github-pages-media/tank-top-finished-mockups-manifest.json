@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-08-27T20:27:54.656Z",
-  "entryCount": 170,
+  "generatedAt": "2026-08-27T20:38:08.608Z",
+  "entryCount": 175,
   "family": "tank_tops",
-  "latestBlock": "tank_top_block_17",
+  "latestBlock": "tank_top_block_18",
   "entries": [
     {
       "blockId": "tank_top_block_01",
@@ -4253,6 +4253,131 @@
       "height": 1000,
       "bytes": 71505,
       "sha256": "58faf06db6db9b0affc34f9d73bcee8ea5ab5dc28f87ca0b2a256fd0c9dad357"
+    },
+    {
+      "blockId": "tank_top_block_18",
+      "syncProductId": 457354475,
+      "productName": "P34nuts 35 unisex staple tank top bella canvas 3480",
+      "color": "Athletic Heather",
+      "variantIds": [
+        8634,
+        8635,
+        8636,
+        8637,
+        8638,
+        8639
+      ],
+      "imageRole": "front",
+      "sourceType": "printful_mockup_generator",
+      "sourceTaskKey": "gt-962173357",
+      "sourceUrl": "https://printful-upload.s3-accelerate.amazonaws.com/tmp/fdf71bafed1376418489cffd3bcbb3be/unisex-staple-tank-top-athletic-heather-front-6a90a022addb8.jpg",
+      "relativePath": "tank-top-finished-mockups/457354475-athletic-heather-front.jpg",
+      "publicUrl": "https://p34nuts.github.io/manus-storage/tank-top-finished-mockups/457354475-athletic-heather-front.jpg",
+      "format": "JPEG",
+      "width": 1000,
+      "height": 1000,
+      "bytes": 162689,
+      "sha256": "8cbc074d5e7d74d94049445473cf107cdbcb0b79d3af042458d00a7a72cee7dc"
+    },
+    {
+      "blockId": "tank_top_block_18",
+      "syncProductId": 457354475,
+      "productName": "P34nuts 35 unisex staple tank top bella canvas 3480",
+      "color": "Navy",
+      "variantIds": [
+        8646,
+        8647,
+        8648,
+        8649,
+        8650,
+        8651
+      ],
+      "imageRole": "front",
+      "sourceType": "printful_mockup_generator",
+      "sourceTaskKey": "gt-962173357",
+      "sourceUrl": "https://printful-upload.s3-accelerate.amazonaws.com/tmp/62756ab8b37e82c89c66de2500ada53a/unisex-staple-tank-top-navy-front-6a90a022ad31b.jpg",
+      "relativePath": "tank-top-finished-mockups/457354475-navy-front.jpg",
+      "publicUrl": "https://p34nuts.github.io/manus-storage/tank-top-finished-mockups/457354475-navy-front.jpg",
+      "format": "JPEG",
+      "width": 1000,
+      "height": 1000,
+      "bytes": 125699,
+      "sha256": "2050d2dba79837945e4f1be5f570da1adc38f53e59680660b35c28e3867d616e"
+    },
+    {
+      "blockId": "tank_top_block_18",
+      "syncProductId": 457354475,
+      "productName": "P34nuts 35 unisex staple tank top bella canvas 3480",
+      "color": "Red",
+      "variantIds": [
+        8652,
+        8653,
+        8654,
+        8655,
+        8656,
+        8657
+      ],
+      "imageRole": "front",
+      "sourceType": "printful_mockup_generator",
+      "sourceTaskKey": "gt-962173357",
+      "sourceUrl": "https://printful-upload.s3-accelerate.amazonaws.com/tmp/bf31cc47d0712d075089e2de2521a76a/unisex-staple-tank-top-red-front-6a90a022ad94a.jpg",
+      "relativePath": "tank-top-finished-mockups/457354475-red-front.jpg",
+      "publicUrl": "https://p34nuts.github.io/manus-storage/tank-top-finished-mockups/457354475-red-front.jpg",
+      "format": "JPEG",
+      "width": 1000,
+      "height": 1000,
+      "bytes": 140982,
+      "sha256": "6f1bc455a93c9ff234829186fb897b1616e0230d81f23ab63b9316747e035d25"
+    },
+    {
+      "blockId": "tank_top_block_18",
+      "syncProductId": 457354475,
+      "productName": "P34nuts 35 unisex staple tank top bella canvas 3480",
+      "color": "True Royal",
+      "variantIds": [
+        8640,
+        8641,
+        8642,
+        8643,
+        8644,
+        8645
+      ],
+      "imageRole": "front",
+      "sourceType": "printful_mockup_generator",
+      "sourceTaskKey": "gt-962173357",
+      "sourceUrl": "https://printful-upload.s3-accelerate.amazonaws.com/tmp/505d4e6b5b1dc0d972799d7a3833aa47/unisex-staple-tank-top-true-royal-front-6a90a022adb0c.jpg",
+      "relativePath": "tank-top-finished-mockups/457354475-true-royal-front.jpg",
+      "publicUrl": "https://p34nuts.github.io/manus-storage/tank-top-finished-mockups/457354475-true-royal-front.jpg",
+      "format": "JPEG",
+      "width": 1000,
+      "height": 1000,
+      "bytes": 139622,
+      "sha256": "3a474c7e8e4a4b4b2dca6714cee2b80485fa98ff561fb258c28840ba6304a929"
+    },
+    {
+      "blockId": "tank_top_block_18",
+      "syncProductId": 457354475,
+      "productName": "P34nuts 35 unisex staple tank top bella canvas 3480",
+      "color": "White",
+      "variantIds": [
+        8658,
+        8659,
+        8660,
+        8661,
+        8662,
+        8663
+      ],
+      "imageRole": "front",
+      "sourceType": "printful_mockup_generator",
+      "sourceTaskKey": "gt-962173357",
+      "sourceUrl": "https://printful-upload.s3-accelerate.amazonaws.com/tmp/f089779151d0c2825b256a9500575b37/unisex-staple-tank-top-white-front-6a90a022ae19c.jpg",
+      "relativePath": "tank-top-finished-mockups/457354475-white-front.jpg",
+      "publicUrl": "https://p34nuts.github.io/manus-storage/tank-top-finished-mockups/457354475-white-front.jpg",
+      "format": "JPEG",
+      "width": 1000,
+      "height": 1000,
+      "bytes": 108244,
+      "sha256": "a40121aa36b270fc37b106128f8e5bbe0fc5813829029237434ac014154e350c"
     }
   ],
   "errors": []
