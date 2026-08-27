@@ -225,16 +225,16 @@ export default function Home() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: reduceMotion ? 0 : 1.1, delay: reduceMotion ? 0 : 0.12, ease: [0.23, 1, 0.32, 1] }}
           />
-          <div className="hero-lightning" aria-hidden="true" />
+          <div className="hero-stormlight" aria-hidden="true" />
           <div className="hero-veil" aria-hidden="true" />
           <motion.img
             className="hero-image hero-subject-layer"
             src={assets.heroPersonLayer}
             alt=""
             aria-hidden="true"
-            initial={reduceMotion ? false : { opacity: 0, y: 10, scale: 1.012 }}
+            initial={reduceMotion ? false : { opacity: 0, y: 6, scale: 1.008 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: reduceMotion ? 0 : 2.8, delay: reduceMotion ? 0 : 5, ease: [0.23, 1, 0.32, 1] }}
+            transition={{ duration: reduceMotion ? 0 : 10, delay: reduceMotion ? 0 : 2, ease: "linear" }}
           />
           <div className="hero-register">00 / opening frame <span /></div>
           <motion.div
@@ -243,8 +243,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.62, delay: reduceMotion ? 0 : 0.22, ease: [0.23, 1, 0.32, 1] }}
           >
-            <p className="eyebrow">Independent artist / music archive</p>
-            <h1 id="hero-title" className="hero-wordmark"><img src={assets.heroWordmark} alt="P34nuts" /></h1>
+            <p id="hero-title" className="eyebrow">Independent artist / music archive</p>
             <p className="hero-line">Musik zwischen Maske, <i>Wahrheit und Frequenz.</i></p>
             <a href="#start-here" className="hero-cta">START WITH MUSIC <ArrowDown size={17} /></a>
           </motion.div>
