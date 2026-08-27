@@ -38,6 +38,7 @@ const pillowHoodie18500ManifestPath = path.join(mediaRoot, "pillow-hoodie18500-c
 const zipHoodieMissingColorManifestPath = path.join(mediaRoot, "zip-hoodie-missing-color-mockups-manifest.json");
 const shopHeroPortraitManifestPath = path.join(mediaRoot, "shop-hero-portraits-manifest.json");
 const crewneckYouthFinishedManifestPath = path.join(mediaRoot, "crewneck-youth-finished-mockups-manifest.json");
+const tankTopFinishedManifestPath = path.join(mediaRoot, "tank-top-finished-mockups-manifest.json");
 
 const sourceText = await Promise.all(sourceFiles.map(file => readFile(file, "utf8")));
 const referencedAssets = [...new Set(sourceText
@@ -206,12 +207,30 @@ for (const record of crewneckYouthFinishedManifest.entries) {
   await cp(source, destination);
 }
 
+const tankTopFinishedManifest = JSON.parse(await readFile(tankTopFinishedManifestPath, "utf8"));
+if (!Number.isInteger(tankTopFinishedManifest.entryCount) || tankTopFinishedManifest.entryCount < 10 || tankTopFinishedManifest.entries?.length !== tankTopFinishedManifest.entryCount || tankTopFinishedManifest.errors?.length !== 0)
+  throw new Error("Expected a non-empty, internally consistent Tank-Top finished-mockup manifest without errors.");
+const tankTopFinishedPaths = new Set();
+for (const record of tankTopFinishedManifest.entries) {
+  if (typeof record.relativePath !== "string" || !record.relativePath.startsWith("tank-top-finished-mockups/") || record.imageRole !== "front")
+    throw new Error("Invalid Tank-Top correction asset path or image role in manifest.");
+  if (!Number.isInteger(record.syncProductId) || !record.color || record.sourceType !== "printful_mockup_generator" || !record.sourceUrl?.startsWith("https://printful-upload.s3-accelerate.amazonaws.com/") || record.format !== "JPEG" || record.width < 400 || record.height < 400)
+    throw new Error("Invalid Tank-Top correction asset identity, provenance, or technical metadata in manifest.");
+  if (tankTopFinishedPaths.has(record.relativePath))
+    throw new Error(`Duplicate Tank-Top correction asset path: ${record.relativePath}`);
+  tankTopFinishedPaths.add(record.relativePath);
+  const source = path.join(mediaRoot, record.relativePath);
+  const destination = path.join(outputMediaRoot, record.relativePath);
+  await mkdir(path.dirname(destination), { recursive: true });
+  await cp(source, destination);
+}
+
 const indexPath = path.join(outputRoot, "index.html");
 const index = await readFile(indexPath, "utf8");
 await writeFile(indexPath, index.replaceAll(manusOrigin, siteOrigin));
 
 const outputMediaCount = (await collectFiles(outputMediaRoot)).length;
-const expectedMediaCount = referencedAssets.length + basicPaths.size + finishedProductPaths.size + mugCrewneckPaths.size + pillowHoodie18500Paths.size + zipHoodieMissingColorPaths.size + shopHeroPortraitPaths.size + crewneckYouthFinishedPaths.size;
+const expectedMediaCount = referencedAssets.length + basicPaths.size + finishedProductPaths.size + mugCrewneckPaths.size + pillowHoodie18500Paths.size + zipHoodieMissingColorPaths.size + shopHeroPortraitPaths.size + crewneckYouthFinishedPaths.size + tankTopFinishedPaths.size;
 if (outputMediaCount !== expectedMediaCount) {
   throw new Error(`Expected ${expectedMediaCount} media files, found ${outputMediaCount}.`);
 }
@@ -221,4 +240,4 @@ if (outputInfo.size === 0) {
   throw new Error("GitHub Pages index.html is empty.");
 }
 
-console.log(`Prepared ${outputMediaCount} GitHub Pages media files for ${siteOrigin}, including ${basicPaths.size} verified Basic Softstyle mockups, ${finishedProductPaths.size} verified finished product mockups, ${mugCrewneckPaths.size} corrected Mug/Crewneck previews, ${pillowHoodie18500Paths.size} corrected Pillow/Gildan 18500 previews, ${zipHoodieMissingColorPaths.size} verified Zip Hoodie missing-color previews, ${shopHeroPortraitPaths.size} transparent shop hero portraits, and ${crewneckYouthFinishedPaths.size} corrected Crew Neck/Youth Classic previews.`);
+console.log(`Prepared ${outputMediaCount} GitHub Pages media files for ${siteOrigin}, including ${basicPaths.size} verified Basic Softstyle mockups, ${finishedProductPaths.size} verified finished product mockups, ${mugCrewneckPaths.size} corrected Mug/Crewneck previews, ${pillowHoodie18500Paths.size} corrected Pillow/Gildan 18500 previews, ${zipHoodieMissingColorPaths.size} verified Zip Hoodie missing-color previews, ${shopHeroPortraitPaths.size} transparent shop hero portraits, and ${crewneckYouthFinishedPaths.size} corrected Crew Neck/Youth Classic previews, plus ${tankTopFinishedPaths.size} verified Tank-Top previews.`);
