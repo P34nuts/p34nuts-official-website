@@ -225,7 +225,12 @@ export default function Home() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: reduceMotion ? 0 : 1.1, delay: reduceMotion ? 0 : 0.12, ease: [0.23, 1, 0.32, 1] }}
           />
-          <div className="hero-stormlight" aria-hidden="true" />
+          <div className="hero-stormlight" aria-hidden="true">
+            <img className="hero-storm-clouds" src={assets.heroStormLayer} alt="" />
+            <span className="hero-storm-flash hero-storm-flash-primary" />
+            <span className="hero-storm-flash hero-storm-flash-secondary" />
+            <span className="hero-storm-flash hero-storm-flash-distant" />
+          </div>
           <div className="hero-veil" aria-hidden="true" />
           <motion.img
             className="hero-image hero-subject-layer"

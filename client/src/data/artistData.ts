@@ -13,7 +13,8 @@ const masterAsset = (path: string) => sitePath(path);
 export const artistPortraitSet = {
   throneEditorial: masterAsset("/manus-storage/01-throne-editorial_5b96d963.png"),
   skylineHero: masterAsset("/manus-storage/p34nuts-hero-storm-city_43d245f7.png"),
-  heroPersonLayer: masterAsset("/manus-storage/p34nuts-hero-person-layer_ae8bd23b.png"),
+  heroPersonLayer: masterAsset("/manus-storage/p34nuts-hero-person-layer-v2_89a5e72c.png"),
+  heroStormLayer: masterAsset("/manus-storage/p34nuts-left-sky-storm-overlay_0b197bdf.png"),
   studioMicrophone: masterAsset("/manus-storage/03-studio-microphone_2b56f5ad.png"),
   stageBooking: masterAsset("/manus-storage/04-stage-booking_5ba2e741.png"),
   rainPressure: masterAsset("/manus-storage/05-rain-car-pressure_b380ff7c.png"),
@@ -36,6 +37,7 @@ export const artistPortraitSet02 = {
 export const assets = {
   hero: artistPortraitSet.skylineHero,
   heroPersonLayer: artistPortraitSet.heroPersonLayer,
+  heroStormLayer: artistPortraitSet.heroStormLayer,
   headerWordmark: masterAsset("/manus-storage/p34nuts-header-wordmark-transparent_40231558.png"),
   shopHeaderWordmark: masterAsset("/manus-storage/p34nuts-shop-header.png"),
   heroWordmark: masterAsset("/manus-storage/p34nuts-header-wordmark_60ae815f.png"),
