@@ -34,6 +34,7 @@ const sourceFiles = [
 const basicSoftstyleManifestPath = path.join(mediaRoot, "basic-softstyle-mockups-manifest.json");
 const finishedProductManifestPath = path.join(mediaRoot, "finished-product-mockups-manifest.json");
 const mugCrewneckManifestPath = path.join(mediaRoot, "mug-crewneck-corrected-manifest.json");
+const pillowHoodie18500ManifestPath = path.join(mediaRoot, "pillow-hoodie18500-corrected-manifest.json");
 
 const sourceText = await Promise.all(sourceFiles.map(file => readFile(file, "utf8")));
 const referencedAssets = [...new Set(sourceText
@@ -117,12 +118,30 @@ for (const record of mugCrewneckManifest.entries) {
   await cp(source, destination);
 }
 
+const pillowHoodie18500Manifest = JSON.parse(await readFile(pillowHoodie18500ManifestPath, "utf8"));
+if (pillowHoodie18500Manifest.entryCount !== 575 || pillowHoodie18500Manifest.entries?.length !== 575 || pillowHoodie18500Manifest.errors?.length !== 0)
+  throw new Error("Expected exactly 575 verified Pillow/Gildan 18500 correction assets without errors.");
+const pillowHoodie18500Paths = new Set();
+for (const record of pillowHoodie18500Manifest.entries) {
+  if (typeof record.relativePath !== "string" || !record.relativePath.startsWith("pillow-hoodie18500-corrected/") || !["front", "back"].includes(record.imageRole))
+    throw new Error("Invalid Pillow/Gildan 18500 correction asset path or image role in manifest.");
+  if (!Number.isInteger(record.syncProductId) || !record.key || !["basic_pillow", "hoodie18500"].includes(record.family) || !["https://files.cdn.printful.com/", "https://printful-upload.s3-accelerate.amazonaws.com/"].some(prefix => record.sourceUrl?.startsWith(prefix)))
+    throw new Error("Invalid Pillow/Gildan 18500 correction asset identity or source URL in manifest.");
+  if (pillowHoodie18500Paths.has(record.relativePath))
+    throw new Error(`Duplicate Pillow/Gildan 18500 correction asset path: ${record.relativePath}`);
+  pillowHoodie18500Paths.add(record.relativePath);
+  const source = path.join(mediaRoot, record.relativePath);
+  const destination = path.join(outputMediaRoot, record.relativePath);
+  await mkdir(path.dirname(destination), { recursive: true });
+  await cp(source, destination);
+}
+
 const indexPath = path.join(outputRoot, "index.html");
 const index = await readFile(indexPath, "utf8");
 await writeFile(indexPath, index.replaceAll(manusOrigin, siteOrigin));
 
 const outputMediaCount = (await collectFiles(outputMediaRoot)).length;
-const expectedMediaCount = referencedAssets.length + basicPaths.size + finishedProductPaths.size + mugCrewneckPaths.size;
+const expectedMediaCount = referencedAssets.length + basicPaths.size + finishedProductPaths.size + mugCrewneckPaths.size + pillowHoodie18500Paths.size;
 if (outputMediaCount !== expectedMediaCount) {
   throw new Error(`Expected ${expectedMediaCount} media files, found ${outputMediaCount}.`);
 }
@@ -132,4 +151,4 @@ if (outputInfo.size === 0) {
   throw new Error("GitHub Pages index.html is empty.");
 }
 
-console.log(`Prepared ${outputMediaCount} GitHub Pages media files for ${siteOrigin}, including ${basicPaths.size} verified Basic Softstyle mockups, ${finishedProductPaths.size} verified finished product mockups, and ${mugCrewneckPaths.size} corrected Mug/Crewneck previews.`);
+console.log(`Prepared ${outputMediaCount} GitHub Pages media files for ${siteOrigin}, including ${basicPaths.size} verified Basic Softstyle mockups, ${finishedProductPaths.size} verified finished product mockups, ${mugCrewneckPaths.size} corrected Mug/Crewneck previews, and ${pillowHoodie18500Paths.size} corrected Pillow/Gildan 18500 previews.`);
