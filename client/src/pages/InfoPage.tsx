@@ -1,8 +1,9 @@
 /** NOIR CUT LEGAL FRAME — structured public information without inventing personal details. */
-import { ArrowLeft, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { useEffect } from "react";
 import { Link } from "wouter";
 import { assets, booking } from "@/data/artistData";
+import { SubpageDualBrandHeader } from "@/components/SubpageDualBrandHeader";
 
 type InfoKind = "booking" | "press" | "shop" | "impressum" | "datenschutz";
 type InfoSection = { heading: string; copy: string; value?: string };
@@ -90,10 +91,7 @@ export default function InfoPage({ kind }: { kind: InfoKind }) {
 
   return (
     <main className={`subpage-shell info-page ${hasPortrait ? "info-page--portrait" : ""}`}>
-      <header className="subpage-header">
-        <Link href="/" className="brand-lockup brand-home-wordmark"><img src={assets.headerWordmark} alt="P34nuts" /></Link>
-        <Link href="/" className="subpage-back"><ArrowLeft size={16} /> HOME</Link>
-      </header>
+      <SubpageDualBrandHeader />
       <section className="info-page-content">
         {hasPortrait ? <><img className="info-page-portrait" src={assets.hero} alt="" /><div className="info-page-portrait-veil" /><div className="info-page-content-inner">{content}</div></> : content}
       </section>
