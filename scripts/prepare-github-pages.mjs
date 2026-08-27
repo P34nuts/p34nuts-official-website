@@ -37,6 +37,7 @@ const mugCrewneckManifestPath = path.join(mediaRoot, "mug-crewneck-corrected-man
 const pillowHoodie18500ManifestPath = path.join(mediaRoot, "pillow-hoodie18500-corrected-manifest.json");
 const zipHoodieMissingColorManifestPath = path.join(mediaRoot, "zip-hoodie-missing-color-mockups-manifest.json");
 const shopHeroPortraitManifestPath = path.join(mediaRoot, "shop-hero-portraits-manifest.json");
+const crewneckYouthFinishedManifestPath = path.join(mediaRoot, "crewneck-youth-finished-mockups-manifest.json");
 
 const sourceText = await Promise.all(sourceFiles.map(file => readFile(file, "utf8")));
 const referencedAssets = [...new Set(sourceText
@@ -187,12 +188,30 @@ for (const record of shopHeroPortraitManifest.records) {
 if (shopHeroPortraitPaths.size !== expectedHeroPortraitPaths.size)
   throw new Error("Shop hero portrait manifest does not contain the complete approved asset set.");
 
+const crewneckYouthFinishedManifest = JSON.parse(await readFile(crewneckYouthFinishedManifestPath, "utf8"));
+if (crewneckYouthFinishedManifest.entryCount !== 40 || crewneckYouthFinishedManifest.entries?.length !== 40 || crewneckYouthFinishedManifest.errors?.length !== 0)
+  throw new Error("Expected exactly 40 verified Crew Neck/Youth Classic correction assets without errors.");
+const crewneckYouthFinishedPaths = new Set();
+for (const record of crewneckYouthFinishedManifest.entries) {
+  if (typeof record.relativePath !== "string" || !record.relativePath.startsWith("crewneck-youth-finished-mockups/") || record.imageRole !== "front")
+    throw new Error("Invalid Crew Neck/Youth Classic correction asset path or image role in manifest.");
+  if (!Number.isInteger(record.syncProductId) || !record.color || record.sourceType !== "printful_mockup_generator" || !record.sourceUrl?.startsWith("https://printful-upload.s3-accelerate.amazonaws.com/"))
+    throw new Error("Invalid Crew Neck/Youth Classic correction asset identity or provenance in manifest.");
+  if (crewneckYouthFinishedPaths.has(record.relativePath))
+    throw new Error(`Duplicate Crew Neck/Youth Classic correction asset path: ${record.relativePath}`);
+  crewneckYouthFinishedPaths.add(record.relativePath);
+  const source = path.join(mediaRoot, record.relativePath);
+  const destination = path.join(outputMediaRoot, record.relativePath);
+  await mkdir(path.dirname(destination), { recursive: true });
+  await cp(source, destination);
+}
+
 const indexPath = path.join(outputRoot, "index.html");
 const index = await readFile(indexPath, "utf8");
 await writeFile(indexPath, index.replaceAll(manusOrigin, siteOrigin));
 
 const outputMediaCount = (await collectFiles(outputMediaRoot)).length;
-const expectedMediaCount = referencedAssets.length + basicPaths.size + finishedProductPaths.size + mugCrewneckPaths.size + pillowHoodie18500Paths.size + zipHoodieMissingColorPaths.size + shopHeroPortraitPaths.size;
+const expectedMediaCount = referencedAssets.length + basicPaths.size + finishedProductPaths.size + mugCrewneckPaths.size + pillowHoodie18500Paths.size + zipHoodieMissingColorPaths.size + shopHeroPortraitPaths.size + crewneckYouthFinishedPaths.size;
 if (outputMediaCount !== expectedMediaCount) {
   throw new Error(`Expected ${expectedMediaCount} media files, found ${outputMediaCount}.`);
 }
@@ -202,4 +221,4 @@ if (outputInfo.size === 0) {
   throw new Error("GitHub Pages index.html is empty.");
 }
 
-console.log(`Prepared ${outputMediaCount} GitHub Pages media files for ${siteOrigin}, including ${basicPaths.size} verified Basic Softstyle mockups, ${finishedProductPaths.size} verified finished product mockups, ${mugCrewneckPaths.size} corrected Mug/Crewneck previews, ${pillowHoodie18500Paths.size} corrected Pillow/Gildan 18500 previews, ${zipHoodieMissingColorPaths.size} verified Zip Hoodie missing-color previews, and ${shopHeroPortraitPaths.size} transparent shop hero portraits.`);
+console.log(`Prepared ${outputMediaCount} GitHub Pages media files for ${siteOrigin}, including ${basicPaths.size} verified Basic Softstyle mockups, ${finishedProductPaths.size} verified finished product mockups, ${mugCrewneckPaths.size} corrected Mug/Crewneck previews, ${pillowHoodie18500Paths.size} corrected Pillow/Gildan 18500 previews, ${zipHoodieMissingColorPaths.size} verified Zip Hoodie missing-color previews, ${shopHeroPortraitPaths.size} transparent shop hero portraits, and ${crewneckYouthFinishedPaths.size} corrected Crew Neck/Youth Classic previews.`);
