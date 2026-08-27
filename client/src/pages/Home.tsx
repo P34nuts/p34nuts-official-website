@@ -230,6 +230,8 @@ export default function Home() {
             <span className="hero-storm-flash hero-storm-flash-primary" />
             <span className="hero-storm-flash hero-storm-flash-secondary" />
             <span className="hero-storm-flash hero-storm-flash-distant" />
+            <span className="hero-storm-flash hero-storm-flash-wide" />
+            <span className="hero-storm-flash hero-storm-flash-far" />
           </div>
           <div className="hero-veil" aria-hidden="true" />
           <motion.img
