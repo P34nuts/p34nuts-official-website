@@ -219,22 +219,23 @@ export default function Home() {
           <motion.img
             className="hero-image hero-depth-image hero-skyline-layer"
             src={assets.hero}
-            alt="P34nuts in Rückenansicht vor einer regennassen Skyline bei Nacht"
+            alt="Regennasse Skyline bei Nacht mit rotem Blitz am Himmel"
             fetchPriority="high"
-            initial={reduceMotion ? false : { opacity: 0, scale: 1.045 }}
+            initial={reduceMotion ? false : { opacity: 0, scale: 1.035 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: reduceMotion ? 0 : 1.9, delay: reduceMotion ? 0 : 1.15, ease: [0.23, 1, 0.32, 1] }}
+            transition={{ duration: reduceMotion ? 0 : 1.1, delay: reduceMotion ? 0 : 0.12, ease: [0.23, 1, 0.32, 1] }}
           />
+          <div className="hero-lightning" aria-hidden="true" />
+          <div className="hero-veil" aria-hidden="true" />
           <motion.img
-            className="hero-image hero-depth-image hero-subject-layer"
-            src={assets.hero}
+            className="hero-image hero-subject-layer"
+            src={assets.heroPersonLayer}
             alt=""
             aria-hidden="true"
-            initial={reduceMotion ? false : { opacity: 0, y: 14, scale: 1.018 }}
+            initial={reduceMotion ? false : { opacity: 0, y: 10, scale: 1.012 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: reduceMotion ? 0 : 0.46, delay: reduceMotion ? 0 : 0.08, ease: [0.23, 1, 0.32, 1] }}
+            transition={{ duration: reduceMotion ? 0 : 2.8, delay: reduceMotion ? 0 : 5, ease: [0.23, 1, 0.32, 1] }}
           />
-          <div className="hero-veil" aria-hidden="true" />
           <div className="hero-register">00 / opening frame <span /></div>
           <motion.div
             className="hero-copy"

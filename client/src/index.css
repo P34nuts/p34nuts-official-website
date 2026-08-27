@@ -405,3 +405,15 @@ button:focus-visible, a:focus-visible { outline: 2px solid #ff3b30; outline-offs
 .faq-disclosure[open] .faq-disclosure-action svg { transform: rotate(180deg); }
 @media (max-width: 820px) { .faq-disclosure-summary { grid-template-columns: 1fr; align-items: start; gap: 1.5rem; }.faq-disclosure-action { justify-self: start; margin-bottom: 0; } }
 @media (max-width: 480px) { .faq-disclosure-action { min-height: 3rem; padding-inline: 1rem; } }
+
+/* Storm-city hero: city, sky flash and artist remain separate for a clear opening sequence. */
+.hero-skyline-layer { z-index: -4; object-position: 61% center; }
+.hero-subject-layer { z-index: -1; object-position: 72% 100%; filter: drop-shadow(-1.1rem .8rem 1.4rem rgba(0,0,0,.42)); }
+.hero-lightning { position: absolute; z-index: -3; top: 0; right: 0; width: 69%; height: 58%; overflow: hidden; pointer-events: none; mix-blend-mode: screen; }
+.hero-lightning::before, .hero-lightning::after { content: ""; position: absolute; pointer-events: none; opacity: 0; }
+.hero-lightning::before { top: -4%; right: 16%; width: 2.4rem; height: 76%; background: linear-gradient(145deg, transparent 0 26%, rgba(255,240,226,.18) 27% 30%, #ff3b30 31% 34%, rgba(255,92,74,.88) 35% 38%, transparent 39% 47%, #ff3b30 48% 51%, rgba(255,240,226,.22) 52% 55%, transparent 56%); filter: blur(.45px) drop-shadow(0 0 .52rem rgba(255,59,48,.9)); transform: rotate(8deg); animation: heroLightningStrike 15s linear 3.2s infinite; }
+.hero-lightning::after { inset: 0; background: radial-gradient(ellipse at 73% 32%, rgba(255,76,59,.42), rgba(255,59,48,.16) 18%, transparent 46%); animation: heroSkyFlash 15s linear 3.2s infinite; }
+@keyframes heroLightningStrike { 0%, 51%, 52.2%, 52.75%, 53.3%, 100% { opacity: 0; } 51.55% { opacity: .42; } 51.8% { opacity: 1; } 52.45% { opacity: .18; } 52.6% { opacity: .74; } 52.98% { opacity: .1; } }
+@keyframes heroSkyFlash { 0%, 50.8%, 51.2%, 52.9%, 53.5%, 100% { opacity: 0; } 51% { opacity: .18; } 51.75% { opacity: .66; } 52.55% { opacity: .12; } 53.15% { opacity: .35; } }
+@media (max-width: 820px) { .hero-skyline-layer { object-position: 68% center; } .hero-subject-layer { object-position: 80% 100%; } .hero-lightning { width: 78%; height: 54%; } .hero-copy { position: relative; z-index: 1; text-shadow: 0 .18rem .9rem rgba(0,0,0,.88); } .hero-register { z-index: 1; text-shadow: 0 .12rem .6rem rgba(0,0,0,.9); } }
+@media (prefers-reduced-motion: reduce) { .hero-lightning, .hero-lightning::before, .hero-lightning::after { animation: none; opacity: 0; } }
