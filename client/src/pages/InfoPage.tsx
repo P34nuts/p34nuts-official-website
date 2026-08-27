@@ -6,7 +6,7 @@ import { assets, booking } from "@/data/artistData";
 import { SubpageDualBrandHeader } from "@/components/SubpageDualBrandHeader";
 
 type InfoKind = "booking" | "press" | "shop" | "impressum" | "datenschutz";
-type InfoSection = { heading: string; copy: string; value?: string };
+type InfoSection = { heading: string; copy: string; closingCopy?: string; value?: string };
 type InfoContent = { label: string; title: string; copy: string; action: string; href?: string; notice?: string; sections?: InfoSection[] };
 
 export const infoPageContent: Record<InfoKind, InfoContent> = {
@@ -47,8 +47,7 @@ export const infoPageContent: Record<InfoKind, InfoContent> = {
       { heading: "KI-gestützte Produktion", copy: "Die finale musikalische Komposition und die stimmliche Umsetzung erfolgen über generative KI-Technologie (Suno AI)." },
       { heading: "Aufwand & Leidenschaft", copy: "Auch wenn künstliche Intelligenz als mächtiges Werkzeug dient, steckt in jedem fertigen Track unzählige Stunden an Songwriting, feinteiligem Prompt-Engineering, manuellem Arrangement, Kuration und Feinschliff. Es ist ein modernes Kunstprojekt, das neue digitale Wege im Musikbereich beschreitet." },
       { heading: "Buchungen & Live-Auftritte", copy: "Für Buchungen, Events und Live-Auftritte wird ausdrücklich der Künstler DJ Frank Horn (alias P34nuts) als Person und DJ verpflichtet. Das Live-Programm verbindet energiegeladene DJ-Sets mit den individuellen Sounds und Facetten des Projekts." },
-      { heading: "Support & Wertschätzung", copy: "Ein eigenständiges Projekt dieser Art lebt von seiner Community. Ob durch das Streamen der Musik, Feedback, das Teilen der Songs, Merch-Käufe im Shop oder DJ-Buchungen: Jeder Support fließt direkt in die Weiterentwicklung des Sounds, neue Tracks und kommende Veröffentlichungen." },
-      { heading: "Vielen Dank", copy: "Vielen Dank für jeden Support und das Begleiten dieser Reise!" },
+      { heading: "Support & Wertschätzung", copy: "Ein eigenständiges Projekt dieser Art lebt von seiner Community. Ob durch das Streamen der Musik, Feedback, das Teilen der Songs, Merch-Käufe im Shop oder DJ-Buchungen: Jeder Support fließt direkt in die Weiterentwicklung des Sounds, neue Tracks und kommende Veröffentlichungen.", closingCopy: "Vielen Dank für jeden Support und das Begleiten dieser Reise!" },
       { heading: "Anbieter / verantwortliche Stelle", copy: "Vollständiger bürgerlicher Name oder Unternehmensname der verantwortlichen Person beziehungsweise Organisation.", value: "[ BITTE VOLLSTÄNDIGEN NAMEN / FIRMENNAMEN EINTRAGEN ]" },
       { heading: "Zustellfähige Anschrift", copy: "Straße, Hausnummer, Postleitzahl, Ort und Land der verantwortlichen Stelle.", value: "[ STRASSE · HAUSNUMMER · PLZ · ORT · LAND ]" },
       { heading: "Kontakt", copy: "Die bestätigte E-Mail-Adresse für Booking lautet:", value: booking.email },
@@ -85,7 +84,7 @@ export default function InfoPage({ kind }: { kind: InfoKind }) {
     <h1>{page.title.split("\n").map((line) => <span key={line}>{line}<br /></span>)}</h1>
     <p>{page.copy}</p>
     {page.notice ? <aside className="info-page-notice">{page.notice}</aside> : null}
-    {page.sections ? <div className="info-page-details">{page.sections.map((section) => <section key={section.heading}><h2>{section.heading}</h2><p>{section.copy}</p>{section.value ? <code className="info-page-template-value">{section.value}</code> : null}</section>)}</div> : null}
+    {page.sections ? <div className="info-page-details">{page.sections.map((section) => <section key={section.heading}><h2>{section.heading}</h2><p>{section.copy}</p>{section.closingCopy ? <p>{section.closingCopy}</p> : null}{section.value ? <code className="info-page-template-value">{section.value}</code> : null}</section>)}</div> : null}
     <Link href={page.href ?? "/"} className="info-page-action">{page.action}<ArrowUpRight size={17} /></Link>
   </>;
 
