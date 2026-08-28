@@ -86,6 +86,13 @@ export default function ControlCenter() {
   };
 
   const changedLines = content && originalContent ? content.split("\n").filter((line, index) => line !== originalContent.split("\n")[index]).length : 0;
+  const hasUnsavedChanges = Boolean(content && originalContent && content !== originalContent);
+  useEffect(() => {
+    if (!hasUnsavedChanges) return;
+    const warnBeforeLeave = (event: BeforeUnloadEvent) => { event.preventDefault(); event.returnValue = ""; };
+    window.addEventListener("beforeunload", warnBeforeLeave);
+    return () => window.removeEventListener("beforeunload", warnBeforeLeave);
+  }, [hasUnsavedChanges]);
 
   return <main className="min-h-screen bg-[#101012] px-4 py-6 text-[#f1eee5] sm:px-8 sm:py-10 lg:px-14"><div className="mx-auto max-w-7xl">
     <header className="border-b border-white/15 pb-8"><div className="flex flex-wrap items-center justify-between gap-4"><Link href="/" className="font-mono text-xs uppercase tracking-[.18em] text-white/60 transition hover:text-[#ff3b30]">← Zur Homepage</Link><div className="flex flex-wrap items-center gap-2">{session === "signed-in" ? <span className="inline-flex items-center gap-2 border border-emerald-400/30 bg-emerald-950/25 px-3 py-2 font-mono text-[.62rem] uppercase tracking-[.14em] text-emerald-200"><ShieldCheck className="size-3.5" aria-hidden="true" /> GitHub-Sitzung aktiv</span> : <button type="button" onClick={startLogin} className="inline-flex min-h-11 items-center gap-2 border border-[#ff3b30]/60 bg-[#ff3b30] px-3 py-2 font-mono text-[.62rem] uppercase tracking-[.14em] text-[#101012] transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff3b30]">Mit GitHub anmelden <ArrowUpRight className="size-3.5" aria-hidden="true" /></button>}{session === "checking" && <span className="font-mono text-[.6rem] uppercase tracking-[.12em] text-white/40">Sitzung wird geprüft</span>}</div></div><p className="mt-12 font-mono text-xs uppercase tracking-[.28em] text-[#ff3b30]">P34NUTS / CONTROL CENTER</p><h1 className="mt-4 max-w-4xl text-5xl font-semibold leading-[.88] tracking-[-.09em] sm:text-7xl lg:text-8xl">Deine Seiten.<br /><em className="font-serif font-normal">Deine Kontrolle.</em></h1><p className="mt-7 max-w-2xl text-base leading-7 text-white/65">Hier startest du sichere Änderungen an der Artist-Homepage und am Shop. Jede Änderung bleibt nachvollziehbar und wird erst nach deinem Commit an GitHub übergeben.</p></header>
