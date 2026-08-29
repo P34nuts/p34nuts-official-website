@@ -72,6 +72,7 @@ export default function ControlCenter() {
   const commit = async () => {
     if (!content || content === originalContent) { setEditorStatus("Es gibt keine neue Änderung zum Committen."); return; }
     if (!/^P34nuts: /.test(commitMessage.trim())) { setEditorStatus("Die Commit-Nachricht muss mit „P34nuts: “ beginnen."); return; }
+    if (!window.confirm(`Änderung wirklich sicher committen?\n\nDatei: ${editorPath}\nGeänderte Zeilen: ${changedLines}\n\nDanach startet automatisch der Veröffentlichungs-Workflow.`)) { setEditorStatus("Commit abgebrochen. Deine Änderungen bleiben als Entwurf erhalten."); return; }
     setIsBusy(true);
     setEditorStatus("Änderung wird serverseitig geprüft und als GitHub-Commit geschrieben …");
     try {
