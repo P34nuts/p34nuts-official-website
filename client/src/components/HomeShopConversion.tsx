@@ -3,9 +3,9 @@ import { shopHref } from "@/lib/shopLink";
 import "../homepageConversion.css";
 
 const shopEntries = [
-  { code: "01", title: "T-Shirts", text: "Direkt tragbare P34nuts-Motive – vom Statement bis zum persönlichen Frame.", href: `${shopHref}/tshirts` },
-  { code: "02", title: "Hoodies", text: "Mehr Gewicht, mehr Fläche, derselbe Noir-Cut-Ansatz.", href: `${shopHref}/hoodies` },
-  { code: "03", title: "Caps", text: "Kopfbedeckungen und kleine Pieces für den Look ohne Uniform.", href: `${shopHref}/caps` },
+  { code: "01", title: "T-Shirts", text: "P34nuts-Motive direkt im Shop entdecken und deine Variante auswählen.", href: `${shopHref}/tshirts` },
+  { code: "02", title: "Hoodies", text: "Hoodies aus dem aktuellen P34nuts-Katalog – direkt auswählen und konfigurieren.", href: `${shopHref}/hoodies` },
+  { code: "03", title: "Caps", text: "Caps und kleine Pieces aus dem P34nuts-Katalog für den Look ohne Uniform.", href: `${shopHref}/caps` },
 ] as const;
 
 export function HomeShopConversion() {
@@ -20,7 +20,7 @@ export function HomeShopConversion() {
           </div>
           <div className="home-shop-conversion__lead">
             <span className="home-shop-conversion__icon"><ShoppingBag size={18} /></span>
-            <p>Die Musik ist der Frame. Der Shop macht daraus etwas, das du mitnehmen kannst – ohne den Charakter glattzubügeln.</p>
+            <p>Die Musik ist der Frame. Der Shop macht daraus etwas, das du mitnehmen kannst – direkt aus dem P34nuts-Katalog.</p>
             <a className="home-shop-conversion__primary" href={shopHref}>
               SHOP ALLE PRODUKTE <ArrowUpRight size={16} />
             </a>
