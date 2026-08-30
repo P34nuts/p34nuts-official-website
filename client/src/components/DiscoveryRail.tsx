@@ -3,6 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import { Link } from "wouter";
+import { HomeShopConversion } from "@/components/HomeShopConversion";
 import {
   DISCOVERY_ROTATION_INTERVAL_MS,
   discoveryPaths,
@@ -73,10 +74,7 @@ export function DiscoveryRail() {
       });
     };
 
-    const interval = window.setInterval(() => {
-      runRotation();
-    }, DISCOVERY_ROTATION_INTERVAL_MS);
-
+    const interval = window.setInterval(runRotation, DISCOVERY_ROTATION_INTERVAL_MS);
     return () => {
       window.clearInterval(interval);
       clearFlipTimeouts();
@@ -84,18 +82,21 @@ export function DiscoveryRail() {
   }, [navigationLocked, reduceMotion]);
 
   return (
-    <section id="start-here" className="discovery-section" aria-labelledby="discovery-title">
-      <div className="section-wrap">
-        <div className="discovery-heading"><p className="eyebrow">Start here / new listener guide</p><h2 id="discovery-title">FIND YOUR<br /><em>ENTRY.</em></h2><p>Kein Kontext nötig. Such dir einen Einstieg nach Stimmung aus – der Rest folgt im Archiv.</p></div>
-        <div className="discovery-grid">
-          {paths.map((path, index) => {
-            const track = getTrackBySlug(path.trackSlug);
-            if (!track) return null;
-            const isFlipping = flippingSlots.includes(index);
-            return <Link key={index} href={`/music/${track.slug}`} onClick={handleDiscoveryClick} className={`discovery-card discovery-card--cover ${isFlipping ? "discovery-card--flipping" : ""} ${track.coverStyle}`}><img className="discovery-card-cover" src={track.cover} alt="" loading="lazy" decoding="async" /><span>0{index + 1} / {path.label}</span><strong>{track.title}</strong><p>{path.title}</p><ArrowUpRight size={17} /></Link>;
-          })}
+    <>
+      <section id="start-here" className="discovery-section" aria-labelledby="discovery-title">
+        <div className="section-wrap">
+          <div className="discovery-heading"><p className="eyebrow">Start here / new listener guide</p><h2 id="discovery-title">FIND YOUR<br /><em>ENTRY.</em></h2><p>Kein Kontext nötig. Such dir einen Einstieg nach Stimmung aus – der Rest folgt im Archiv.</p></div>
+          <div className="discovery-grid">
+            {paths.map((path, index) => {
+              const track = getTrackBySlug(path.trackSlug);
+              if (!track) return null;
+              const isFlipping = flippingSlots.includes(index);
+              return <Link key={index} href={`/music/${track.slug}`} onClick={handleDiscoveryClick} className={`discovery-card discovery-card--cover ${isFlipping ? "discovery-card--flipping" : ""} ${track.coverStyle}`}><img className="discovery-card-cover" src={track.cover} alt="" loading="lazy" decoding="async" /><span>0{index + 1} / {path.label}</span><strong>{track.title}</strong><p>{path.title}</p><ArrowUpRight size={17} /></Link>;
+            })}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+      <HomeShopConversion />
+    </>
   );
 }
