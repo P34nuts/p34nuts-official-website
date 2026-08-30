@@ -118,6 +118,19 @@
   }
 }
 
+/* Keep off-screen visual sections out of the initial rendering work. */
+@supports (content-visibility: auto) {
+  .release-section,
+  .statement-section,
+  .manifest-section,
+  .music-section,
+  .featured-section,
+  .about-section {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 760px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hero-depth-image {
     will-change: auto;
