@@ -32,6 +32,7 @@ import { ScrollFlowController } from "@/components/ScrollFlowController";
 import { ScrollTrackRail } from "@/components/ScrollTrackRail";
 import { SectionTransitionScene } from "@/components/SectionTransitionScene";
 import { FinalPressTransition } from "@/components/FinalPressTransition";
+import { NoStaticGalleryController } from "@/components/NoStaticGalleryController";
 import { DiscoveryRail } from "@/components/DiscoveryRail";
 import { BookingForm } from "@/components/BookingForm";
 import { SectionLabel } from "@/components/SectionLabel";
@@ -376,6 +377,7 @@ export default function Home() {
         </section>
 
         <section className="gallery-section" aria-labelledby="gallery-title">
+          <NoStaticGalleryController />
           <div className="section-wrap gallery-heading"><SectionLabel index="05" label="Image archive" /><h2 id="gallery-title">NO<br /><em>STATIC.</em></h2></div>
           <div className="gallery-grid">
             {gallery.map((image) => (
