@@ -9,17 +9,48 @@ import { assets } from "@/data/artistData";
 export function ScrollFollowWatermark() {
   const reduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll();
-  const y = useTransform(scrollYProgress, [0, 1], ["-8vh", "8vh"]);
-  const rotate = useTransform(scrollYProgress, [0, 1], [-5, 9]);
+  const y = useTransform(scrollYProgress, [0, 1], ["-4vh", "48vh"]);
+  const rotate = useTransform(scrollYProgress, [0, 1], [-10, 560]);
+  const scale = useTransform(scrollYProgress, [0, 0.45, 1], [0.92, 1.08, 0.96]);
 
   return (
     <motion.div
       className="scroll-follow-watermark"
       aria-hidden="true"
-      style={reduceMotion ? undefined : { y, rotate }}
+      style={reduceMotion ? undefined : { y, rotate, scale }}
     >
       <img src={assets.mark} alt="" />
     </motion.div>
+  );
+}
+
+/**
+ * A low-contrast, page-wide editorial layer. It gives the homepage a
+ * continuous scroll language without covering actionable content.
+ */
+export function ScrollEditorialField() {
+  const reduceMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll();
+  const wordX = useTransform(scrollYProgress, [0, 0.25, 0.55, 0.8, 1], ["-14vw", "6vw", "-10vw", "8vw", "-16vw"]);
+  const wordY = useTransform(scrollYProgress, [0, 1], ["-3vh", "18vh"]);
+  const leadX = useTransform(scrollYProgress, [0, 0.5, 1], ["-7vw", "11vw", "-5vw"]);
+  const leadY = useTransform(scrollYProgress, [0, 1], ["-9vh", "19vh"]);
+  const middleX = useTransform(scrollYProgress, [0, 1], ["7vw", "-10vw"]);
+  const middleY = useTransform(scrollYProgress, [0, 1], ["14vh", "-15vh"]);
+  const lastX = useTransform(scrollYProgress, [0, 1], ["-3vw", "10vw"]);
+
+  return (
+    <div className="scroll-editorial-field" aria-hidden="true">
+      <motion.div className="scroll-editorial-word scroll-editorial-word--one" style={reduceMotion ? undefined : { x: wordX, y: wordY }}>
+        P34NUTS&nbsp;&nbsp;P34NUTS&nbsp;&nbsp;P34NUTS
+      </motion.div>
+      <motion.div className="scroll-editorial-word scroll-editorial-word--two" style={reduceMotion ? undefined : { x: wordX, y: wordY }}>
+        MUSIC&nbsp;&nbsp;VISUALS&nbsp;&nbsp;ARCHIVE
+      </motion.div>
+      <motion.img className="scroll-editorial-frame scroll-editorial-frame--lead" src={assets.editorial} alt="" style={reduceMotion ? undefined : { x: leadX, y: leadY }} />
+      <motion.img className="scroll-editorial-frame scroll-editorial-frame--middle" src={assets.galleryNight} alt="" style={reduceMotion ? undefined : { x: middleX, y: middleY }} />
+      <motion.img className="scroll-editorial-frame scroll-editorial-frame--last" src={assets.performance} alt="" style={reduceMotion ? undefined : { x: lastX }} />
+    </div>
   );
 }
 
