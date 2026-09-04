@@ -15,3 +15,7 @@ Die sinnvolle P34nuts-Übertragung ist daher eine scrollgebundene, sticky-artige
 ## Weitere Beobachtung
 
 Im weiteren Verlauf wird die Typografie nicht einfach durch einen neuen rechteckigen Abschnitt ersetzt. Eine große, weich abgerundete Bild-/Flächenform bleibt noch im oberen Teil sichtbar, während darunter eine dunkle Fläche mit gebogener Oberkante in den Viewport wächst. Der Wechsel fühlt sich dadurch wie ein räumliches Übergleiten an. Für P34nuts ist die passende Übersetzung eine Folge von „Frame“-Übergängen mit überlappenden, abgerundeten Flächen und gebogenen Masken; nicht eine dauerhaft über den gesamten Inhalt gelegte Floating-Ebene.
+
+## Abgleich mit der aktuellen P34nuts-Live-Seite
+
+Die aktuelle P34nuts-Seite besitzt bereits den passenden Grundrhythmus: Hero mit Skyline, rotes Marquee-Band, dunkle Album-/Audiofläche und eine hellere, weich gerundete Einstiegsebene. Die nächste Ausbaustufe sollte die vorhandenen Flächen beim Scrollen stärker ineinander schieben: die dunkle Albumfläche kann beim Verlassen leicht skalieren und nach oben auslaufen, die helle Entry-Fläche kann mit einer gebogenen Maske einlaufen, und Bildkarten können während des Übergangs leicht aus dem vorherigen Bereich in den nächsten driften. Die gute globale Wasserzeichenbewegung bleibt dabei separat.

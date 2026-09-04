@@ -28,6 +28,7 @@ import { shouldShowIntroPreview } from "@/lib/introPreview";
 import { shopHref } from "@/lib/shopLink";
 import { Marquee } from "@/components/Marquee";
 import { ScrollFollowWatermark, ScrollWatermarkInterlude } from "@/components/ScrollWatermark";
+import { ScrollFlowController } from "@/components/ScrollFlowController";
 import { DiscoveryRail } from "@/components/DiscoveryRail";
 import { BookingForm } from "@/components/BookingForm";
 import { SectionLabel } from "@/components/SectionLabel";
@@ -217,6 +218,7 @@ export default function Home() {
       </AnimatePresence>
 
       <main id="main-content">
+        <ScrollFlowController />
         <section className="hero" aria-labelledby="hero-title">
           <motion.img
             className="hero-image hero-depth-image hero-skyline-layer"
