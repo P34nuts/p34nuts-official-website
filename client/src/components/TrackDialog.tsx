@@ -19,14 +19,15 @@ import { getTrackStory, type Track } from "@/data/artistData";
 type TrackDialogProps = {
   track: Track;
   onListenRequest: (track: Track) => void;
+  triggerClassName?: string;
 };
 
-export function TrackDialog({ track, onListenRequest }: TrackDialogProps) {
+export function TrackDialog({ track, onListenRequest, triggerClassName = "" }: TrackDialogProps) {
   const story = getTrackStory(track);
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button type="button" className={`release-tile ${track.coverStyle}`} aria-label={`${track.title} – Track-Archiv öffnen`}>
+        <button type="button" className={`release-tile ${track.coverStyle} ${triggerClassName}`} aria-label={`${track.title} – Track-Archiv öffnen`}>
           {track.cover ? <img src={track.cover} alt="" className="release-tile-image" loading="lazy" /> : <span className="release-generated-art" aria-hidden="true" />}
           <span className="tile-number">{track.id}</span>
           <span className="tile-state">ARCHIVE / 23</span>

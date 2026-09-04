@@ -29,10 +29,11 @@ import { shopHref } from "@/lib/shopLink";
 import { Marquee } from "@/components/Marquee";
 import { ScrollFollowWatermark, ScrollWatermarkInterlude } from "@/components/ScrollWatermark";
 import { ScrollFlowController } from "@/components/ScrollFlowController";
+import { ScrollTrackRail } from "@/components/ScrollTrackRail";
+import { SectionTransitionScene } from "@/components/SectionTransitionScene";
 import { DiscoveryRail } from "@/components/DiscoveryRail";
 import { BookingForm } from "@/components/BookingForm";
 import { SectionLabel } from "@/components/SectionLabel";
-import { TrackDialog } from "@/components/TrackDialog";
 import { VideoDialog } from "@/components/VideoDialog";
 import { trpc } from "@/lib/trpc";
 import { faqItems } from "@/data/faqData";
@@ -280,6 +281,15 @@ export default function Home() {
           </motion.div>
         </section>
 
+        <SectionTransitionScene
+          index="01"
+          eyebrow="from opening frame to music archive"
+          firstWord="ENTER"
+          secondWord="THE FRAME."
+          image={assets.releaseCover}
+          tone="light"
+        />
+
         <DiscoveryRail />
 
         <section className="statement-section" aria-label="Artist statement">
@@ -303,11 +313,10 @@ export default function Home() {
             <h2 id="music-title">ALL<br /><em>FRAMES.</em></h2>
             <p>23 visuelle Trackkader: Jeder Song ist direkt als vollständige Suno-Version verfügbar – ohne Plattformwechsel.</p>
           </div>
-          <div className="release-grid visual-discography">
-            {releases.map((release) => (
-              <TrackDialog key={release.id} track={release} onListenRequest={(track) => showPlaceholder(`${track.title}: Streaming-Link wird nach Bestätigung ergänzt.`)} />
-            ))}
-          </div>
+          <ScrollTrackRail
+            tracks={releases}
+            onListenRequest={(track) => showPlaceholder(`${track.title}: Streaming-Link wird nach Bestätigung ergänzt.`)}
+          />
         </section>
 
         <section className="featured-section" aria-labelledby="featured-title">
@@ -319,6 +328,15 @@ export default function Home() {
           </div>
           <VideoDialog {...featuredVisual} className="featured-open" />
         </section>
+
+        <SectionTransitionScene
+          index="03"
+          eyebrow="from moving image to inner frame"
+          firstWord="CUT"
+          secondWord="DEEPER."
+          image={assets.mirror}
+          tone="red"
+        />
 
         <section id="about" className="about-section section-wrap" aria-labelledby="about-title">
           <SectionLabel index="03" label="About / Artist profile" />
@@ -368,6 +386,15 @@ export default function Home() {
           </div>
 
         </section>
+
+        <SectionTransitionScene
+          index="05"
+          eyebrow="from still image to live signal"
+          firstWord="KEEP"
+          secondWord="MOVING."
+          image={assets.liveFrame}
+          tone="dark"
+        />
 
         <section id="live" className="live-section section-wrap" aria-labelledby="live-title">
           <img className="live-frame-art" src={assets.liveFrame} alt="" loading="lazy" />
