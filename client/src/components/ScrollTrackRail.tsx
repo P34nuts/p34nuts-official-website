@@ -74,9 +74,9 @@ export function ScrollTrackRail({ tracks, onListenRequest }: ScrollTrackRailProp
       lastTimestamp = timestamp;
 
       if (active && !keyboardPause && loopWidth) {
-        const idleSpeed = window.matchMedia("(max-width: 820px)").matches ? 9 : 13;
+        const idleSpeed = window.matchMedia("(max-width: 820px)").matches ? 13 : 18;
         offset += direction * (idleSpeed + boost) * deltaSeconds;
-        boost *= Math.pow(.055, deltaSeconds);
+        boost *= Math.pow(.08, deltaSeconds);
         if (boost < .2) boost = 0;
         wrapOffset();
         track.style.transform = `translate3d(${offset.toFixed(2)}px, 0, 0)`;
@@ -92,7 +92,7 @@ export function ScrollTrackRail({ tracks, onListenRequest }: ScrollTrackRailProp
       if (!delta) return;
 
       direction = delta > 0 ? -1 : 1;
-      boost = Math.min(760, boost + Math.abs(delta) * 14);
+      boost = Math.min(950, boost + Math.abs(delta) * 18);
       section.dataset.trackDirection = direction < 0 ? "left" : "right";
     };
 

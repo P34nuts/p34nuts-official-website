@@ -34,7 +34,7 @@ export function ScrollFlowController() {
     if (!main) return;
 
     const items = Array.from(
-      main.querySelectorAll<HTMLElement>(":scope > section:not(.hero):not(.section-transition-scene):not(.scroll-track-rail-section), :scope > .marquee"),
+      main.querySelectorAll<HTMLElement>(":scope > section:not(.hero):not(.section-transition-scene):not(.scroll-track-rail-section):not(.final-press-transition), :scope > .marquee"),
     );
     if (!items.length) return;
 

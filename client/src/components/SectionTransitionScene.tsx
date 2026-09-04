@@ -51,13 +51,13 @@ export function SectionTransitionScene({
       const viewport = window.innerHeight || 800;
       const progress = clamp((viewport - rect.top) / (viewport + rect.height));
       const mobile = window.matchMedia("(max-width: 820px)").matches;
-      const imageY = (1 - progress) * (mobile ? 14 : 28) - (mobile ? 7 : 14);
-      const wordShift = (progress - .5) * (mobile ? 8 : 18);
-      const maskScale = (mobile ? .88 : .76) + progress * (mobile ? .24 : .44);
-      const imageScale = (mobile ? 1.18 : 1.28) - progress * (mobile ? .08 : .16);
-      const imageShift = (progress - .5) * (mobile ? 6 : 10);
-      const maskRotate = (progress - .5) * (mobile ? 2 : 4.5);
-      const maskRadius = (mobile ? 4.8 : 13) - progress * (mobile ? 1.8 : 5.5);
+      const imageY = (1 - progress) * (mobile ? 18 : 36) - (mobile ? 9 : 18);
+      const wordShift = (progress - .5) * (mobile ? 11 : 24);
+      const maskScale = (mobile ? .84 : .72) + progress * (mobile ? .32 : .52);
+      const imageScale = (mobile ? 1.22 : 1.34) - progress * (mobile ? .1 : .18);
+      const imageShift = (progress - .5) * (mobile ? 8 : 14);
+      const maskRotate = (progress - .5) * (mobile ? 3.2 : 6);
+      const maskRadius = (mobile ? 5.6 : 14.5) - progress * (mobile ? 2.3 : 7);
 
       scene.dataset.sceneReady = "true";
       scene.style.setProperty("--scene-progress", progress.toFixed(3));

@@ -31,6 +31,7 @@ import { ScrollFollowWatermark, ScrollWatermarkInterlude } from "@/components/Sc
 import { ScrollFlowController } from "@/components/ScrollFlowController";
 import { ScrollTrackRail } from "@/components/ScrollTrackRail";
 import { SectionTransitionScene } from "@/components/SectionTransitionScene";
+import { FinalPressTransition } from "@/components/FinalPressTransition";
 import { DiscoveryRail } from "@/components/DiscoveryRail";
 import { BookingForm } from "@/components/BookingForm";
 import { SectionLabel } from "@/components/SectionLabel";
@@ -504,6 +505,8 @@ export default function Home() {
             </div>
           </details>
         </section>
+
+        <FinalPressTransition mark={assets.mark} />
 
         <section className="press-section section-wrap" aria-labelledby="press-title">
           <div className="press-box">

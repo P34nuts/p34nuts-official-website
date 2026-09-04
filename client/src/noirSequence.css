@@ -643,7 +643,7 @@ main > .marquee[data-flow-ready="true"] {
 .section-transition-scene {
   position: relative;
   z-index: 2;
-  height: clamp(86rem, 185vh, 132rem);
+  height: clamp(94rem, 205vh, 148rem);
   margin-top: clamp(-6rem, -9vw, -2.5rem);
   padding: 0;
   border-radius: 0;
@@ -765,8 +765,8 @@ main > .marquee[data-flow-ready="true"] {
 
 @media (max-width: 820px) {
   .section-transition-scene {
-    height: 122vh;
-    min-height: 48rem;
+    height: 140vh;
+    min-height: 54rem;
     margin-top: -1.4rem;
     padding: 0 .65rem;
     overflow: visible;
@@ -821,4 +821,211 @@ main > .marquee[data-flow-ready="true"] {
   .section-transition-scene__words,
   .section-transition-scene__mask,
   .section-transition-scene__mask img { transform: none; will-change: auto; }
+}
+
+/* ASK P34NUTS → PRESS KIT — dedicated final curved hand-off. */
+.final-press-transition {
+  position: relative;
+  z-index: 3;
+  height: clamp(90rem, 190vh, 138rem);
+  margin-top: clamp(-4rem, -6vw, -1.5rem);
+  padding: 0;
+  overflow: visible;
+  border-radius: 0;
+  background: #101012;
+  isolation: isolate;
+}
+
+.final-press-transition::before,
+.final-press-transition::after { display: none; }
+
+.final-press-transition__sticky {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  min-height: 38rem;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 36%, rgba(255, 59, 48, .2), transparent 24%),
+    #101012;
+}
+
+.final-press-transition__source {
+  position: absolute;
+  inset: 8% 4% auto;
+  display: flex;
+  flex-direction: column;
+  color: rgba(241, 238, 229, .9);
+  font-size: clamp(5rem, 15vw, 17rem);
+  font-weight: 700;
+  letter-spacing: -.105em;
+  line-height: .68;
+}
+
+.final-press-transition__source em {
+  margin-left: clamp(1.5rem, 15vw, 14rem);
+  color: #ff453c;
+  font-family: "Bodoni Moda", Georgia, serif;
+  font-size: .68em;
+  font-weight: 500;
+}
+
+.final-press-transition__reveal {
+  position: absolute;
+  z-index: 2;
+  inset: 0 -4% -8%;
+  overflow: hidden;
+  border-radius: 50% 50% 0 0 / 18% 18% 0 0;
+  background: #e9e4d9;
+  color: #101012;
+  box-shadow: 0 -2.8rem 7rem rgba(0, 0, 0, .42);
+  transform: translate3d(0, var(--final-press-reveal-y, 76%), 0);
+  transform-origin: 50% 100%;
+  will-change: transform;
+}
+
+.final-press-transition__reveal::before {
+  position: absolute;
+  top: 0;
+  right: 7%;
+  left: 7%;
+  height: 2px;
+  content: "";
+  background: linear-gradient(90deg, transparent, rgba(255, 59, 48, .9), transparent);
+}
+
+.final-press-transition__kicker {
+  position: absolute;
+  z-index: 2;
+  top: 14%;
+  right: 8%;
+  margin: 0;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: clamp(.55rem, .78vw, .72rem);
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+
+.final-press-transition__ticker {
+  position: absolute;
+  z-index: 1;
+  top: 38%;
+  left: -14%;
+  display: flex;
+  width: max-content;
+  flex-direction: column;
+  color: #101012;
+  font-size: clamp(4.8rem, 11vw, 12.5rem);
+  font-weight: 500;
+  letter-spacing: -.08em;
+  line-height: .72;
+  white-space: nowrap;
+  transform: translate3d(var(--final-press-word-shift, 0vw), 0, 0);
+  will-change: transform;
+}
+
+.final-press-transition__ticker em {
+  margin-left: clamp(2rem, 10vw, 10rem);
+  font-family: "Bodoni Moda", Georgia, serif;
+  font-weight: 500;
+}
+
+.final-press-transition__mark {
+  position: absolute;
+  z-index: 2;
+  right: clamp(2rem, 10vw, 12rem);
+  bottom: clamp(1.5rem, 7vh, 5rem);
+  width: clamp(5rem, 10vw, 9rem);
+  height: auto;
+  filter: grayscale(1) contrast(1.4);
+  opacity: .78;
+  transform: rotate(var(--final-press-mark-rotate, 0deg)) scale(var(--final-press-mark-scale, 1));
+  will-change: transform;
+}
+
+.press-section {
+  position: relative;
+  z-index: 4;
+  margin-top: -1px;
+  background: #e9e4d9;
+  color: #101012;
+}
+
+.press-section .press-box {
+  background: #101012;
+  color: #f1eee5;
+  box-shadow: 0 2rem 5rem rgba(0, 0, 0, .22);
+}
+
+@media (max-width: 820px) {
+  .final-press-transition {
+    height: 154vh;
+    min-height: 62rem;
+    margin-top: -1.3rem;
+  }
+
+  .final-press-transition__sticky { min-height: 34rem; }
+
+  .final-press-transition__source {
+    inset: 13% 5% auto;
+    font-size: clamp(4.2rem, 19vw, 6.4rem);
+    line-height: .7;
+  }
+
+  .final-press-transition__source em { margin-left: 1rem; }
+
+  .final-press-transition__reveal {
+    right: -12%;
+    left: -12%;
+    border-radius: 58% 58% 0 0 / 13% 13% 0 0;
+  }
+
+  .final-press-transition__kicker {
+    top: 12%;
+    right: 13%;
+    font-size: .5rem;
+  }
+
+  .final-press-transition__ticker {
+    top: 38%;
+    left: -32%;
+    font-size: clamp(3.9rem, 19vw, 6.2rem);
+    line-height: .74;
+  }
+
+  .final-press-transition__ticker em { margin-left: 1.5rem; }
+
+  .final-press-transition__mark {
+    right: 13%;
+    bottom: 8%;
+    width: 5.4rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .final-press-transition {
+    height: auto;
+    min-height: 0;
+    margin-top: 0;
+    background: #e9e4d9;
+  }
+
+  .final-press-transition__sticky {
+    position: relative;
+    height: 28rem;
+    min-height: 0;
+    background: #e9e4d9;
+  }
+
+  .final-press-transition__source { display: none; }
+
+  .final-press-transition__reveal {
+    inset: 0;
+    border-radius: 3rem 3rem 0 0;
+    box-shadow: none;
+    transform: none;
+  }
+
+  .final-press-transition__ticker,
+  .final-press-transition__mark { transform: none; will-change: auto; }
 }
