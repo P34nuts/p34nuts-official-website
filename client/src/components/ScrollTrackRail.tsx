@@ -74,7 +74,7 @@ export function ScrollTrackRail({ tracks, onListenRequest }: ScrollTrackRailProp
       lastTimestamp = timestamp;
 
       if (active && !keyboardPause && loopWidth) {
-        const idleSpeed = window.matchMedia("(max-width: 820px)").matches ? 17 : 24;
+        const idleSpeed = window.matchMedia("(max-width: 820px)").matches ? 34 : 48;
         offset += direction * (idleSpeed + boost) * deltaSeconds;
         boost *= Math.pow(.055, deltaSeconds);
         if (boost < .2) boost = 0;
