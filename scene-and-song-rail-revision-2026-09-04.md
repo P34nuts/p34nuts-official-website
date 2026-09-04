@@ -34,3 +34,9 @@ Bei aktivierter Einstellung `prefers-reduced-motion` wird die Songbahn zur horiz
 
 - Jomor Design: https://www.jomor.design/
 - Paul Kalkbrenner: https://www.paulkalkbrenner.net/
+
+## Veröffentlichung und Live-Verifikation
+
+Der Quellcommit `d65bf66` wurde erfolgreich auf `main` veröffentlicht. Der separate Root-GitHub-Pages-Deploy `33873811238` ist erfolgreich abgeschlossen. Das öffentliche HTML der Adresse https://p34nuts.github.io/ liefert danach das JavaScript-Bundle `assets/index-9k3Mm6GC.js` und das Stylesheet `assets/index-BZEuL7_j.css`.
+
+In den ausgelieferten Bundles wurden die Marker `scroll-track-rail-section`, `--track-rail-progress`, `section-transition-scene`, `--scene-progress` und `scroll-follow-watermark` verifiziert. Die zurückgenommenen alten globalen Editorialmarker `scroll-editorial-field` und `scroll-type-composition` sind nicht mehr in der öffentlichen Auslieferung enthalten.
