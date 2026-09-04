@@ -27,7 +27,7 @@ import { AlbumIntroPlayer } from "@/components/AlbumIntroPlayer";
 import { shouldShowIntroPreview } from "@/lib/introPreview";
 import { shopHref } from "@/lib/shopLink";
 import { Marquee } from "@/components/Marquee";
-import { ScrollEditorialField, ScrollFollowWatermark, ScrollTypeComposition, ScrollWatermarkInterlude } from "@/components/ScrollWatermark";
+import { ScrollFollowWatermark, ScrollWatermarkInterlude } from "@/components/ScrollWatermark";
 import { DiscoveryRail } from "@/components/DiscoveryRail";
 import { BookingForm } from "@/components/BookingForm";
 import { SectionLabel } from "@/components/SectionLabel";
@@ -175,7 +175,6 @@ export default function Home() {
 
         <a className="skip-link" href="#main-content">Zum Inhalt springen</a>
         <ScrollFollowWatermark />
-        <ScrollEditorialField />
         <header className={`site-header ${headerSolid || menuOpen ? "site-header-solid" : ""}`}>
         <div className="header-brand-group">
           <a href={sitePath("/")} className="brand-lockup brand-home-wordmark" aria-label="P34nuts, zur Startseite">
@@ -288,7 +287,6 @@ export default function Home() {
         </section>
 
         <ScrollWatermarkInterlude />
-        <ScrollTypeComposition />
 
         <section className="manifest-section" aria-labelledby="manifest-title">
           <div className="section-wrap manifest-layout">
