@@ -123,3 +123,158 @@
     will-change: auto;
   }
 }
+
+/* Scroll-led watermark interlude: a P34nuts-native interpretation of the reference interaction. */
+.scroll-follow-watermark {
+  position: fixed;
+  z-index: 20;
+  top: 42%;
+  right: clamp(1rem, 3vw, 3.25rem);
+  width: clamp(4.5rem, 8vw, 8.5rem);
+  aspect-ratio: 1;
+  pointer-events: none;
+  opacity: .18;
+  mix-blend-mode: screen;
+  will-change: transform;
+}
+
+.scroll-follow-watermark img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: grayscale(1) contrast(1.18) drop-shadow(0 .7rem 1rem rgba(0, 0, 0, .35));
+}
+
+.scroll-watermark-interlude {
+  position: relative;
+  min-height: min(76svh, 47rem);
+  overflow: hidden;
+  border-block: 1px solid rgba(241, 238, 229, .14);
+  background: #101012;
+  isolation: isolate;
+}
+
+.scroll-watermark-stage {
+  position: relative;
+  display: grid;
+  min-height: min(76svh, 47rem);
+  place-items: center;
+  overflow: hidden;
+}
+
+.scroll-watermark-stage::before,
+.scroll-watermark-stage::after {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  content: "";
+  background: linear-gradient(90deg, transparent, rgba(255, 59, 48, .72), transparent);
+}
+
+.scroll-watermark-stage::before { top: 22%; }
+.scroll-watermark-stage::after { bottom: 22%; opacity: .55; }
+
+.scroll-watermark-word {
+  position: absolute;
+  z-index: -1;
+  top: 50%;
+  left: 0;
+  color: rgba(241, 238, 229, .085);
+  font-size: clamp(5.25rem, 17vw, 17rem);
+  font-weight: 700;
+  letter-spacing: -.11em;
+  line-height: .78;
+  white-space: nowrap;
+  transform: translateY(-50%);
+  will-change: transform;
+}
+
+.scroll-watermark-disc {
+  position: relative;
+  display: grid;
+  width: clamp(10rem, 24vw, 18rem);
+  aspect-ratio: 1;
+  place-items: center;
+  transform-origin: center;
+  will-change: transform;
+}
+
+.scroll-watermark-disc::before,
+.scroll-watermark-disc::after {
+  position: absolute;
+  inset: -9%;
+  border: 1px solid rgba(241, 238, 229, .25);
+  border-radius: 50%;
+  content: "";
+}
+
+.scroll-watermark-disc::after {
+  inset: -18%;
+  border-color: rgba(255, 59, 48, .45);
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+
+.scroll-watermark-disc img {
+  display: block;
+  width: 72%;
+  height: 72%;
+  object-fit: contain;
+  filter: grayscale(1) contrast(1.2) drop-shadow(0 .8rem 1.4rem rgba(0, 0, 0, .4));
+}
+
+.scroll-watermark-orbit {
+  position: absolute;
+  inset: -26%;
+  display: grid;
+  place-items: center;
+  color: rgba(241, 238, 229, .48);
+  font-family: monospace;
+  font-size: clamp(.42rem, .75vw, .58rem);
+  letter-spacing: .18em;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transform: rotate(-18deg);
+}
+
+.scroll-watermark-caption {
+  position: absolute;
+  right: clamp(1.25rem, 5vw, 5rem);
+  bottom: clamp(1.25rem, 4vw, 3rem);
+  left: clamp(1.25rem, 5vw, 5rem);
+  display: flex;
+  justify-content: space-between;
+  color: rgba(241, 238, 229, .5);
+  font-family: monospace;
+  font-size: .58rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 820px) {
+  .scroll-follow-watermark {
+    top: 54%;
+    right: .6rem;
+    width: 4.5rem;
+    opacity: .12;
+  }
+
+  .scroll-watermark-interlude,
+  .scroll-watermark-stage {
+    min-height: 62svh;
+  }
+
+  .scroll-watermark-disc { width: clamp(9rem, 47vw, 13rem); }
+  .scroll-watermark-word { font-size: clamp(4.1rem, 21vw, 8rem); }
+  .scroll-watermark-caption { gap: 1rem; flex-wrap: wrap; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-follow-watermark { position: absolute; top: 43%; transform: none !important; }
+  .scroll-watermark-word,
+  .scroll-watermark-disc { transform: none !important; }
+}
