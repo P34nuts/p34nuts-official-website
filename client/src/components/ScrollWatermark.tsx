@@ -52,3 +52,49 @@ export function ScrollWatermarkInterlude() {
     </section>
   );
 }
+
+/**
+ * A P34nuts-native editorial scroll composition: oversized type stays legible
+ * while existing visual frames drift through it at different scroll speeds.
+ */
+export function ScrollTypeComposition() {
+  const reduceMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+  const leadX = useTransform(scrollYProgress, [0, 1], ["-7vw", "8vw"]);
+  const leadY = useTransform(scrollYProgress, [0, 1], ["3rem", "-4rem"]);
+  const middleY = useTransform(scrollYProgress, [0, 1], ["-3rem", "4rem"]);
+  const lastX = useTransform(scrollYProgress, [0, 1], ["6vw", "-8vw"]);
+
+  return (
+    <section ref={sectionRef} className="scroll-type-composition" aria-labelledby="scroll-type-title">
+      <div className="scroll-type-stage">
+        <div className="scroll-type-heading">
+          <span>03 / visual archive</span>
+          <span>frames move with the signal</span>
+        </div>
+        <h2 id="scroll-type-title" className="scroll-type-title" aria-label="P34nuts visual archive">
+          <span>P34</span>
+          <em>NUTS</em>
+          <small>VISUAL ARCHIVE</small>
+        </h2>
+        <motion.figure className="scroll-type-frame scroll-type-frame--lead" style={reduceMotion ? undefined : { x: leadX, y: leadY }}>
+          <img src={assets.editorial} alt="P34nuts in einer dunklen, editoriellen Studioaufnahme" loading="lazy" />
+          <figcaption>01 / raw signal</figcaption>
+        </motion.figure>
+        <motion.figure className="scroll-type-frame scroll-type-frame--middle" style={reduceMotion ? undefined : { y: middleY }}>
+          <img src={assets.galleryNight} alt="Nächtliche urbane P34nuts-Bildwelt" loading="lazy" />
+          <figcaption>02 / night frame</figcaption>
+        </motion.figure>
+        <motion.figure className="scroll-type-frame scroll-type-frame--last" style={reduceMotion ? undefined : { x: lastX }}>
+          <img src={assets.performance} alt="P34nuts-Performancebild auf einer Brücke" loading="lazy" />
+          <figcaption>03 / live perspective</figcaption>
+        </motion.figure>
+        <p className="scroll-type-note">Jeder Frame verschiebt sich. Die Geschichte bleibt im Fokus.</p>
+      </div>
+    </section>
+  );
+}

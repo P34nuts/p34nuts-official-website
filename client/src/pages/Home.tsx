@@ -27,7 +27,7 @@ import { AlbumIntroPlayer } from "@/components/AlbumIntroPlayer";
 import { shouldShowIntroPreview } from "@/lib/introPreview";
 import { shopHref } from "@/lib/shopLink";
 import { Marquee } from "@/components/Marquee";
-import { ScrollFollowWatermark, ScrollWatermarkInterlude } from "@/components/ScrollWatermark";
+import { ScrollFollowWatermark, ScrollTypeComposition, ScrollWatermarkInterlude } from "@/components/ScrollWatermark";
 import { DiscoveryRail } from "@/components/DiscoveryRail";
 import { BookingForm } from "@/components/BookingForm";
 import { SectionLabel } from "@/components/SectionLabel";
@@ -287,6 +287,7 @@ export default function Home() {
         </section>
 
         <ScrollWatermarkInterlude />
+        <ScrollTypeComposition />
 
         <section className="manifest-section" aria-labelledby="manifest-title">
           <div className="section-wrap manifest-layout">

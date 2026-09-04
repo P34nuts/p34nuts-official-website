@@ -278,3 +278,189 @@
   .scroll-watermark-word,
   .scroll-watermark-disc { transform: none !important; }
 }
+
+/* Mobile-visible follow mark and P34nuts editorial scroll composition. */
+.scroll-follow-watermark {
+  right: clamp(1rem, 3vw, 3.25rem);
+  width: clamp(5.5rem, 9vw, 9rem);
+  opacity: .31;
+  mix-blend-mode: normal;
+}
+
+.scroll-follow-watermark img {
+  filter: grayscale(.25) contrast(1.2) brightness(1.2) drop-shadow(0 .7rem 1rem rgba(0, 0, 0, .48));
+}
+
+.scroll-type-composition {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(241, 238, 229, .15);
+  background: #e9e4d9;
+  color: #101012;
+  isolation: isolate;
+}
+
+.scroll-type-stage {
+  position: relative;
+  min-height: min(88svh, 58rem);
+  overflow: hidden;
+}
+
+.scroll-type-heading {
+  position: absolute;
+  z-index: 4;
+  top: clamp(1.25rem, 4vw, 3rem);
+  right: clamp(1.25rem, 5vw, 5rem);
+  left: clamp(1.25rem, 5vw, 5rem);
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  color: rgba(16, 16, 18, .58);
+  font-family: monospace;
+  font-size: .59rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.scroll-type-title {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  width: max-content;
+  margin: 0;
+  color: #101012;
+  font-size: clamp(6.5rem, 20vw, 19rem);
+  font-weight: 700;
+  letter-spacing: -.13em;
+  line-height: .72;
+  text-align: center;
+  transform: translate(-50%, -50%);
+}
+
+.scroll-type-title span,
+.scroll-type-title em {
+  display: block;
+}
+
+.scroll-type-title em {
+  margin-left: .18em;
+  font-family: "Bodoni Moda", serif;
+  font-weight: 500;
+}
+
+.scroll-type-title small {
+  display: block;
+  margin-top: 1rem;
+  color: rgba(16, 16, 18, .62);
+  font-family: monospace;
+  font-size: clamp(.48rem, .8vw, .68rem);
+  font-style: normal;
+  letter-spacing: .18em;
+  line-height: 1;
+  text-align: right;
+}
+
+.scroll-type-frame {
+  position: absolute;
+  z-index: 2;
+  width: clamp(9.5rem, 19vw, 17rem);
+  margin: 0;
+  padding: .45rem;
+  background: #101012;
+  box-shadow: 0 1.2rem 2.8rem rgba(16, 16, 18, .2);
+  will-change: transform;
+}
+
+.scroll-type-frame img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1.18;
+  object-fit: cover;
+  filter: saturate(.72) contrast(1.08);
+}
+
+.scroll-type-frame figcaption {
+  display: block;
+  padding: .5rem .1rem .15rem;
+  color: rgba(241, 238, 229, .72);
+  font-family: monospace;
+  font-size: .53rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.scroll-type-frame--lead { top: 15%; left: 9%; transform: rotate(-5deg); }
+.scroll-type-frame--middle { right: 13%; bottom: 11%; transform: rotate(4deg); }
+.scroll-type-frame--last { top: 27%; right: 8%; transform: rotate(-3deg); }
+
+.scroll-type-note {
+  position: absolute;
+  z-index: 4;
+  bottom: clamp(1.3rem, 4vw, 3rem);
+  left: clamp(1.25rem, 5vw, 5rem);
+  max-width: 13rem;
+  margin: 0;
+  color: rgba(16, 16, 18, .67);
+  font-family: monospace;
+  font-size: .62rem;
+  line-height: 1.55;
+  text-transform: uppercase;
+}
+
+@media (max-width: 820px) {
+  .scroll-follow-watermark {
+    top: 49%;
+    right: .75rem;
+    width: 5.8rem;
+    opacity: .34;
+  }
+
+  .scroll-type-stage {
+    min-height: 76svh;
+  }
+
+  .scroll-type-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: .3rem;
+  }
+
+  .scroll-type-title {
+    top: 48%;
+    font-size: clamp(5.25rem, 24vw, 10rem);
+  }
+
+  .scroll-type-title small {
+    margin-top: .75rem;
+    font-size: .46rem;
+  }
+
+  .scroll-type-frame {
+    width: clamp(7.25rem, 30vw, 10rem);
+    padding: .3rem;
+  }
+
+  .scroll-type-frame figcaption {
+    padding-top: .35rem;
+    font-size: .45rem;
+  }
+
+  .scroll-type-frame--lead { top: 25%; left: 5%; }
+  .scroll-type-frame--middle { right: 4%; bottom: 19%; }
+  .scroll-type-frame--last { top: 37%; right: 4%; }
+
+  .scroll-type-note {
+    right: 1.25rem;
+    bottom: 1.25rem;
+    left: auto;
+    max-width: 9rem;
+    font-size: .54rem;
+    text-align: right;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-type-frame,
+  .scroll-follow-watermark { will-change: auto; }
+}
