@@ -31,3 +31,7 @@ Der Newsletterbereich der Paul-Kalkbrenner-Seite arbeitet vor dem Formular mit e
 ## Ergänzung aus der Projektstrecke
 
 Die Jomor-Projektansicht stellt die Folgeprojekte als klar kuratierte Strecke bereit (beispielsweise Métrica mit anschließenden Projektzielen bis Stellar). Die technische Browseransicht liefert für den tiefen Scrollcontainer keine belastbare weitere Bewegung, bestätigt aber das relevante Navigationsprinzip: Jede neue Projektfläche ist eine eigene, dominante Szene. Die P34nuts-Umsetzung soll darum nicht alle Abschnitte laufend skalieren, sondern nur wenige definierte Übergabe-Szenen zwischen Inhaltsgruppen nutzen und die 23 Trackkader in einer klaren, gerichteten Bahn führen.
+
+## Detailanalyse für die stärkere Revision
+
+Der prägende Jomor-Effekt entsteht aus vier koordinierten Ebenen: Eine sehr große Typografie bleibt über eine lange Scrollstrecke als ruhige Bühne erhalten; kleinere Medien liegen räumlich versetzt darüber; eine einzelne schwarze, stark gerundete Medienfläche wächst vom unteren Viewportrand nach oben; und der Kontrastwechsel von hell zu dunkel markiert die tatsächliche Übergabe. Die Wirkung kommt nicht von permanentem Wackeln, sondern von kontrolliertem Maskenwachstum, klaren Größenverhältnissen, Z-Tiefe und einem langen Scrollweg. Für P34nuts werden deshalb die bestehenden drei Übergabebühnen durch stärkere Bildmasken, mehr Überdeckung, leichte Bildtiefe und eine deutlichere Desktop-/Mobil-Choreografie intensiviert, ohne wieder alle Inhaltsbereiche zu transformieren.

@@ -11,12 +11,21 @@ type SectionTransitionSceneProps = {
 };
 
 const clamp = (value: number) => Math.min(1, Math.max(0, value));
+const sceneProperties = [
+  "--scene-progress",
+  "--scene-image-y",
+  "--scene-word-shift",
+  "--scene-mask-scale",
+  "--scene-image-scale",
+  "--scene-image-shift",
+  "--scene-mask-rotate",
+  "--scene-mask-radius",
+] as const;
 
 /**
- * A single controlled hand-off scene between major content groups.
- * It mirrors the compositional principle of the reference without copying
- * its media or navigation: typography stays as a stage while one P34nuts
- * image surface rounds upward into the next section.
+ * One controlled hand-off between major content groups. The large type remains
+ * a stage while a rounded P34nuts image surface grows upward into the next
+ * section. Mobile uses the same isolated scene with smaller amplitudes.
  */
 export function SectionTransitionScene({
   index,
@@ -38,24 +47,27 @@ export function SectionTransitionScene({
     let frame = 0;
     const update = () => {
       frame = 0;
-      if (window.matchMedia("(max-width: 820px)").matches) {
-        scene.removeAttribute("data-scene-ready");
-        ["--scene-progress", "--scene-image-y", "--scene-word-shift", "--scene-mask-scale"].forEach((property) => scene.style.removeProperty(property));
-        return;
-      }
-
       const rect = scene.getBoundingClientRect();
       const viewport = window.innerHeight || 800;
       const progress = clamp((viewport - rect.top) / (viewport + rect.height));
-      const imageY = (1 - progress) * 16 - 8;
-      const wordShift = (progress - .5) * 11;
-      const maskScale = .9 + progress * .18;
+      const mobile = window.matchMedia("(max-width: 820px)").matches;
+      const imageY = (1 - progress) * (mobile ? 14 : 28) - (mobile ? 7 : 14);
+      const wordShift = (progress - .5) * (mobile ? 8 : 18);
+      const maskScale = (mobile ? .88 : .76) + progress * (mobile ? .24 : .44);
+      const imageScale = (mobile ? 1.18 : 1.28) - progress * (mobile ? .08 : .16);
+      const imageShift = (progress - .5) * (mobile ? 6 : 10);
+      const maskRotate = (progress - .5) * (mobile ? 2 : 4.5);
+      const maskRadius = (mobile ? 4.8 : 13) - progress * (mobile ? 1.8 : 5.5);
 
       scene.dataset.sceneReady = "true";
       scene.style.setProperty("--scene-progress", progress.toFixed(3));
       scene.style.setProperty("--scene-image-y", `${imageY.toFixed(3)}%`);
       scene.style.setProperty("--scene-word-shift", `${wordShift.toFixed(3)}vw`);
       scene.style.setProperty("--scene-mask-scale", maskScale.toFixed(3));
+      scene.style.setProperty("--scene-image-scale", imageScale.toFixed(3));
+      scene.style.setProperty("--scene-image-shift", `${imageShift.toFixed(3)}%`);
+      scene.style.setProperty("--scene-mask-rotate", `${maskRotate.toFixed(3)}deg`);
+      scene.style.setProperty("--scene-mask-radius", `${maskRadius.toFixed(3)}rem`);
     };
 
     const requestUpdate = () => {
@@ -70,6 +82,8 @@ export function SectionTransitionScene({
       window.removeEventListener("scroll", requestUpdate);
       window.removeEventListener("resize", requestUpdate);
       if (frame) window.cancelAnimationFrame(frame);
+      delete scene.dataset.sceneReady;
+      sceneProperties.forEach((property) => scene.style.removeProperty(property));
     };
   }, [reduceMotion]);
 
