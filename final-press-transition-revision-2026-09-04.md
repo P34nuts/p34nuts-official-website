@@ -28,3 +28,9 @@ Die neue Schlussbühne ist aus der allgemeinen Bereichssteuerung ausgeschlossen 
 ## References
 
 [1]: https://www.jomor.design/project/priestess "Priestess | Jomor Design"
+
+## Veröffentlichung und Live-Verifikation
+
+Der Funktionscommit `64790e3` wurde auf `main` veröffentlicht. Der Root-GitHub-Pages-Workflow `33877062256` ist erfolgreich abgeschlossen. Die öffentliche Homepage liefert danach `assets/index-8JlxIGwO.js` und `assets/index-G53czR5v.css` aus.
+
+In den Live-Bundles wurden `final-press-transition`, `finalPressReady`, `--final-press-reveal-y`, der Textmarker der richtungsabhängigen Idle-Bewegung, `--scene-mask-radius` und das unveränderte `scroll-follow-watermark` verifiziert.
