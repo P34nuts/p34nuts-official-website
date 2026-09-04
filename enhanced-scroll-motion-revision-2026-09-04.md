@@ -37,3 +37,9 @@ Für die Songbahn war ein rein fortschrittsgebundener Einzelstreifen nicht ausre
 ## References
 
 [1]: https://www.jomor.design/ "Jomor Design – High-End Digital Experiences"
+
+## Veröffentlichung und Live-Verifikation
+
+Der Funktionscommit `5effcb3` wurde auf `main` veröffentlicht. Der Root-GitHub-Pages-Workflow `33875461130` hat exakt diesen Quellcommit ausgecheckt, gebaut und erfolgreich unter https://p34nuts.github.io/ veröffentlicht.
+
+Nach Abschluss der CDN-Propagation liefert die Homepage `assets/index-Dir8ovB5.js` und `assets/index-CXQY0E81.css`. In diesen öffentlichen Bundles wurden `data-clone-position`, `trackDirection`, der Laufzeittext `idle keeps the last direction`, `scroll-track-rail-segment`, `--scene-mask-radius`, `--scene-image-scale`, die mobile Szenenhöhe von `122vh` sowie das weiterhin vorhandene `scroll-follow-watermark` verifiziert. Die früher zurückgenommenen Marker `scroll-editorial-field` und `scroll-type-composition` bleiben entfernt.
