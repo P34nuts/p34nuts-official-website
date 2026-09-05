@@ -19,20 +19,28 @@ export function CurrentTrackPlayer({ tracks }: CurrentTrackPlayerProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
+  const [autoplayBlocked, setAutoplayBlocked] = useState(false);
 
   const currentTrack = playableTracks[currentIndex] ?? playableTracks[0];
 
   useEffect(() => {
     if (!currentTrack || !audioRef.current) return;
     const audio = audioRef.current;
-    audio.muted = isMuted;
+    audio.muted = true;
+    audio.defaultMuted = true;
     audio.autoplay = true;
 
-    audio.defaultMuted = true;
-
     const startWhenReady = () => {
-      audio.muted = isMuted;
-      void audio.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
+      audio.muted = true;
+      void audio.play()
+        .then(() => {
+          setIsPlaying(true);
+          setAutoplayBlocked(false);
+        })
+        .catch(() => {
+          setIsPlaying(false);
+          setAutoplayBlocked(true);
+        });
     };
 
     audio.addEventListener("loadedmetadata", startWhenReady);
@@ -45,10 +53,6 @@ export function CurrentTrackPlayer({ tracks }: CurrentTrackPlayerProps) {
       audio.removeEventListener("canplay", startWhenReady);
     };
   }, [currentTrack]);
-
-  useEffect(() => {
-    if (audioRef.current) audioRef.current.muted = isMuted;
-  }, [isMuted]);
 
   useEffect(() => {
     return () => {
@@ -71,9 +75,12 @@ export function CurrentTrackPlayer({ tracks }: CurrentTrackPlayerProps) {
       audio.muted = false;
       try {
         await audio.play();
-        if (position > 0 && Math.abs(audio.currentTime - position) > 0.25) audio.currentTime = position;
+        if (position > 0 && Math.abs(audio.currentTime - position) > 0.25) {
+          audio.currentTime = position;
+        }
         setIsMuted(false);
         setIsPlaying(true);
+        setAutoplayBlocked(false);
       } catch {
         audio.muted = true;
         setIsMuted(true);
@@ -91,12 +98,25 @@ export function CurrentTrackPlayer({ tracks }: CurrentTrackPlayerProps) {
     setIsPlaying(true);
   };
 
+  const statusLabel = isPlaying ? "AKTUELL LÄUFT" : autoplayBlocked ? "BEREIT ZUM START" : "AUDIO WIRD GELADEN";
+  const soundLabel = isPlaying ? (isMuted ? "TON AN" : "TON AUS") : "START / TON AN";
+
   return (
     <section className="current-track-player" aria-label="P34nuts Audioplayer">
-      <audio ref={audioRef} src={currentTrack.audioSrc} preload="auto" autoPlay playsInline onEnded={handleEnded} aria-hidden="true" />
+      <audio
+        ref={audioRef}
+        src={currentTrack.audioSrc}
+        preload="auto"
+        autoPlay
+        playsInline
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
+        onEnded={handleEnded}
+        aria-hidden="true"
+      />
       <div className="current-track-copy">
         <span className={`current-track-status ${isPlaying ? "is-live" : ""}`}>
-          <i aria-hidden="true" /> AKTUELL LÄUFT
+          <i aria-hidden="true" /> {statusLabel}
         </span>
         <strong className="current-track-title" aria-live="polite">{currentTrack.title}</strong>
         <span className="current-track-meta">{currentTrack.id} / {playableTracks.length || 1} DIRECT AUDIO</span>
@@ -106,10 +126,10 @@ export function CurrentTrackPlayer({ tracks }: CurrentTrackPlayerProps) {
         className={`current-track-sound ${isMuted ? "is-muted" : "is-on"}`}
         onClick={toggleSound}
         aria-pressed={!isMuted}
-        aria-label={isMuted ? "Ton einschalten" : "Ton ausschalten"}
+        aria-label={isPlaying ? (isMuted ? "Ton einschalten" : "Ton ausschalten") : "Song starten und Ton einschalten"}
       >
         {isMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
-        <span>{isMuted ? "TON AN" : "TON AUS"}</span>
+        <span>{soundLabel}</span>
       </button>
       <span className="current-track-signal" aria-hidden="true"><i /><i /><i /><i /><i /></span>
     </section>
