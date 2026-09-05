@@ -44,6 +44,7 @@ export const assets = {
   releaseCover: artistPortraitSet02.currentFrameDiscipline,
   featuredVideo: artistPortraitSet.sunsetFeature,
   mark: masterAsset("/manus-storage/p34nuts-watermark-transparent_a8f921d2.png"),
+  vinylRecord: masterAsset("/manus-storage/p34nuts-vinyl-record.png"),
   editorial: artistPortraitSet.throneEditorial,
   raw: artistPortraitSet.rainPressure,
   mirror: artistPortraitSet.studioProfile,
