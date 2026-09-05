@@ -396,6 +396,13 @@ export default function Home() {
           </div>
         </section>
 
+        <section className="mask-split-cut" aria-label="Übergang vom Artist-Profil zum Kontrastkapitel">
+          <span>03.25 / split the mask</span>
+          <div className="mask-split-cut__bars" aria-hidden="true"><i /><i /><i /><i /><i /></div>
+          <strong>THE HUMAN<br /><em>IN THE CUT.</em></strong>
+          <small>profile → pressure / inside → outside</small>
+        </section>
+
         <section className="contrast-section" aria-labelledby="contrast-title">
           <div className="section-wrap contrast-layout">
             <SectionLabel index="03.5" label="The contrast / human behind the mask" align="right" />
@@ -414,6 +421,13 @@ export default function Home() {
               <VideoDialog key={visual.id} {...visual} className={visual.size} />
             ))}
           </div>
+        </section>
+
+        <section className="motion-residue-cut" aria-label="Übergang vom Videoarchiv zum Bilderarchiv">
+          <div className="motion-residue-cut__trail" aria-hidden="true"><i /><i /><i /><i /></div>
+          <span>04.5 / motion residue</span>
+          <strong>WHEN THE<br /><em>MOTION STOPS.</em></strong>
+          <small>visual archive → image archive</small>
         </section>
 
         <section className="gallery-section" aria-labelledby="gallery-title">
@@ -450,6 +464,13 @@ export default function Home() {
               <button type="button" onClick={() => showPlaceholder("Aktuell sind keine bestätigten Shows hinterlegt.")}>GET SHOW UPDATES <ArrowUpRight size={16} /></button>
             </div>
           </div>
+        </section>
+
+        <section className="live-contact-cut" aria-label="Übergang von Live-Ankündigungen zu Kontakt">
+          <div className="live-contact-cut__wave" aria-hidden="true" />
+          <span>06.5 / open channel</span>
+          <strong>NO DATE.<br /><em>STILL A SIGNAL.</em></strong>
+          <small>live frame → direct line</small>
         </section>
 
       {announcementEnabled && announcementText ? <div className="section-wrap" role="status"><div className="rounded-sm border border-red-400/40 bg-red-950/20 px-5 py-4 text-sm text-white">{announcementText}</div></div> : null}
@@ -496,6 +517,13 @@ export default function Home() {
           </div>
         </section>
 
+        <section className="trace-drop-cut" aria-label="Übergang vom Kontaktbereich zum Gästebuch">
+          <span>07.5 / drop a trace</span>
+          <div className="trace-drop-cut__cursor" aria-hidden="true">_</div>
+          <strong>YOUR TURN<br /><em>TO LEAVE A SIGNAL.</em></strong>
+          <small>contact → guestbook</small>
+        </section>
+
         <section id="guestbook" className="guestbook-section section-wrap" aria-labelledby="guestbook-title">
           <SectionLabel index="08" label="Guestbook / moderated signal" />
           <div className="guestbook-heading">
@@ -527,6 +555,13 @@ export default function Home() {
               <div className="guestbook-submit-row"><small>Dein Eintrag wird direkt sichtbar. Bitte nenne nur den Namen, unter dem du erscheinen möchtest, und poste keine privaten Daten.</small><button type="submit" disabled={submitGuestbook.isPending || guestbookName.trim().length < 2 || guestbookMessage.trim().length < 2}><span>{submitGuestbook.isPending ? "WIRD GESENDET" : "SIGNAL SENDEN"}</span><Send size={16} /></button></div>
             </form>
           </div>
+        </section>
+
+        <section className="question-cut" aria-label="Übergang vom Gästebuch zu häufigen Fragen">
+          <span>08.5 / cut through the noise</span>
+          <div className="question-cut__marks" aria-hidden="true"><i>?</i><i>?</i><i>?</i></div>
+          <strong>ONE MORE<br /><em>QUESTION.</em></strong>
+          <small>guestbook → faq</small>
         </section>
 
         <section className="faq-section section-wrap" aria-labelledby="faq-title">
