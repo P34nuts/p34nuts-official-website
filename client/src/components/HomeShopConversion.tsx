@@ -12,6 +12,9 @@ export function HomeShopConversion() {
   return (
     <section className="home-shop-conversion" aria-labelledby="home-shop-title">
       <div className="home-shop-conversion__noise" aria-hidden="true" />
+      <div className="home-shop-conversion__contact-sheet" aria-hidden="true">
+        <span>01 / FRAME</span><span>02 / FRAME</span><span>03 / FRAME</span>
+      </div>
       <div className="section-wrap home-shop-conversion__inner">
         <div className="home-shop-conversion__intro">
           <div>
