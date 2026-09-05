@@ -294,6 +294,19 @@ export default function Home() {
           tone="light"
         />
 
+        <section className="entry-frame-fracture" aria-label="Album-Frame wird zum persönlichen Einstieg">
+          <div className="entry-frame-fracture__copy">
+            <span>01.5 / frame fracture</span>
+            <strong>ONE FRAME.<br /><em>SIX WAYS IN.</em></strong>
+          </div>
+          <div className="entry-frame-fracture__fragments" aria-hidden="true">
+            {[0, 1, 2, 3, 4, 5].map((fragment) => (
+              <span key={fragment} style={{ backgroundImage: `url(${assets.releaseCover})` }} />
+            ))}
+          </div>
+          <span className="entry-frame-fracture__edge">FIND YOUR ENTRY →</span>
+        </section>
+
         <DiscoveryRail />
 
         <section className="statement-section" aria-label="Artist statement">
@@ -321,6 +334,23 @@ export default function Home() {
             tracks={releases}
             onListenRequest={(track) => showPlaceholder(`${track.title}: Streaming-Link wird nach Bestätigung ergänzt.`)}
           />
+        </section>
+
+        <section className="archive-visual-cut" aria-label="Übergang vom Track-Archiv zum bewegten Bild">
+          <div className="archive-visual-cut__label"><span>02.5 / archive cut</span><span>many frames → one moving image</span></div>
+          <div className="archive-visual-cut__contact-sheet" aria-hidden="true">
+            {[releases[2], releases[6], releases[12], releases[20]].map((track, index) => track ? (
+              <figure key={`${track.slug}-${index}`} style={{ transform: `rotate(${index % 2 === 0 ? -2 : 2}deg)` }}>
+                <img src={track.cover} alt="" loading="lazy" />
+                <figcaption>{track.id} / ARCHIVE</figcaption>
+              </figure>
+            ) : null)}
+            <figure className="archive-visual-cut__hero" style={{ transform: "rotate(-1deg)" }}>
+              <img src={featuredVisual.poster} alt="" loading="lazy" />
+              <figcaption>LIVE / SIGNAL</figcaption>
+            </figure>
+          </div>
+          <strong>FROM CONTACT<br /><em>TO CUT.</em></strong>
         </section>
 
         <section className="featured-section" aria-labelledby="featured-title">
