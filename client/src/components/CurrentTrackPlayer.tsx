@@ -26,10 +26,9 @@ export function CurrentTrackPlayer({ tracks }: CurrentTrackPlayerProps) {
     if (!currentTrack || !audioRef.current) return;
     const audio = audioRef.current;
     audio.src = currentTrack.audioSrc ?? "";
+    audio.muted = isMuted;
     audio.load();
-    if (isPlaying) {
-      void audio.play().catch(() => setIsPlaying(false));
-    }
+    void audio.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
   }, [currentTrack]);
 
   useEffect(() => {
@@ -75,7 +74,7 @@ export function CurrentTrackPlayer({ tracks }: CurrentTrackPlayerProps) {
 
   return (
     <section className="current-track-player" aria-label="P34nuts Audioplayer">
-      <audio ref={audioRef} preload="metadata" onEnded={handleEnded} aria-hidden="true" />
+      <audio ref={audioRef} preload="auto" autoPlay muted playsInline onEnded={handleEnded} aria-hidden="true" />
       <div className="current-track-copy">
         <span className={`current-track-status ${isPlaying ? "is-live" : ""}`}>
           <i aria-hidden="true" /> AKTUELL LÄUFT
