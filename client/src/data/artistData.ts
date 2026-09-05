@@ -136,6 +136,17 @@ export const currentAudioExtras: readonly Track[] = [
     note: "Ein direkter P34nuts-Song für den aktuellen Live-Player.",
     audioSrc: "/audio/P34nuts.mp3",
   },
+  {
+    id: "LIVE+",
+    slug: "tunnelblick-live",
+    title: "TUNNELBLICK",
+    mood: "Night / focus",
+    themes: ["Focus", "Night"],
+    visualTheme: "signal",
+    coverStyle: "track-signal",
+    note: "Ein weiterer direkter P34nuts-Song für den aktuellen Live-Player.",
+    audioSrc: "/audio/Tunnelblick.mp3",
+  },
 ];
 
 export const artistProfile = {
