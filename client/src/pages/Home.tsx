@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { AlbumIntroPlayer } from "@/components/AlbumIntroPlayer";
+import { CurrentTrackPlayer } from "@/components/CurrentTrackPlayer";
 import { shouldShowIntroPreview } from "@/lib/introPreview";
 import { shopHref } from "@/lib/shopLink";
 import { Marquee } from "@/components/Marquee";
@@ -259,6 +260,7 @@ export default function Home() {
           >
             <p id="hero-title" className="eyebrow">Independent artist / music archive</p>
             <p className="hero-line">Musik zwischen Maske, <i>Wahrheit und Frequenz.</i></p>
+            <CurrentTrackPlayer tracks={releases} />
             <a href="#start-here" className="hero-cta">START WITH MUSIC <ArrowDown size={17} /></a>
           </motion.div>
           <div className="hero-bottom"><span>Scroll to enter</span><span>01:01 / no autoplay</span></div>

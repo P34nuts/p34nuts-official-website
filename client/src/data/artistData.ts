@@ -120,6 +120,7 @@ export type Track = {
   cover?: string;
   note: string;
   sunoId?: string;
+  audioSrc?: string;
 };
 
 export const artistProfile = {
@@ -196,7 +197,7 @@ export function getTrackStory(track: Track) {
 }
 
 export const releases: readonly Track[] = [
-  { id: "01", slug: "dein-name-auf-nem-stein", title: "DEIN NAME AUF NEM STEIN", mood: "Night / memory", themes: ["Verlust", "Freundschaft", "Stille"], visualTheme: "loss", coverStyle: "track-stone", cover: originalCovers["01"], note: "Ein stiller Kader für Erinnerung ohne Pathos.", sunoId: "eb401eb1-fd65-4b66-b16f-e870042179e4" },
+  { id: "01", slug: "dein-name-auf-nem-stein", title: "DEIN NAME AUF NEM STEIN", mood: "Night / memory", themes: ["Verlust", "Freundschaft", "Stille"], visualTheme: "loss", coverStyle: "track-stone", cover: originalCovers["01"], note: "Ein stiller Kader für Erinnerung ohne Pathos.", sunoId: "eb401eb1-fd65-4b66-b16f-e870042179e4", audioSrc: masterAsset("/manus-storage/DeinNameaufnemStein.mp3") },
   { id: "02", slug: "was", title: "WAS?", mood: "Academic / absurd", themes: ["Ego", "Ironie", "Überlegenheit"], visualTheme: "ego", coverStyle: "track-was", cover: originalCovers["02"], note: "Präzision kippt mit Absicht ins Absurde.", sunoId: "26b45c1f-01d5-4ea9-b457-bd589793f3e0" },
   { id: "03", slug: "p34nuts-regelt-das", title: "P34NUTS REGELT DAS", mood: "Control / comic", themes: ["Charisma", "Selbstironie", "Kontrolle"], visualTheme: "control", coverStyle: "track-controls", cover: originalCovers["03"], note: "Ein überernster Problemlöser in einer viel zu großen Geste.", sunoId: "ed79a111-18bf-4476-ad9d-0b01fabc7df3" },
   { id: "04", slug: "maskenball", title: "MASKENBALL", mood: "Elegant / alone", themes: ["Maske", "Einsamkeit", "Rolle"], visualTheme: "mask", coverStyle: "track-mask", cover: originalCovers["04"], note: "Außen ein Ritual, innen ein leerer Raum.", sunoId: "6fc6cffd-60cc-4440-81e0-4dfde2bd575a" },
