@@ -27,7 +27,8 @@ export function FinalPressTransition({ mark, newspaper, newspaperSecondary }: Fi
       frame = 0;
       const rect = section.getBoundingClientRect();
       const viewport = window.innerHeight || 800;
-      if (rect.top <= viewport * .58 && rect.bottom > viewport * .18) {
+      const progress = clamp((viewport - rect.top) / (viewport + rect.height));
+      if (progress >= .9 && rect.bottom > viewport * .02) {
         setNewspapersLaunched(true);
         window.removeEventListener("scroll", requestCheck, { capture: false });
         window.removeEventListener("resize", requestCheck, { capture: false });
@@ -103,8 +104,12 @@ export function FinalPressTransition({ mark, newspaper, newspaperSecondary }: Fi
             <em>PRESS KIT — PRESS KIT — PRESS KIT — PRESS KIT —</em>
           </div>
           <img className="final-press-transition__mark" src={mark} alt="" aria-hidden="true" />
-          <img className="final-press-transition__newspaper final-press-transition__newspaper--primary" src={newspaper} alt="P34nuts in der Morgenpost – Press-Archiv" loading="lazy" />
-          <img className="final-press-transition__newspaper final-press-transition__newspaper--secondary" src={newspaperSecondary} alt="P34nuts in der Berliner Zeitung – Press-Archiv" loading="lazy" />
+          {newspapersLaunched ? (
+            <>
+              <img className="final-press-transition__newspaper final-press-transition__newspaper--primary" src={newspaper} alt="P34nuts in der Morgenpost – Press-Archiv" loading="lazy" />
+              <img className="final-press-transition__newspaper final-press-transition__newspaper--secondary" src={newspaperSecondary} alt="P34nuts in der Berliner Zeitung – Press-Archiv" loading="lazy" />
+            </>
+          ) : null}
         </div>
       </div>
     </section>
