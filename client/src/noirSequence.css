@@ -1152,15 +1152,55 @@ main > .marquee[data-flow-ready="true"] {
 .final-press-transition__newspaper {
   position: absolute;
   z-index: 4;
-  top: 25%;
-  left: 50%;
-  width: clamp(15rem, 32vw, 31rem);
+  top: 31%;
   height: auto;
   border: 1px solid rgba(16, 16, 18, .24);
   box-shadow: 1.4rem 2rem 2.8rem rgba(0, 0, 0, .34), -.3rem .4rem .7rem rgba(255, 255, 255, .25);
-  transform: translate3d(calc(-50% + var(--final-press-newspaper-x, 0vw)), var(--final-press-newspaper-y, -112%), 0) rotate(var(--final-press-newspaper-rotate, 18deg)) scale(var(--final-press-newspaper-scale, .74));
   transform-origin: 50% 18%;
-  will-change: transform;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.final-press-transition__newspaper--primary {
+  left: 37%;
+  width: clamp(15rem, 27vw, 27rem);
+}
+
+.final-press-transition__newspaper--secondary {
+  left: 65%;
+  width: clamp(13rem, 23vw, 23rem);
+}
+
+.final-press-transition.is-newspapers-launched .final-press-transition__newspaper {
+  animation-duration: 1.75s;
+  animation-timing-function: cubic-bezier(.16, .9, .24, 1);
+  animation-fill-mode: both;
+  animation-iteration-count: 1;
+}
+
+.final-press-transition.is-newspapers-launched .final-press-transition__newspaper--primary {
+  animation-name: pressNewspaperPrimary;
+}
+
+.final-press-transition.is-newspapers-launched .final-press-transition__newspaper--secondary {
+  animation-name: pressNewspaperSecondary;
+  animation-delay: .2s;
+}
+
+@keyframes pressNewspaperPrimary {
+  0% { opacity: 0; transform: translate3d(-21vw, -92vh, 0) rotate(-28deg) scale(.58); }
+  20% { opacity: 1; }
+  62% { transform: translate3d(8vw, -7vh, 0) rotate(14deg) scale(1.05); }
+  82% { transform: translate3d(-2vw, 4vh, 0) rotate(-7deg) scale(.98); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0) rotate(-3deg) scale(1); }
+}
+
+@keyframes pressNewspaperSecondary {
+  0% { opacity: 0; transform: translate3d(29vw, -108vh, 0) rotate(34deg) scale(.5); }
+  20% { opacity: 1; }
+  58% { transform: translate3d(-9vw, -3vh, 0) rotate(-17deg) scale(1.04); }
+  80% { transform: translate3d(2vw, 5vh, 0) rotate(8deg) scale(.97); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0) rotate(5deg) scale(1); }
 }
 
 .press-section {
@@ -1222,8 +1262,17 @@ main > .marquee[data-flow-ready="true"] {
   }
 
   .final-press-transition__newspaper {
-    top: 29%;
-    width: min(72vw, 20rem);
+    top: 34%;
+  }
+
+  .final-press-transition__newspaper--primary {
+    left: 35%;
+    width: min(48vw, 13.3rem);
+  }
+
+  .final-press-transition__newspaper--secondary {
+    left: 68%;
+    width: min(42vw, 12rem);
   }
 }
 
@@ -1253,7 +1302,7 @@ main > .marquee[data-flow-ready="true"] {
 
   .final-press-transition__ticker,
   .final-press-transition__mark,
-  .final-press-transition__newspaper { transform: none; will-change: auto; }
+  .final-press-transition__newspaper { transform: none; will-change: auto; opacity: 1; }
 }
 
 /* NO STATIC — scroll-led image choreography without changing gallery content. */

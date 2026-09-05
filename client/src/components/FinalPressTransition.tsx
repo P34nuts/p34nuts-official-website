@@ -1,9 +1,10 @@
 import { useReducedMotion } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type FinalPressTransitionProps = {
   mark: string;
   newspaper: string;
+  newspaperSecondary: string;
 };
 
 const clamp = (value: number) => Math.min(1, Math.max(0, value));
@@ -13,9 +14,23 @@ const clamp = (value: number) => Math.min(1, Math.max(0, value));
  * one curved light sheet rises over the outgoing scene and a repeated PRESS KIT
  * line takes over. The composition is original to P34nuts.
  */
-export function FinalPressTransition({ mark, newspaper }: FinalPressTransitionProps) {
+export function FinalPressTransition({ mark, newspaper, newspaperSecondary }: FinalPressTransitionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const reduceMotion = useReducedMotion();
+  const [newspapersLaunched, setNewspapersLaunched] = useState(false);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setNewspapersLaunched(true);
+        observer.disconnect();
+      }
+    }, { threshold: 0.12 });
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     if (reduceMotion) return;
@@ -34,10 +49,6 @@ export function FinalPressTransition({ mark, newspaper }: FinalPressTransitionPr
       const wordShift = (progress - .5) * (mobile ? 28 : 42);
       const markRotate = (progress - .5) * (mobile ? 72 : 130);
       const markScale = .78 + progress * .38;
-      const newspaperX = (1 - progress) * 34;
-      const newspaperY = (1 - progress) * -112;
-      const newspaperRotate = (1 - progress) * 18 - progress * 4;
-      const newspaperScale = .74 + progress * .2;
 
       section.dataset.finalPressReady = "true";
       section.style.setProperty("--final-press-progress", progress.toFixed(3));
@@ -45,10 +56,6 @@ export function FinalPressTransition({ mark, newspaper }: FinalPressTransitionPr
       section.style.setProperty("--final-press-word-shift", `${wordShift.toFixed(3)}vw`);
       section.style.setProperty("--final-press-mark-rotate", `${markRotate.toFixed(3)}deg`);
       section.style.setProperty("--final-press-mark-scale", markScale.toFixed(3));
-      section.style.setProperty("--final-press-newspaper-x", `${newspaperX.toFixed(3)}vw`);
-      section.style.setProperty("--final-press-newspaper-y", `${newspaperY.toFixed(3)}%`);
-      section.style.setProperty("--final-press-newspaper-rotate", `${newspaperRotate.toFixed(3)}deg`);
-      section.style.setProperty("--final-press-newspaper-scale", newspaperScale.toFixed(3));
     };
 
     const requestUpdate = () => {
@@ -69,7 +76,7 @@ export function FinalPressTransition({ mark, newspaper }: FinalPressTransitionPr
   }, [reduceMotion]);
 
   return (
-    <section ref={sectionRef} className="final-press-transition" aria-label="Übergang von Ask P34nuts zum Press Kit">
+    <section ref={sectionRef} className={`final-press-transition${newspapersLaunched ? " is-newspapers-launched" : ""}`} aria-label="Übergang von Ask P34nuts zum Press Kit">
       <div className="final-press-transition__sticky">
         <div className="final-press-transition__source" aria-hidden="true">
           <span>ASK</span>
@@ -82,7 +89,8 @@ export function FinalPressTransition({ mark, newspaper }: FinalPressTransitionPr
             <em>PRESS KIT — PRESS KIT — PRESS KIT — PRESS KIT —</em>
           </div>
           <img className="final-press-transition__mark" src={mark} alt="" aria-hidden="true" />
-          <img className="final-press-transition__newspaper" src={newspaper} alt="P34nuts in der Morgenpost – Press-Archiv" loading="lazy" />
+          <img className="final-press-transition__newspaper final-press-transition__newspaper--primary" src={newspaper} alt="P34nuts in der Morgenpost – Press-Archiv" loading="lazy" />
+          <img className="final-press-transition__newspaper final-press-transition__newspaper--secondary" src={newspaperSecondary} alt="P34nuts in der Berliner Zeitung – Press-Archiv" loading="lazy" />
         </div>
       </div>
     </section>
