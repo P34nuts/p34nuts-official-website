@@ -1,5 +1,6 @@
 import { Volume2, VolumeX, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import type { Track } from "@/data/artistData";
 
 type CurrentTrackPlayerProps = {
@@ -114,9 +115,23 @@ export function CurrentTrackPlayer({ tracks }: CurrentTrackPlayerProps) {
 
   const statusLabel = isPlaying ? "AKTUELL LÄUFT" : autoplayBlocked ? "BEREIT ZUM START" : "AUDIO WIRD GELADEN";
   const soundLabel = isPlaying ? (isMuted ? "TON AN" : "TON AUS") : "START / TON AN";
+  const miniPlayer = miniVisible && !miniDismissed ? (
+    <div className="current-track-mini" role="status" aria-live="polite">
+      <div className="current-track-mini__copy">
+        <span><i aria-hidden="true" /> AKTUELL LÄUFT</span>
+        <strong>{currentTrack.title}</strong>
+      </div>
+      <button type="button" className="current-track-mini__sound" onClick={toggleSound} aria-pressed={!isMuted}>
+        {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
+        <span>{isMuted ? "TON AN" : "TON AUS"}</span>
+      </button>
+      <button type="button" className="current-track-mini__close" onClick={() => { setMiniDismissed(true); setMiniVisible(false); }} aria-label="Mini-Player schließen"><X size={14} /></button>
+    </div>
+  ) : null;
 
   return (
-    <section ref={playerRef} className="current-track-player" aria-label="P34nuts Audioplayer">
+    <>
+      <section ref={playerRef} className="current-track-player" aria-label="P34nuts Audioplayer">
       <audio
         ref={audioRef}
         src={currentTrack.audioSrc}
@@ -146,19 +161,8 @@ export function CurrentTrackPlayer({ tracks }: CurrentTrackPlayerProps) {
         <span>{soundLabel}</span>
       </button>
       <span className="current-track-signal" aria-hidden="true"><i /><i /><i /><i /><i /></span>
-      {miniVisible && !miniDismissed ? (
-        <div className="current-track-mini" role="status" aria-live="polite">
-          <div className="current-track-mini__copy">
-            <span><i aria-hidden="true" /> AKTUELL LÄUFT</span>
-            <strong>{currentTrack.title}</strong>
-          </div>
-          <button type="button" className="current-track-mini__sound" onClick={toggleSound} aria-pressed={!isMuted}>
-            {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
-            <span>{isMuted ? "TON AN" : "TON AUS"}</span>
-          </button>
-          <button type="button" className="current-track-mini__close" onClick={() => { setMiniDismissed(true); setMiniVisible(false); }} aria-label="Mini-Player schließen"><X size={14} /></button>
-        </div>
-      ) : null}
-    </section>
+      </section>
+      {typeof document !== "undefined" && miniPlayer ? createPortal(miniPlayer, document.body) : null}
+    </>
   );
 }
