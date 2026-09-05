@@ -42,7 +42,7 @@ export function ScrollWatermarkInterlude() {
   });
   const { scrollY: globalScrollY } = useScroll();
   const rotation = useMotionValue(0);
-  const targetSpin = useRef(0.16);
+  const targetSpin = useRef(0.55);
   const lastScrollY = useRef<number | null>(null);
   const lastEventAt = useRef<number | null>(null);
   const textX = useTransform(scrollYProgress, [0, 1], ["7%", "-19%"]);
@@ -62,8 +62,8 @@ export function ScrollWatermarkInterlude() {
       const elapsed = Math.max(now - lastEventAt.current, 8);
       const velocity = delta / elapsed;
       const direction = velocity < 0 ? -1 : 1;
-      const intensity = Math.min(Math.abs(velocity) * 0.95, 1.55);
-      targetSpin.current = direction * Math.max(0.16, intensity);
+      const intensity = Math.min(Math.abs(velocity) * 4.8, 8.5);
+      targetSpin.current = direction * Math.max(0.55, intensity);
     }
     lastScrollY.current = latest;
     lastEventAt.current = now;
@@ -72,7 +72,7 @@ export function ScrollWatermarkInterlude() {
   useAnimationFrame((_, delta) => {
     if (reduceMotion) return;
     const frame = Math.min(delta, 40) / 16.67;
-    const idle = targetSpin.current >= 0 ? 0.16 : -0.16;
+    const idle = targetSpin.current >= 0 ? 0.55 : -0.55;
     targetSpin.current += (idle - targetSpin.current) * Math.min(0.08 * frame, 0.22);
     rotation.set(rotation.get() + targetSpin.current * frame);
   });

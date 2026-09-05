@@ -1,5 +1,5 @@
 import { useReducedMotion } from "framer-motion";
-import { type FocusEvent, useEffect, useRef } from "react";
+import { type CSSProperties, type FocusEvent, useEffect, useRef } from "react";
 import { Link } from "wouter";
 import { type Track } from "@/data/artistData";
 import { TrackDialog } from "@/components/TrackDialog";
@@ -8,6 +8,8 @@ type ScrollTrackRailProps = {
   tracks: readonly Track[];
   onListenRequest: (track: Track) => void;
 };
+
+const noteLines = [2, 4, 1, 3, 0, 2, 4, 1, 3, 2, 0, 3, 1, 4, 2, 0, 2, 3, 1, 4, 2, 1, 3] as const;
 
 function TrackCloneLink({ track, position }: { track: Track; position: "before" | "after" }) {
   return (
@@ -27,16 +29,34 @@ function TrackCloneLink({ track, position }: { track: Track; position: "before" 
   );
 }
 
+function NotationSegment({ tracks, segment }: { tracks: readonly Track[]; segment: string }) {
+  return (
+    <div className="notation-segment">
+      {tracks.map((track, index) => {
+        const noteStyle = { "--note-line": noteLines[index % noteLines.length] } as CSSProperties;
+        return (
+          <span className="notation-note" key={`${segment}-${track.id}`} style={noteStyle}>
+            <span className="notation-note-accidental">{index % 7 === 0 ? "♯" : index % 11 === 0 ? "♭" : ""}</span>
+            <span className="notation-note-head" />
+            <span className="notation-note-stem" />
+            <span className="notation-note-flag" />
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
 /**
  * An endless visual archive strip. Scroll down accelerates it to the left,
  * scroll up accelerates it to the right, then a slow directional drift remains.
- * The middle sequence is fully keyboard accessible; surrounding link copies
- * provide a seamless visible loop and remain clickable with pointer input.
+ * The fixed staff below the cards uses the same direction and pixel velocity.
  */
 export function ScrollTrackRail({ tracks, onListenRequest }: ScrollTrackRailProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const windowRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
+  const notationRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
 
   useEffect(() => {
@@ -44,13 +64,16 @@ export function ScrollTrackRail({ tracks, onListenRequest }: ScrollTrackRailProp
 
     const section = sectionRef.current;
     const track = trackRef.current;
-    if (!section || !track || !tracks.length) return;
+    const notation = notationRef.current;
+    if (!section || !track || !notation || !tracks.length) return;
 
     let animationFrame = 0;
     let lastTimestamp = performance.now();
     let lastScrollY = window.scrollY;
     let loopWidth = 0;
+    let notationLoopWidth = 0;
     let offset = 0;
+    let notationOffset = 0;
     let direction: -1 | 1 = -1;
     let boost = 0;
     let active = false;
@@ -58,9 +81,12 @@ export function ScrollTrackRail({ tracks, onListenRequest }: ScrollTrackRailProp
 
     const measure = () => {
       loopWidth = track.scrollWidth / 3;
-      if (!loopWidth) return;
+      notationLoopWidth = notation.scrollWidth / 3;
+      if (!loopWidth || !notationLoopWidth) return;
       offset = -loopWidth;
+      notationOffset = -notationLoopWidth;
       track.style.transform = `translate3d(${offset.toFixed(2)}px, 0, 0)`;
+      notation.style.transform = `translate3d(${notationOffset.toFixed(2)}px, 0, 0)`;
     };
 
     const wrapOffset = () => {
@@ -69,17 +95,27 @@ export function ScrollTrackRail({ tracks, onListenRequest }: ScrollTrackRailProp
       while (offset >= 0) offset -= loopWidth;
     };
 
+    const wrapNotationOffset = () => {
+      if (!notationLoopWidth) return;
+      while (notationOffset <= -notationLoopWidth * 2) notationOffset += notationLoopWidth;
+      while (notationOffset >= 0) notationOffset -= notationLoopWidth;
+    };
+
     const animate = (timestamp: number) => {
       const deltaSeconds = Math.min((timestamp - lastTimestamp) / 1000, .05);
       lastTimestamp = timestamp;
 
-      if (active && !keyboardPause && loopWidth) {
+      if (active && !keyboardPause && loopWidth && notationLoopWidth) {
         const idleSpeed = window.matchMedia("(max-width: 820px)").matches ? 34 : 48;
-        offset += direction * (idleSpeed + boost) * deltaSeconds;
+        const speed = idleSpeed + boost;
+        offset += direction * speed * deltaSeconds;
+        notationOffset += direction * speed * deltaSeconds;
         boost *= Math.pow(.055, deltaSeconds);
         if (boost < .2) boost = 0;
         wrapOffset();
+        wrapNotationOffset();
         track.style.transform = `translate3d(${offset.toFixed(2)}px, 0, 0)`;
+        notation.style.transform = `translate3d(${notationOffset.toFixed(2)}px, 0, 0)`;
       }
 
       animationFrame = window.requestAnimationFrame(animate);
@@ -133,6 +169,7 @@ export function ScrollTrackRail({ tracks, onListenRequest }: ScrollTrackRailProp
       delete section.dataset.trackDirection;
       delete track.dataset.focusOffset;
       track.style.removeProperty("transform");
+      notation.style.removeProperty("transform");
     };
   }, [reduceMotion, tracks.length]);
 
@@ -176,6 +213,16 @@ export function ScrollTrackRail({ tracks, onListenRequest }: ScrollTrackRailProp
           </div>
           <div className="scroll-track-rail-segment" aria-hidden="true">
             {tracks.map((track) => <TrackCloneLink key={`after-${track.id}`} track={track} position="after" />)}
+          </div>
+        </div>
+        <div className="scroll-notation-system" aria-hidden="true">
+          <span className="notation-clef">𝄞</span>
+          <div className="notation-staff">
+            <div ref={notationRef} className="notation-roll">
+              <NotationSegment tracks={tracks} segment="before" />
+              <NotationSegment tracks={tracks} segment="active" />
+              <NotationSegment tracks={tracks} segment="after" />
+            </div>
           </div>
         </div>
       </div>
