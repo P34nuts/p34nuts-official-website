@@ -32,6 +32,7 @@ import { ScrollFollowWatermark, ScrollWatermarkInterlude } from "@/components/Sc
 import { ScrollFlowController } from "@/components/ScrollFlowController";
 import { ScrollTrackRail } from "@/components/ScrollTrackRail";
 import { SectionTransitionScene } from "@/components/SectionTransitionScene";
+import { FinalPressTransition } from "@/components/FinalPressTransition";
 import { NoStaticGalleryController } from "@/components/NoStaticGalleryController";
 import { DiscoveryRail } from "@/components/DiscoveryRail";
 import { BookingForm } from "@/components/BookingForm";
@@ -294,11 +295,22 @@ export default function Home() {
           tone="light"
         />
 
-        <SectionTransitionScene index="01.5" eyebrow="from music archive to first entry" firstWord="FIND" secondWord="YOUR ENTRY." image={assets.releaseCover} tone="light" />
+        <section className="entry-frame-fracture" aria-label="Album-Frame wird zum persönlichen Einstieg">
+          <div className="entry-frame-fracture__copy">
+            <span>01.5 / frame fracture</span>
+            <strong>ONE FRAME.<br /><em>SIX WAYS IN.</em></strong>
+          </div>
+          <span className="entry-frame-fracture__edge">FIND YOUR ENTRY →</span>
+        </section>
 
         <DiscoveryRail />
 
-        <SectionTransitionScene index="01.75" eyebrow="from shop frame to artist signal" firstWord="UNBOX" secondWord="THE SIGNAL." image={assets.mark} tone="dark" />
+        <section className="signal-unbox-cut" aria-label="Übergang vom Shop zum Artist Statement">
+          <div className="signal-unbox-cut__line" aria-hidden="true" />
+          <span>01.75 / unbox the signal</span>
+          <strong>WHAT YOU<br /><em>TAKE WITH YOU.</em></strong>
+          <small>shop frame → artist signal</small>
+        </section>
 
         <section className="statement-section" aria-label="Artist statement">
           <div className="statement-rule" />
@@ -315,7 +327,11 @@ export default function Home() {
           </div>
         </section>
 
-        <SectionTransitionScene index="02" eyebrow="from principles to music structure" firstWord="LOCK" secondWord="THE INDEX." image={assets.vinylRecord} tone="light" />
+        <section className="archive-index-lock" aria-label="Übergang vom Artist Manifest zum Track-Archiv">
+          <div className="archive-index-lock__head"><span>01—03 / principle</span><span>02 / music structure ready</span></div>
+          <div className="archive-index-lock__counter" aria-hidden="true"><span>01</span><i>→</i><strong>23</strong></div>
+          <p>THREE PRINCIPLES.<br /><em>TWENTY-THREE FRAMES.</em></p>
+        </section>
 
         <section id="music" className="music-section section-wrap" aria-labelledby="music-title">
           <SectionLabel index="02" label="Music / structure ready" align="right" />
@@ -329,7 +345,22 @@ export default function Home() {
           />
         </section>
 
-        <SectionTransitionScene index="02.5" eyebrow="from music archive to moving image" firstWord="CUT" secondWord="TO SIGNAL." image={featuredVisual.poster} tone="dark" />
+        <section className="archive-visual-cut" aria-label="Übergang vom Track-Archiv zum bewegten Bild">
+          <div className="archive-visual-cut__label"><span>02.5 / archive cut</span><span>many frames → one moving image</span></div>
+          <div className="archive-visual-cut__contact-sheet" aria-hidden="true">
+            {[releases[2], releases[6], releases[12], releases[20]].map((track, index) => track ? (
+              <figure key={`${track.slug}-${index}`} style={{ transform: `rotate(${index % 2 === 0 ? -2 : 2}deg)` }}>
+                <img src={track.cover} alt="" loading="lazy" />
+                <figcaption>{track.id} / ARCHIVE</figcaption>
+              </figure>
+            ) : null)}
+            <figure className="archive-visual-cut__hero" style={{ transform: "rotate(-1deg)" }}>
+              <img src={featuredVisual.poster} alt="" loading="lazy" />
+              <figcaption>LIVE / SIGNAL</figcaption>
+            </figure>
+          </div>
+          <strong>FROM CONTACT<br /><em>TO CUT.</em></strong>
+        </section>
 
         <section className="featured-section" aria-labelledby="featured-title">
           <img src={featuredVisual.poster} alt="" />
@@ -366,7 +397,12 @@ export default function Home() {
           </div>
         </section>
 
-        <SectionTransitionScene index="03.25" eyebrow="from artist profile to human contrast" firstWord="MEET" secondWord="THE HUMAN." image={assets.human} tone="light" />
+        <section className="mask-split-cut" aria-label="Übergang vom Artist-Profil zum Kontrastkapitel">
+          <span>03.25 / split the mask</span>
+          <div className="mask-split-cut__bars" aria-hidden="true"><i /><i /><i /><i /><i /></div>
+          <strong>THE HUMAN<br /><em>IN THE CUT.</em></strong>
+          <small>profile → pressure / inside → outside</small>
+        </section>
 
         <section className="contrast-section" aria-labelledby="contrast-title">
           <div className="section-wrap contrast-layout">
@@ -388,7 +424,12 @@ export default function Home() {
           </div>
         </section>
 
-        <SectionTransitionScene index="04.5" eyebrow="from moving archive to still image" firstWord="HOLD" secondWord="THE FRAME." image={gallery[0].src} tone="dark" />
+        <section className="motion-residue-cut" aria-label="Übergang vom Videoarchiv zum Bilderarchiv">
+          <div className="motion-residue-cut__trail" aria-hidden="true"><i /><i /><i /><i /></div>
+          <span>04.5 / motion residue</span>
+          <strong>WHEN THE<br /><em>MOTION STOPS.</em></strong>
+          <small>visual archive → image archive</small>
+        </section>
 
         <section className="gallery-section" aria-labelledby="gallery-title">
           <NoStaticGalleryController />
@@ -426,7 +467,12 @@ export default function Home() {
           </div>
         </section>
 
-        <SectionTransitionScene index="06.5" eyebrow="from live signal to direct line" firstWord="OPEN" secondWord="THE LINE." image={assets.bookingStage} tone="red" />
+        <section className="live-contact-cut" aria-label="Übergang von Live-Ankündigungen zu Kontakt">
+          <div className="live-contact-cut__wave" aria-hidden="true" />
+          <span>06.5 / open channel</span>
+          <strong>NO DATE.<br /><em>STILL A SIGNAL.</em></strong>
+          <small>live frame → direct line</small>
+        </section>
 
       {announcementEnabled && announcementText ? <div className="section-wrap" role="status"><div className="rounded-sm border border-red-400/40 bg-red-950/20 px-5 py-4 text-sm text-white">{announcementText}</div></div> : null}
 
@@ -472,7 +518,12 @@ export default function Home() {
           </div>
         </section>
 
-        <SectionTransitionScene index="07.5" eyebrow="from direct line to public trace" firstWord="LEAVE" secondWord="A TRACE." image={assets.mirror} tone="light" />
+        <section className="trace-drop-cut" aria-label="Übergang vom Kontaktbereich zum Gästebuch">
+          <span>07.5 / drop a trace</span>
+          <div className="trace-drop-cut__cursor" aria-hidden="true">_</div>
+          <strong>YOUR TURN<br /><em>TO LEAVE A SIGNAL.</em></strong>
+          <small>contact → guestbook</small>
+        </section>
 
         <section id="guestbook" className="guestbook-section section-wrap" aria-labelledby="guestbook-title">
           <SectionLabel index="08" label="Guestbook / moderated signal" />
@@ -507,7 +558,12 @@ export default function Home() {
           </div>
         </section>
 
-        <SectionTransitionScene index="08.5" eyebrow="from public trace to open questions" firstWord="ASK" secondWord="WHAT'S NEXT." image={assets.pressFrame} tone="dark" />
+        <section className="question-cut" aria-label="Übergang vom Gästebuch zu häufigen Fragen">
+          <span>08.5 / cut through the noise</span>
+          <div className="question-cut__marks" aria-hidden="true"><i>?</i><i>?</i><i>?</i></div>
+          <strong>ONE MORE<br /><em>QUESTION.</em></strong>
+          <small>guestbook → faq</small>
+        </section>
 
         <section className="faq-section section-wrap" aria-labelledby="faq-title">
           <SectionLabel index="09" label="FAQ / no box no mask" align="right" />
@@ -528,7 +584,7 @@ export default function Home() {
           </details>
         </section>
 
-        <SectionTransitionScene index="09.5" eyebrow="from open questions to press archive" firstWord="PRESS" secondWord="THE FRAME." image={assets.pressFrame} tone="red" />
+        <FinalPressTransition mark={assets.mark} />
 
         <section className="press-section section-wrap" aria-labelledby="press-title">
           <div className="press-box">
