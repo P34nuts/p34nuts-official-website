@@ -42,7 +42,7 @@ export function ScrollWatermarkInterlude() {
   });
   const { scrollY: globalScrollY } = useScroll();
   const rotation = useMotionValue(0);
-  const targetSpin = useRef(0.55);
+  const spinVelocity = useRef(1.15);
   const lastScrollY = useRef<number | null>(null);
   const lastEventAt = useRef<number | null>(null);
   const textX = useTransform(scrollYProgress, [0, 1], ["7%", "-19%"]);
@@ -51,9 +51,9 @@ export function ScrollWatermarkInterlude() {
     damping: 24,
     mass: 0.35,
   });
-  const needleX = useTransform(needleProgress, [0, 1], ["18%", "58%"]);
-  const needleY = useTransform(needleProgress, [0, 1], ["-25%", "1%"]);
-  const needleRotate = useTransform(needleProgress, [0, 1], [-30, -7]);
+  const needleX = useTransform(needleProgress, [0, 1], ["0%", "-23%"]);
+  const needleY = useTransform(needleProgress, [0, 1], ["-34%", "2%"]);
+  const needleRotate = useTransform(needleProgress, [0, 1], [24, 6]);
 
   useMotionValueEvent(globalScrollY, "change", (latest) => {
     const now = performance.now();
@@ -62,8 +62,8 @@ export function ScrollWatermarkInterlude() {
       const elapsed = Math.max(now - lastEventAt.current, 8);
       const velocity = delta / elapsed;
       const direction = velocity < 0 ? -1 : 1;
-      const intensity = Math.min(Math.abs(velocity) * 4.8, 8.5);
-      targetSpin.current = direction * Math.max(0.55, intensity);
+      const impulse = Math.min(Math.abs(delta) * 0.18, 8.5);
+      spinVelocity.current = Math.max(-18, Math.min(18, spinVelocity.current + direction * impulse));
     }
     lastScrollY.current = latest;
     lastEventAt.current = now;
@@ -72,9 +72,9 @@ export function ScrollWatermarkInterlude() {
   useAnimationFrame((_, delta) => {
     if (reduceMotion) return;
     const frame = Math.min(delta, 40) / 16.67;
-    const idle = targetSpin.current >= 0 ? 0.55 : -0.55;
-    targetSpin.current += (idle - targetSpin.current) * Math.min(0.08 * frame, 0.22);
-    rotation.set(rotation.get() + targetSpin.current * frame);
+    const idle = spinVelocity.current >= 0 ? 0.95 : -0.95;
+    spinVelocity.current += (idle - spinVelocity.current) * Math.min(0.012 * frame, 0.08);
+    rotation.set(rotation.get() + spinVelocity.current * frame);
   });
 
   return (

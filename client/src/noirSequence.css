@@ -281,14 +281,14 @@
   left: 50%;
   width: 46%;
   height: 3.2rem;
-  transform-origin: 0 50%;
+  transform-origin: 100% 50%;
   will-change: transform;
 }
 
 .scroll-turntable-pivot {
   position: absolute;
   top: 50%;
-  left: 0;
+  left: 100%;
   width: 1.4rem;
   aspect-ratio: 1;
   border: 2px solid rgba(241, 238, 229, .72);
@@ -301,7 +301,7 @@
 .scroll-turntable-arm {
   position: absolute;
   top: calc(50% - .12rem);
-  left: .42rem;
+  right: .42rem;
   width: 78%;
   height: .24rem;
   border-radius: 999px;
@@ -312,7 +312,7 @@
 .scroll-turntable-cartridge {
   position: absolute;
   top: calc(50% - .45rem);
-  right: 17%;
+  left: 17%;
   width: 1.15rem;
   height: .82rem;
   border: 1px solid rgba(241, 238, 229, .72);
@@ -323,23 +323,23 @@
 .scroll-turntable-needle {
   position: absolute;
   top: calc(50% + .22rem);
-  right: 18%;
+  left: 18%;
   width: .12rem;
   height: .7rem;
   background: #ff3b30;
-  transform: rotate(-18deg);
+  transform: rotate(18deg);
   transform-origin: top center;
 }
 
 .scroll-notation-system {
-  position: absolute;
-  right: 0;
-  bottom: clamp(.65rem, 1.6vw, 1.15rem);
-  left: 0;
+  position: sticky;
+  top: clamp(4.8rem, 9vh, 7rem);
   z-index: 4;
   display: flex;
   align-items: center;
-  height: clamp(4.8rem, 8vw, 7rem);
+  width: 100%;
+  height: clamp(8.5rem, 14vw, 12rem);
+  margin-top: clamp(1.2rem, 2.4vw, 2.4rem);
   overflow: hidden;
   border-block: 1px solid rgba(241, 238, 229, .18);
   background: linear-gradient(180deg, rgba(8, 8, 10, .82), rgba(8, 8, 10, .54));
@@ -388,10 +388,24 @@
 
 .notation-note {
   position: relative;
+  top: calc((var(--note-line) - 2) * 20%);
   display: block;
   flex: 0 0 clamp(2.3rem, 4.3vw, 4.8rem);
   width: clamp(2.3rem, 4.3vw, 4.8rem);
   height: 100%;
+  animation: notation-note-drift 2.4s ease-in-out infinite alternate;
+  animation-delay: calc(var(--note-line) * -180ms);
+  transform-origin: 50% 50%;
+}
+
+.notation-note:nth-child(3n) { animation-duration: 3.1s; }
+.notation-note:nth-child(4n) { animation-duration: 1.8s; }
+.notation-note:nth-child(5n) { animation-direction: alternate-reverse; }
+
+@keyframes notation-note-drift {
+  0% { transform: rotate(-9deg) translateY(-.32rem) scale(.9); }
+  46% { transform: rotate(6deg) translateY(.42rem) scale(1.04); }
+  100% { transform: rotate(-4deg) translateY(-.18rem) scale(.94); }
 }
 
 .notation-note-head {

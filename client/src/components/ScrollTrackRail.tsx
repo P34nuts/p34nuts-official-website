@@ -215,14 +215,14 @@ export function ScrollTrackRail({ tracks, onListenRequest }: ScrollTrackRailProp
             {tracks.map((track) => <TrackCloneLink key={`after-${track.id}`} track={track} position="after" />)}
           </div>
         </div>
-        <div className="scroll-notation-system" aria-hidden="true">
-          <span className="notation-clef">𝄞</span>
-          <div className="notation-staff">
-            <div ref={notationRef} className="notation-roll">
-              <NotationSegment tracks={tracks} segment="before" />
-              <NotationSegment tracks={tracks} segment="active" />
-              <NotationSegment tracks={tracks} segment="after" />
-            </div>
+      </div>
+      <div className="scroll-notation-system" aria-hidden="true">
+        <span className="notation-clef">𝄞</span>
+        <div className="notation-staff">
+          <div ref={notationRef} className="notation-roll">
+            <NotationSegment tracks={tracks} segment="before" />
+            <NotationSegment tracks={tracks} segment="active" />
+            <NotationSegment tracks={tracks} segment="after" />
           </div>
         </div>
       </div>
