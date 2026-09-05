@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 
 type FinalPressTransitionProps = {
   mark: string;
+  newspaper: string;
 };
 
 const clamp = (value: number) => Math.min(1, Math.max(0, value));
@@ -12,7 +13,7 @@ const clamp = (value: number) => Math.min(1, Math.max(0, value));
  * one curved light sheet rises over the outgoing scene and a repeated PRESS KIT
  * line takes over. The composition is original to P34nuts.
  */
-export function FinalPressTransition({ mark }: FinalPressTransitionProps) {
+export function FinalPressTransition({ mark, newspaper }: FinalPressTransitionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const reduceMotion = useReducedMotion();
 
@@ -33,6 +34,10 @@ export function FinalPressTransition({ mark }: FinalPressTransitionProps) {
       const wordShift = (progress - .5) * (mobile ? 28 : 42);
       const markRotate = (progress - .5) * (mobile ? 72 : 130);
       const markScale = .78 + progress * .38;
+      const newspaperX = (1 - progress) * 34;
+      const newspaperY = (1 - progress) * -112;
+      const newspaperRotate = (1 - progress) * 18 - progress * 4;
+      const newspaperScale = .74 + progress * .2;
 
       section.dataset.finalPressReady = "true";
       section.style.setProperty("--final-press-progress", progress.toFixed(3));
@@ -40,6 +45,10 @@ export function FinalPressTransition({ mark }: FinalPressTransitionProps) {
       section.style.setProperty("--final-press-word-shift", `${wordShift.toFixed(3)}vw`);
       section.style.setProperty("--final-press-mark-rotate", `${markRotate.toFixed(3)}deg`);
       section.style.setProperty("--final-press-mark-scale", markScale.toFixed(3));
+      section.style.setProperty("--final-press-newspaper-x", `${newspaperX.toFixed(3)}vw`);
+      section.style.setProperty("--final-press-newspaper-y", `${newspaperY.toFixed(3)}%`);
+      section.style.setProperty("--final-press-newspaper-rotate", `${newspaperRotate.toFixed(3)}deg`);
+      section.style.setProperty("--final-press-newspaper-scale", newspaperScale.toFixed(3));
     };
 
     const requestUpdate = () => {
@@ -55,7 +64,7 @@ export function FinalPressTransition({ mark }: FinalPressTransitionProps) {
       window.removeEventListener("resize", requestUpdate);
       if (frame) window.cancelAnimationFrame(frame);
       delete section.dataset.finalPressReady;
-      ["--final-press-progress", "--final-press-reveal-y", "--final-press-word-shift", "--final-press-mark-rotate", "--final-press-mark-scale"].forEach((property) => section.style.removeProperty(property));
+      ["--final-press-progress", "--final-press-reveal-y", "--final-press-word-shift", "--final-press-mark-rotate", "--final-press-mark-scale", "--final-press-newspaper-x", "--final-press-newspaper-y", "--final-press-newspaper-rotate", "--final-press-newspaper-scale"].forEach((property) => section.style.removeProperty(property));
     };
   }, [reduceMotion]);
 
@@ -73,6 +82,7 @@ export function FinalPressTransition({ mark }: FinalPressTransitionProps) {
             <em>PRESS KIT — PRESS KIT — PRESS KIT — PRESS KIT —</em>
           </div>
           <img className="final-press-transition__mark" src={mark} alt="" aria-hidden="true" />
+          <img className="final-press-transition__newspaper" src={newspaper} alt="P34nuts in der Morgenpost – Press-Archiv" loading="lazy" />
         </div>
       </div>
     </section>

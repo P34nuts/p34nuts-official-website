@@ -1149,6 +1149,20 @@ main > .marquee[data-flow-ready="true"] {
   will-change: transform;
 }
 
+.final-press-transition__newspaper {
+  position: absolute;
+  z-index: 4;
+  top: 25%;
+  left: 50%;
+  width: clamp(15rem, 32vw, 31rem);
+  height: auto;
+  border: 1px solid rgba(16, 16, 18, .24);
+  box-shadow: 1.4rem 2rem 2.8rem rgba(0, 0, 0, .34), -.3rem .4rem .7rem rgba(255, 255, 255, .25);
+  transform: translate3d(calc(-50% + var(--final-press-newspaper-x, 0vw)), var(--final-press-newspaper-y, -112%), 0) rotate(var(--final-press-newspaper-rotate, 18deg)) scale(var(--final-press-newspaper-scale, .74));
+  transform-origin: 50% 18%;
+  will-change: transform;
+}
+
 .press-section {
   position: relative;
   z-index: 4;
@@ -1206,6 +1220,11 @@ main > .marquee[data-flow-ready="true"] {
     bottom: 8%;
     width: 5.4rem;
   }
+
+  .final-press-transition__newspaper {
+    top: 29%;
+    width: min(72vw, 20rem);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1233,7 +1252,8 @@ main > .marquee[data-flow-ready="true"] {
   }
 
   .final-press-transition__ticker,
-  .final-press-transition__mark { transform: none; will-change: auto; }
+  .final-press-transition__mark,
+  .final-press-transition__newspaper { transform: none; will-change: auto; }
 }
 
 /* NO STATIC — scroll-led image choreography without changing gallery content. */
