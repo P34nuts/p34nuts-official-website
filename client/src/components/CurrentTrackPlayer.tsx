@@ -67,19 +67,23 @@ export function CurrentTrackPlayer({ tracks }: CurrentTrackPlayerProps) {
     if (!audio) return;
 
     if (isMuted) {
-      setIsMuted(false);
+      const position = audio.currentTime;
       audio.muted = false;
       try {
         await audio.play();
+        if (position > 0 && Math.abs(audio.currentTime - position) > 0.25) audio.currentTime = position;
+        setIsMuted(false);
         setIsPlaying(true);
       } catch {
+        audio.muted = true;
+        setIsMuted(true);
         setIsPlaying(false);
       }
       return;
     }
 
-    setIsMuted(true);
     audio.muted = true;
+    setIsMuted(true);
   };
 
   const handleEnded = () => {
@@ -89,7 +93,7 @@ export function CurrentTrackPlayer({ tracks }: CurrentTrackPlayerProps) {
 
   return (
     <section className="current-track-player" aria-label="P34nuts Audioplayer">
-      <audio ref={audioRef} src={currentTrack.audioSrc} preload="auto" autoPlay muted playsInline onEnded={handleEnded} aria-hidden="true" />
+      <audio ref={audioRef} src={currentTrack.audioSrc} preload="auto" autoPlay playsInline onEnded={handleEnded} aria-hidden="true" />
       <div className="current-track-copy">
         <span className={`current-track-status ${isPlaying ? "is-live" : ""}`}>
           <i aria-hidden="true" /> AKTUELL LÄUFT
