@@ -16,35 +16,21 @@ const clamp = (value: number) => Math.min(1, Math.max(0, value));
  */
 export function FinalPressTransition({ mark, newspaper, newspaperSecondary }: FinalPressTransitionProps) {
   const sectionRef = useRef<HTMLElement>(null);
+  const kickerRef = useRef<HTMLParagraphElement>(null);
   const reduceMotion = useReducedMotion();
   const [newspapersLaunched, setNewspapersLaunched] = useState(false);
 
   useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-    let frame = 0;
-    const checkArrival = () => {
-      frame = 0;
-      const rect = section.getBoundingClientRect();
-      const viewport = window.innerHeight || 800;
-      const progress = clamp((viewport - rect.top) / (viewport + rect.height));
-      if (progress >= .9 && rect.bottom > viewport * .02) {
+    const kicker = kickerRef.current;
+    if (!kicker) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && entry.intersectionRatio >= .5) {
         setNewspapersLaunched(true);
-        window.removeEventListener("scroll", requestCheck, { capture: false });
-        window.removeEventListener("resize", requestCheck, { capture: false });
+        observer.disconnect();
       }
-    };
-    const requestCheck = () => {
-      if (!frame) frame = window.requestAnimationFrame(checkArrival);
-    };
-    checkArrival();
-    window.addEventListener("scroll", requestCheck, { passive: true });
-    window.addEventListener("resize", requestCheck);
-    return () => {
-      window.removeEventListener("scroll", requestCheck);
-      window.removeEventListener("resize", requestCheck);
-      if (frame) window.cancelAnimationFrame(frame);
-    };
+    }, { threshold: [.5] });
+    observer.observe(kicker);
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -98,7 +84,7 @@ export function FinalPressTransition({ mark, newspaper, newspaperSecondary }: Fi
           <em>P34NUTS.</em>
         </div>
         <div className="final-press-transition__reveal">
-          <p className="final-press-transition__kicker">final frame / press archive</p>
+          <p ref={kickerRef} className="final-press-transition__kicker">final frame / press archive</p>
           <div className="final-press-transition__ticker" aria-hidden="true">
             <span>PRESS KIT — PRESS KIT — PRESS KIT — PRESS KIT —</span>
             <em>PRESS KIT — PRESS KIT — PRESS KIT — PRESS KIT —</em>

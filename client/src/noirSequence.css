@@ -1266,13 +1266,13 @@ main > .marquee[data-flow-ready="true"] {
   }
 
   .final-press-transition__newspaper--primary {
-    left: 35%;
-    width: min(48vw, 13.3rem);
+    left: 27%;
+    width: min(36vw, 10rem);
   }
 
   .final-press-transition__newspaper--secondary {
-    left: 68%;
-    width: min(42vw, 12rem);
+    left: 73%;
+    width: min(32vw, 9rem);
   }
 }
 
