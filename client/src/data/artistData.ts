@@ -123,6 +123,21 @@ export type Track = {
   audioSrc?: string;
 };
 
+/** Homepage-only audio additions that are not part of the numbered archive. */
+export const currentAudioExtras: readonly Track[] = [
+  {
+    id: "LIVE",
+    slug: "p34nuts-live",
+    title: "P34NUTS",
+    mood: "Direct / signal",
+    themes: ["Signal", "Identity"],
+    visualTheme: "signal",
+    coverStyle: "track-signal",
+    note: "Ein direkter P34nuts-Song für den aktuellen Live-Player.",
+    audioSrc: "/audio/P34nuts.mp3",
+  },
+];
+
 export const artistProfile = {
   intro: "P34nuts bewegt sich im deutschen Rap zwischen emotionaler Verletzlichkeit, intellektueller Wortgewalt und dem unverfälschten Charme des Berliner Alltags.",
   positioning: "Wo andere mit Statussymbolen oder Härte posieren, verbindet P34nuts Systeme, Satire und Situationen aus dem echten Leben – vom Katerfrühstück bis zur späten Clubnacht.",

@@ -45,6 +45,7 @@ import {
   artistProfile,
   artistManifest,
   booking,
+  currentAudioExtras,
   featuredVisual,
   gallery,
   latestRelease,
@@ -260,7 +261,7 @@ export default function Home() {
           >
             <p id="hero-title" className="eyebrow">Independent artist / music archive</p>
             <p className="hero-line">Musik zwischen Maske, <i>Wahrheit und Frequenz.</i></p>
-            <CurrentTrackPlayer tracks={releases} />
+            <CurrentTrackPlayer tracks={[...releases, ...currentAudioExtras]} />
             <a href="#start-here" className="hero-cta">START WITH MUSIC <ArrowDown size={17} /></a>
           </motion.div>
           <div className="hero-bottom"><span>Scroll to enter</span><span>01:01 / no autoplay</span></div>
