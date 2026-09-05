@@ -299,15 +299,17 @@ export default function Home() {
             <span>01.5 / frame fracture</span>
             <strong>ONE FRAME.<br /><em>SIX WAYS IN.</em></strong>
           </div>
-          <div className="entry-frame-fracture__fragments" aria-hidden="true">
-            {[0, 1, 2, 3, 4, 5].map((fragment) => (
-              <span key={fragment} style={{ backgroundImage: `url(${assets.releaseCover})` }} />
-            ))}
-          </div>
           <span className="entry-frame-fracture__edge">FIND YOUR ENTRY →</span>
         </section>
 
         <DiscoveryRail />
+
+        <section className="signal-unbox-cut" aria-label="Übergang vom Shop zum Artist Statement">
+          <div className="signal-unbox-cut__line" aria-hidden="true" />
+          <span>01.75 / unbox the signal</span>
+          <strong>WHAT YOU<br /><em>TAKE WITH YOU.</em></strong>
+          <small>shop frame → artist signal</small>
+        </section>
 
         <section className="statement-section" aria-label="Artist statement">
           <div className="statement-rule" />
@@ -322,6 +324,12 @@ export default function Home() {
             <div className="manifest-intro"><p className="eyebrow">{artistManifest.eyebrow}</p><h2 id="manifest-title">NO BOX.<br /><em>NO MASK.</em><br />NO FILTER.</h2></div>
             <div className="manifest-copy"><p>{artistManifest.lede}</p><ol>{artistManifest.principles.map((principle, index) => <li key={principle}><span>0{index + 1}</span>{principle}</li>)}</ol><a href={sitePath("/music")} className="text-link">ENTER THE ARCHIVE <ArrowUpRight size={14} /></a></div>
           </div>
+        </section>
+
+        <section className="archive-index-lock" aria-label="Übergang vom Artist Manifest zum Track-Archiv">
+          <div className="archive-index-lock__head"><span>01—03 / principle</span><span>02 / music structure ready</span></div>
+          <div className="archive-index-lock__counter" aria-hidden="true"><span>01</span><i>→</i><strong>23</strong></div>
+          <p>THREE PRINCIPLES.<br /><em>TWENTY-THREE FRAMES.</em></p>
         </section>
 
         <section id="music" className="music-section section-wrap" aria-labelledby="music-title">
