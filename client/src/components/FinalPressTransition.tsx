@@ -22,14 +22,28 @@ export function FinalPressTransition({ mark, newspaper, newspaperSecondary }: Fi
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
+    let frame = 0;
+    const checkArrival = () => {
+      frame = 0;
+      const rect = section.getBoundingClientRect();
+      const viewport = window.innerHeight || 800;
+      if (rect.top <= viewport * .58 && rect.bottom > viewport * .18) {
         setNewspapersLaunched(true);
-        observer.disconnect();
+        window.removeEventListener("scroll", requestCheck, { capture: false });
+        window.removeEventListener("resize", requestCheck, { capture: false });
       }
-    }, { threshold: 0.12 });
-    observer.observe(section);
-    return () => observer.disconnect();
+    };
+    const requestCheck = () => {
+      if (!frame) frame = window.requestAnimationFrame(checkArrival);
+    };
+    checkArrival();
+    window.addEventListener("scroll", requestCheck, { passive: true });
+    window.addEventListener("resize", requestCheck);
+    return () => {
+      window.removeEventListener("scroll", requestCheck);
+      window.removeEventListener("resize", requestCheck);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
   }, []);
 
   useEffect(() => {
