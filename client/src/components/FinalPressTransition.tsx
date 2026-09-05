@@ -92,8 +92,8 @@ export function FinalPressTransition({ mark, newspaper, newspaperSecondary }: Fi
           <img className="final-press-transition__mark" src={mark} alt="" aria-hidden="true" />
           {newspapersLaunched ? (
             <>
-              <img className="final-press-transition__newspaper final-press-transition__newspaper--primary" src={newspaper} alt="P34nuts in der Morgenpost – Press-Archiv" loading="lazy" />
-              <img className="final-press-transition__newspaper final-press-transition__newspaper--secondary" src={newspaperSecondary} alt="P34nuts in der Berliner Zeitung – Press-Archiv" loading="lazy" />
+              <div className="final-press-transition__newspaper final-press-transition__newspaper--primary"><img src={newspaper} alt="P34nuts in der Morgenpost – Press-Archiv" loading="lazy" /></div>
+              <div className="final-press-transition__newspaper final-press-transition__newspaper--secondary"><img src={newspaperSecondary} alt="P34nuts in der Berliner Zeitung – Press-Archiv" loading="lazy" /></div>
             </>
           ) : null}
         </div>
