@@ -11,15 +11,6 @@ import {
   getTrackBySlug,
 } from "@/data/artistData";
 
-const smokePaths = [
-  "M500 240 C470 330 190 390 90 820",
-  "M500 240 C480 350 330 430 245 820",
-  "M500 240 C495 360 445 485 400 820",
-  "M500 240 C510 360 555 485 560 820",
-  "M500 240 C530 350 680 430 720 820",
-  "M500 240 C540 330 830 390 900 820",
-] as const;
-
 export function DiscoveryRail() {
   const reduceMotion = useReducedMotion();
   const [paths, setPaths] = useState(() => discoveryPaths);
@@ -27,7 +18,6 @@ export function DiscoveryRail() {
   const [navigationLocked, setNavigationLocked] = useState(false);
   const pathsRef = useRef(paths);
   const flipTimeoutsRef = useRef<number[]>([]);
-  const smokeFieldRef = useRef<HTMLDivElement>(null);
 
   const prepareTopNavigation = () => {
     document.documentElement.scrollTop = 0;
@@ -91,42 +81,8 @@ export function DiscoveryRail() {
     };
   }, [navigationLocked, reduceMotion]);
 
-  useEffect(() => {
-    const field = smokeFieldRef.current;
-    if (!field) return;
-    if (reduceMotion) {
-      field.style.setProperty("--smoke-progress", "1");
-      return;
-    }
-    let frame = 0;
-    const update = () => {
-      frame = 0;
-      const rect = field.getBoundingClientRect();
-      const viewport = window.innerHeight || 800;
-      const progress = Math.min(1, Math.max(0, (viewport * .88 - rect.top) / (rect.height + viewport * .35)));
-      field.style.setProperty("--smoke-progress", progress.toFixed(3));
-    };
-    const requestUpdate = () => { if (!frame) frame = window.requestAnimationFrame(update); };
-    update();
-    window.addEventListener("scroll", requestUpdate, { passive: true });
-    window.addEventListener("resize", requestUpdate, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", requestUpdate);
-      window.removeEventListener("resize", requestUpdate);
-      if (frame) window.cancelAnimationFrame(frame);
-    };
-  }, [reduceMotion]);
-
   return (
     <>
-      <div ref={smokeFieldRef} className="discovery-signal-field" aria-hidden="true">
-        <div className="discovery-signal-portrait"><img src="/uploads/page-images/file_00000000dc3481f483d76133fa226760.png" alt="" loading="lazy" decoding="async" /></div>
-        <svg className="discovery-smoke-map" viewBox="0 0 1000 900" preserveAspectRatio="none">
-          {smokePaths.map((path, index) => <path key={path} className={`discovery-smoke-path discovery-smoke-path--${index + 1}`} d={path} pathLength="1" />)}
-        </svg>
-        <span className="discovery-signal-caption">SIX WAYS IN / ONE SIGNAL</span>
-      </div>
-      <div className="discovery-signal-next">FIND YOUR ENTRY →</div>
       <section id="start-here" className="discovery-section" aria-labelledby="discovery-title">
         <div className="section-wrap">
           <div className="discovery-heading"><p className="eyebrow">Start here / new listener guide</p><h2 id="discovery-title">FIND YOUR<br /><em>ENTRY.</em></h2><p>Kein Kontext nötig. Such dir einen Einstieg nach Stimmung aus – der Rest folgt im Archiv.</p></div>
