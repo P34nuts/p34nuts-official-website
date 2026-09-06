@@ -5,6 +5,7 @@ type FinalPressTransitionProps = {
   mark: string;
   newspaper: string;
   newspaperSecondary: string;
+  newspaperTertiary: string;
 };
 
 const clamp = (value: number) => Math.min(1, Math.max(0, value));
@@ -14,12 +15,12 @@ const clamp = (value: number) => Math.min(1, Math.max(0, value));
  * one curved light sheet rises over the outgoing scene and a repeated PRESS KIT
  * line takes over. The composition is original to P34nuts.
  */
-export function FinalPressTransition({ mark, newspaper, newspaperSecondary }: FinalPressTransitionProps) {
+export function FinalPressTransition({ mark, newspaper, newspaperSecondary, newspaperTertiary }: FinalPressTransitionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const kickerRef = useRef<HTMLParagraphElement>(null);
   const reduceMotion = useReducedMotion();
   const [newspapersLaunched, setNewspapersLaunched] = useState(false);
-  const [selectedNewspaper, setSelectedNewspaper] = useState<"primary" | "secondary" | null>(null);
+  const [selectedNewspaper, setSelectedNewspaper] = useState<"primary" | "secondary" | "tertiary" | null>(null);
 
   useEffect(() => {
     const closeOnOutsideClick = (event: PointerEvent) => {
@@ -128,6 +129,7 @@ export function FinalPressTransition({ mark, newspaper, newspaperSecondary }: Fi
           <img className="final-press-transition__mark" src={mark} alt="" aria-hidden="true" />
           <div onClick={(event) => { event.stopPropagation(); setSelectedNewspaper("primary"); }} className={`final-press-transition__newspaper final-press-transition__newspaper--primary${newspapersLaunched ? " is-launched" : ""}${selectedNewspaper === "primary" ? " is-selected" : ""}`}><img src={newspaper} alt="P34nuts in der Morgenpost – Press-Archiv" loading="lazy" /></div>
           <div onClick={(event) => { event.stopPropagation(); setSelectedNewspaper("secondary"); }} className={`final-press-transition__newspaper final-press-transition__newspaper--secondary${newspapersLaunched ? " is-launched" : ""}${selectedNewspaper === "secondary" ? " is-selected" : ""}`}><img src={newspaperSecondary} alt="P34nuts in der Berliner Zeitung – Press-Archiv" loading="lazy" /></div>
+          <div onClick={(event) => { event.stopPropagation(); setSelectedNewspaper("tertiary"); }} className={`final-press-transition__newspaper final-press-transition__newspaper--tertiary${newspapersLaunched ? " is-launched" : ""}${selectedNewspaper === "tertiary" ? " is-selected" : ""}`}><img src={newspaperTertiary} alt="P34nuts im Press-Archiv – dritte Zeitung" loading="lazy" /></div>
         </div>
       </div>
     </section>
