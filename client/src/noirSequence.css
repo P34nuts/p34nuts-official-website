@@ -1100,6 +1100,10 @@ main > .marquee[data-flow-ready="true"] {
   background: linear-gradient(90deg, transparent, rgba(255, 59, 48, .9), transparent);
 }
 
+.final-press-transition__reveal:has(.final-press-transition__newspaper.is-selected) {
+  overflow: visible;
+}
+
 .final-press-transition__kicker {
   position: absolute;
   z-index: 2;
@@ -1228,7 +1232,7 @@ main > .marquee[data-flow-ready="true"] {
 }
 .final-press-transition__newspaper.is-selected img {
   animation: none !important;
-  transform: scale(1.55) rotate(0deg);
+  transform: scale(2.1) rotate(0deg);
   transition: transform .55s cubic-bezier(.2, .8, .2, 1), box-shadow .55s ease;
   box-shadow: 1.8rem 2.4rem 4rem rgba(0, 0, 0, .45), -.3rem .4rem .7rem rgba(255, 255, 255, .25);
 }
@@ -1308,7 +1312,7 @@ main > .marquee[data-flow-ready="true"] {
   }
 
   .final-press-transition__newspaper.is-selected img {
-    transform: scale(1.45) rotate(0deg);
+    transform: scale(1.85) rotate(0deg);
   }
 }
 
