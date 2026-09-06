@@ -119,16 +119,17 @@ export function DiscoveryRail() {
 
   return (
     <>
+      <div ref={smokeFieldRef} className="discovery-signal-field" aria-hidden="true">
+        <div className="discovery-signal-portrait"><img src="/uploads/page-images/file_00000000dc3481f483d76133fa226760.png" alt="" loading="lazy" decoding="async" /></div>
+        <svg className="discovery-smoke-map" viewBox="0 0 1000 900" preserveAspectRatio="none">
+          {smokePaths.map((path, index) => <path key={path} className={`discovery-smoke-path discovery-smoke-path--${index + 1}`} d={path} pathLength="1" />)}
+        </svg>
+        <span className="discovery-signal-caption">SIX WAYS IN / ONE SIGNAL</span>
+      </div>
+      <div className="discovery-signal-next">FIND YOUR ENTRY →</div>
       <section id="start-here" className="discovery-section" aria-labelledby="discovery-title">
         <div className="section-wrap">
           <div className="discovery-heading"><p className="eyebrow">Start here / new listener guide</p><h2 id="discovery-title">FIND YOUR<br /><em>ENTRY.</em></h2><p>Kein Kontext nötig. Such dir einen Einstieg nach Stimmung aus – der Rest folgt im Archiv.</p></div>
-          <div ref={smokeFieldRef} className="discovery-signal-field" aria-hidden="true">
-            <div className="discovery-signal-portrait"><img src="/uploads/page-images/file_00000000dc3481f483d76133fa226760.png" alt="" loading="lazy" decoding="async" /></div>
-            <svg className="discovery-smoke-map" viewBox="0 0 1000 900" preserveAspectRatio="none">
-              {smokePaths.map((path, index) => <path key={path} className={`discovery-smoke-path discovery-smoke-path--${index + 1}`} d={path} pathLength="1" />)}
-            </svg>
-            <span className="discovery-signal-caption">SIX WAYS IN / ONE SIGNAL</span>
-          </div>
           <div className="discovery-grid">
             {paths.map((path, index) => {
               const track = getTrackBySlug(path.trackSlug);
