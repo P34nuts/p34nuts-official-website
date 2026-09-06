@@ -21,38 +21,31 @@ export function FinalPressTransition({ mark, newspaper, newspaperSecondary }: Fi
   const reduceMotion = useReducedMotion();
   const [newspapersLaunched, setNewspapersLaunched] = useState(false);
   const [selectedNewspaper, setSelectedNewspaper] = useState<"primary" | "secondary" | null>(null);
-  const [newspapersLocked, setNewspapersLocked] = useState(false);
 
   useEffect(() => {
     const closeOnOutsideClick = (event: PointerEvent) => {
       const target = event.target as HTMLElement;
-      if (!target.closest(".final-press-transition__newspaper")) {
-        setSelectedNewspaper(null);
-        setNewspapersLocked(true);
-      }
+      if (!target.closest(".final-press-transition__newspaper")) setSelectedNewspaper(null);
     };
     document.addEventListener("pointerdown", closeOnOutsideClick);
     return () => document.removeEventListener("pointerdown", closeOnOutsideClick);
   }, []);
 
   useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
+    const ticker = tickerRef.current;
+    if (!ticker) return;
     const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
+      if (entry.isIntersecting && entry.intersectionRatio >= .18) {
         setNewspapersLaunched(true);
         observer.disconnect();
       }
-    }, { threshold: 0.01 });
-    observer.observe(section);
+    }, { threshold: [.18] });
+    observer.observe(ticker);
     return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
-    if (reduceMotion) {
-      setNewspapersLaunched(true);
-      return;
-    }
+    if (reduceMotion) return;
 
     const section = sectionRef.current;
     if (!section) return;
@@ -68,11 +61,6 @@ export function FinalPressTransition({ mark, newspaper, newspaperSecondary }: Fi
       const wordShift = (progress - .5) * (mobile ? 28 : 42);
       const markRotate = (progress - .5) * (mobile ? 72 : 130);
       const markScale = .78 + progress * .38;
-
-      const tickerRect = tickerRef.current?.getBoundingClientRect();
-      const tickerVisible = tickerRect && tickerRect.top < viewport && tickerRect.bottom > 0;
-      const revealReady = revealY <= (mobile ? 26 : 30) || progress >= .3;
-      if (tickerVisible || revealReady) setNewspapersLaunched(true);
 
       section.dataset.finalPressReady = "true";
       section.style.setProperty("--final-press-progress", progress.toFixed(3));
@@ -115,8 +103,8 @@ export function FinalPressTransition({ mark, newspaper, newspaperSecondary }: Fi
           <img className="final-press-transition__mark" src={mark} alt="" aria-hidden="true" />
           {newspapersLaunched ? (
             <>
-              <div onClick={(event) => { event.stopPropagation(); setSelectedNewspaper("primary"); }} className={`final-press-transition__newspaper final-press-transition__newspaper--primary${newspapersLocked ? " is-locked" : ""}${selectedNewspaper === "primary" ? " is-selected" : ""}`}><img src={newspaper} alt="P34nuts in der Morgenpost – Press-Archiv" loading="lazy" /></div>
-              <div onClick={(event) => { event.stopPropagation(); setSelectedNewspaper("secondary"); }} className={`final-press-transition__newspaper final-press-transition__newspaper--secondary${newspapersLocked ? " is-locked" : ""}${selectedNewspaper === "secondary" ? " is-selected" : ""}`}><img src={newspaperSecondary} alt="P34nuts in der Berliner Zeitung – Press-Archiv" loading="lazy" /></div>
+              <div onClick={(event) => { event.stopPropagation(); setSelectedNewspaper("primary"); }} className={`final-press-transition__newspaper final-press-transition__newspaper--primary${selectedNewspaper === "primary" ? " is-selected" : ""}`}><img src={newspaper} alt="P34nuts in der Morgenpost – Press-Archiv" loading="lazy" /></div>
+              <div onClick={(event) => { event.stopPropagation(); setSelectedNewspaper("secondary"); }} className={`final-press-transition__newspaper final-press-transition__newspaper--secondary${selectedNewspaper === "secondary" ? " is-selected" : ""}`}><img src={newspaperSecondary} alt="P34nuts in der Berliner Zeitung – Press-Archiv" loading="lazy" /></div>
             </>
           ) : null}
         </div>
