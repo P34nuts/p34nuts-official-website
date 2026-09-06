@@ -84,6 +84,7 @@ const archivePolaroidImages = [
   "file_00000000f31c82108db89d51d69fdcd5.png",
   "file_00000000f5f081f491558024dfc44f0c.png",
   "file_00000000f89482109ed6934e487b580d.png",
+  "file_00000000801c821099219a2bdbfcce60.png",
 ] as const;
 
 export default function Home() {
