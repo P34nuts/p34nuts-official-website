@@ -36,21 +36,18 @@ export function FinalPressTransition({ mark, newspaper, newspaperSecondary }: Fi
 
     const launchWhenReached = () => {
       const rect = section.getBoundingClientRect();
-      if (rect.top <= window.innerHeight * .9 && rect.bottom >= 0) {
+      const viewport = window.innerHeight || 800;
+      // The transition is taller than one viewport. Wait until its visual
+      // hand-off is in the middle of the screen so the complete flight path
+      // remains visible instead of launching at the very first entry.
+      if (rect.top <= viewport * .56 && rect.bottom >= viewport * .28) {
         setNewspapersLaunched(true);
         return true;
       }
       return false;
     };
 
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setNewspapersLaunched(true);
-        observer.disconnect();
-        window.removeEventListener("scroll", launchOnScroll);
-        window.removeEventListener("resize", launchOnScroll);
-      }
-    }, { threshold: 0, rootMargin: "0px 0px 10% 0px" });
+    const observer = new IntersectionObserver(() => { launchOnScroll(); }, { threshold: 0 });
 
     const launchOnScroll = () => {
       if (launchWhenReached()) {
