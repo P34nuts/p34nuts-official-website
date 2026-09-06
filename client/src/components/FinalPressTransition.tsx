@@ -58,7 +58,7 @@ export function FinalPressTransition({ mark, newspaper, newspaperSecondary }: Fi
 
       const tickerRect = tickerRef.current?.getBoundingClientRect();
       const tickerVisible = tickerRect && tickerRect.top < viewport && tickerRect.bottom > 0;
-      const revealReady = revealY <= (mobile ? 26 : 30) || progress >= .3;
+      const revealReady = revealY <= (mobile ? 26 : 30);
       if (tickerVisible || revealReady) setNewspapersLaunched(true);
 
       section.dataset.finalPressReady = "true";
