@@ -73,6 +73,19 @@ const guestbookReactions = [
   { key: "sad", label: "Berührt", symbol: "☹", Icon: Frown },
 ] as const;
 
+const archivePolaroidImages = [
+  "file_000000000a308210ba39c31b09d63d4b.png",
+  "file_000000000cb481f489928ee5d76c365f.png",
+  "file_0000000015d48210b5ad600f70843bf6.png",
+  "file_0000000050f081f4968890d2a0f849ad.png",
+  "file_00000000698c824389de23d27ca55af8.png",
+  "file_00000000989481f48d9aff3f81416e92.png",
+  "file_00000000a97c81f4b8ae01882b429dc8.png",
+  "file_00000000f31c82108db89d51d69fdcd5.png",
+  "file_00000000f5f081f491558024dfc44f0c.png",
+  "file_00000000f89482109ed6934e487b580d.png",
+] as const;
+
 export default function Home() {
   const reduceMotion = useReducedMotion();
   const introPreview = typeof window !== "undefined" && shouldShowIntroPreview(window.location.search);
@@ -84,6 +97,7 @@ export default function Home() {
   const [guestbookMessage, setGuestbookMessage] = useState("");
   const [guestbookWebsite, setGuestbookWebsite] = useState("");
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [activeArchivePolaroid, setActiveArchivePolaroid] = useState<number | null>(null);
   const trpcUtils = trpc.useUtils();
   const guestbookQuery = trpc.guestbook.list.useQuery();
   const settingsQuery = trpc.settings.public.useQuery();
@@ -345,19 +359,25 @@ export default function Home() {
           />
         </section>
 
-        <section className="archive-visual-cut" aria-label="Übergang vom Track-Archiv zum bewegten Bild">
+        <section className="archive-visual-cut" aria-label="Übergang vom Track-Archiv zum bewegten Bild" onClick={() => setActiveArchivePolaroid(null)}>
           <div className="archive-visual-cut__label"><span>02.5 / archive cut</span><span>many frames → one moving image</span></div>
-          <div className="archive-visual-cut__contact-sheet" aria-hidden="true">
-            {[releases[2], releases[6], releases[12], releases[20]].map((track, index) => track ? (
-              <figure key={`${track.slug}-${index}`} style={{ transform: `rotate(${index % 2 === 0 ? -2 : 2}deg)` }}>
-                <img src={track.cover} alt="" loading="lazy" />
-                <figcaption>{track.id} / ARCHIVE</figcaption>
+          <div className="archive-visual-cut__polaroid-field">
+            {archivePolaroidImages.map((filename, index) => (
+              <figure
+                key={filename}
+                className={`archive-polaroid${activeArchivePolaroid === index ? " is-selected" : ""}`}
+                tabIndex={0}
+                role="button"
+                aria-label={`Archive-Polaroid ${index + 1} vergrößern`}
+                onClick={(event) => { event.stopPropagation(); setActiveArchivePolaroid(index); }}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") { event.preventDefault(); setActiveArchivePolaroid(index); }
+                }}
+              >
+                <img src={`/uploads/page-images/${filename}`} alt={`Archive Frame ${String(index + 1).padStart(2, "0")}`} loading="lazy" />
+                <figcaption>{String(index + 1).padStart(2, "0")} / FRAME</figcaption>
               </figure>
-            ) : null)}
-            <figure className="archive-visual-cut__hero" style={{ transform: "rotate(-1deg)" }}>
-              <img src={featuredVisual.poster} alt="" loading="lazy" />
-              <figcaption>LIVE / SIGNAL</figcaption>
-            </figure>
+            ))}
           </div>
           <strong>FROM CONTACT<br /><em>TO CUT.</em></strong>
         </section>
