@@ -17,7 +17,6 @@ const clamp = (value: number) => Math.min(1, Math.max(0, value));
 export function FinalPressTransition({ mark, newspaper, newspaperSecondary }: FinalPressTransitionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const kickerRef = useRef<HTMLParagraphElement>(null);
-  const tickerRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
   const [newspapersLaunched, setNewspapersLaunched] = useState(false);
   const [selectedNewspaper, setSelectedNewspaper] = useState<"primary" | "secondary" | null>(null);
@@ -32,16 +31,45 @@ export function FinalPressTransition({ mark, newspaper, newspaperSecondary }: Fi
   }, []);
 
   useEffect(() => {
-    const ticker = tickerRef.current;
-    if (!ticker) return;
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const launchWhenReached = () => {
+      const rect = section.getBoundingClientRect();
+      if (rect.top <= window.innerHeight * .9 && rect.bottom >= 0) {
+        setNewspapersLaunched(true);
+        return true;
+      }
+      return false;
+    };
+
     const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && entry.intersectionRatio >= .18) {
+      if (entry.isIntersecting) {
         setNewspapersLaunched(true);
         observer.disconnect();
+        window.removeEventListener("scroll", launchOnScroll);
+        window.removeEventListener("resize", launchOnScroll);
       }
-    }, { threshold: [.18] });
-    observer.observe(ticker);
-    return () => observer.disconnect();
+    }, { threshold: 0, rootMargin: "0px 0px 10% 0px" });
+
+    const launchOnScroll = () => {
+      if (launchWhenReached()) {
+        observer.disconnect();
+        window.removeEventListener("scroll", launchOnScroll);
+        window.removeEventListener("resize", launchOnScroll);
+      }
+    };
+
+    observer.observe(section);
+    launchOnScroll();
+    window.addEventListener("scroll", launchOnScroll, { passive: true });
+    window.addEventListener("resize", launchOnScroll);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", launchOnScroll);
+      window.removeEventListener("resize", launchOnScroll);
+    };
   }, []);
 
   useEffect(() => {
@@ -96,17 +124,13 @@ export function FinalPressTransition({ mark, newspaper, newspaperSecondary }: Fi
         </div>
         <div className="final-press-transition__reveal">
           <p ref={kickerRef} className="final-press-transition__kicker">final frame / press archive</p>
-          <div ref={tickerRef} className="final-press-transition__ticker" aria-hidden="true">
+          <div className="final-press-transition__ticker" aria-hidden="true">
             <span>PRESS KIT — PRESS KIT — PRESS KIT — PRESS KIT —</span>
             <em>PRESS KIT — PRESS KIT — PRESS KIT — PRESS KIT —</em>
           </div>
           <img className="final-press-transition__mark" src={mark} alt="" aria-hidden="true" />
-          {newspapersLaunched ? (
-            <>
-              <div onClick={(event) => { event.stopPropagation(); setSelectedNewspaper("primary"); }} className={`final-press-transition__newspaper final-press-transition__newspaper--primary${selectedNewspaper === "primary" ? " is-selected" : ""}`}><img src={newspaper} alt="P34nuts in der Morgenpost – Press-Archiv" loading="lazy" /></div>
-              <div onClick={(event) => { event.stopPropagation(); setSelectedNewspaper("secondary"); }} className={`final-press-transition__newspaper final-press-transition__newspaper--secondary${selectedNewspaper === "secondary" ? " is-selected" : ""}`}><img src={newspaperSecondary} alt="P34nuts in der Berliner Zeitung – Press-Archiv" loading="lazy" /></div>
-            </>
-          ) : null}
+          <div onClick={(event) => { event.stopPropagation(); setSelectedNewspaper("primary"); }} className={`final-press-transition__newspaper final-press-transition__newspaper--primary${newspapersLaunched ? " is-launched" : ""}${selectedNewspaper === "primary" ? " is-selected" : ""}`}><img src={newspaper} alt="P34nuts in der Morgenpost – Press-Archiv" loading="lazy" /></div>
+          <div onClick={(event) => { event.stopPropagation(); setSelectedNewspaper("secondary"); }} className={`final-press-transition__newspaper final-press-transition__newspaper--secondary${newspapersLaunched ? " is-launched" : ""}${selectedNewspaper === "secondary" ? " is-selected" : ""}`}><img src={newspaperSecondary} alt="P34nuts in der Berliner Zeitung – Press-Archiv" loading="lazy" /></div>
         </div>
       </div>
     </section>
