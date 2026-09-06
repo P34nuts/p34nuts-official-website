@@ -36,10 +36,34 @@ export function FinalPressTransition({ mark, newspaper, newspaperSecondary }: Fi
   }, []);
 
   useEffect(() => {
-    if (reduceMotion) {
-      setNewspapersLaunched(true);
-      return;
-    }
+    const ticker = tickerRef.current;
+    if (!ticker) return;
+    let frame = 0;
+    const checkTickerVisibility = () => {
+      frame = 0;
+      const rect = ticker.getBoundingClientRect();
+      const viewport = window.innerHeight || 800;
+      if (rect.top < viewport && rect.bottom > 0) {
+        setNewspapersLaunched(true);
+        window.removeEventListener("scroll", requestCheck, { capture: false });
+        window.removeEventListener("resize", requestCheck, { capture: false });
+      }
+    };
+    const requestCheck = () => {
+      if (!frame) frame = window.requestAnimationFrame(checkTickerVisibility);
+    };
+    checkTickerVisibility();
+    window.addEventListener("scroll", requestCheck, { passive: true });
+    window.addEventListener("resize", requestCheck);
+    return () => {
+      window.removeEventListener("scroll", requestCheck);
+      window.removeEventListener("resize", requestCheck);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (reduceMotion) return;
 
     const section = sectionRef.current;
     if (!section) return;
@@ -55,11 +79,6 @@ export function FinalPressTransition({ mark, newspaper, newspaperSecondary }: Fi
       const wordShift = (progress - .5) * (mobile ? 28 : 42);
       const markRotate = (progress - .5) * (mobile ? 72 : 130);
       const markScale = .78 + progress * .38;
-
-      const tickerRect = tickerRef.current?.getBoundingClientRect();
-      const tickerVisible = tickerRect && tickerRect.top < viewport && tickerRect.bottom > 0;
-      const revealReady = revealY <= (mobile ? 26 : 30);
-      if (tickerVisible || revealReady) setNewspapersLaunched(true);
 
       section.dataset.finalPressReady = "true";
       section.style.setProperty("--final-press-progress", progress.toFixed(3));
