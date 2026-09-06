@@ -56,7 +56,7 @@ export const assets = {
   galleryDiscipline: artistPortraitSet02.disciplineRain,
   galleryNight: artistPortraitSet02.nightNeonAlley,
   liveFrame: artistPortraitSet02.liveHarborSunset,
-  pressFrame: artistPortraitSet02.pressLionSunset,
+  pressFrame: masterAsset("https://files.manuscdn.com/user_upload_by_module/session_file/310519663912299250/mfYupinKtkmVHxXT.png"),
   albumIntro: masterAsset("/manus-storage/p34nuts-album-intro_7d20998b.mp3"),
 } as const;
 
