@@ -1200,6 +1200,12 @@ main > .marquee[data-flow-ready="true"] {
   width: clamp(13rem, 23vw, 23rem);
 }
 
+.final-press-transition__newspaper--tertiary {
+  left: 10%;
+  top: 58%;
+  width: clamp(11rem, 19vw, 19rem);
+}
+
 .final-press-transition__newspaper.is-launched {
   animation-duration: 4s;
   animation-timing-function: cubic-bezier(.18, .82, .22, 1);
@@ -1214,6 +1220,11 @@ main > .marquee[data-flow-ready="true"] {
 .final-press-transition__newspaper--secondary.is-launched {
   animation-name: pressNewspaperSecondary;
   animation-delay: .35s;
+}
+
+.final-press-transition__newspaper--tertiary.is-launched {
+  animation-name: pressNewspaperTertiary;
+  animation-delay: .55s;
 }
 
 .final-press-transition__newspaper.is-launched img {
@@ -1240,6 +1251,14 @@ main > .marquee[data-flow-ready="true"] {
   100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
 }
 
+@keyframes pressNewspaperTertiary {
+  0% { opacity: 0; transform: translate3d(-112vw, 78vh, 0) scale(.36); }
+  14% { opacity: 1; }
+  55% { transform: translate3d(9vw, 9vh, 0) scale(1.06); }
+  80% { transform: translate3d(-2vw, -3vh, 0) scale(.98); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
 /* One continuous easing curve prevents the rotation from re-accelerating between keyframes. */
 @keyframes pressNewspaperSpinPrimary {
   0% { transform: rotate(-1080deg); }
@@ -1247,6 +1266,10 @@ main > .marquee[data-flow-ready="true"] {
 }
 @keyframes pressNewspaperSpinSecondary {
   0% { transform: rotate(1080deg); }
+  100% { transform: rotate(0deg); }
+}
+@keyframes pressNewspaperSpinTertiary {
+  0% { transform: rotate(-900deg); }
   100% { transform: rotate(0deg); }
 }
 
@@ -1333,6 +1356,12 @@ main > .marquee[data-flow-ready="true"] {
     left: 52%;
     top: 48%;
     width: min(32vw, 9rem);
+  }
+
+  .final-press-transition__newspaper--tertiary {
+    left: 8%;
+    top: 66%;
+    width: min(30vw, 8.5rem);
   }
 
   .final-press-transition__newspaper.is-selected img {
@@ -1617,3 +1646,4 @@ main > .marquee[data-flow-ready="true"] {
 .featured-open .visual-card-trigger:focus-visible {
   outline-offset: 4px;
 }
+.final-press-transition__newspaper--tertiary.is-launched img { animation-name: pressNewspaperSpinTertiary; animation-delay: .5s; }
