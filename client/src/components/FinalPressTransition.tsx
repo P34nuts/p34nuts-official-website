@@ -38,28 +38,14 @@ export function FinalPressTransition({ mark, newspaper, newspaperSecondary }: Fi
   useEffect(() => {
     const ticker = tickerRef.current;
     if (!ticker) return;
-    let frame = 0;
-    const checkTickerVisibility = () => {
-      frame = 0;
-      const rect = ticker.getBoundingClientRect();
-      const viewport = window.innerHeight || 800;
-      if (rect.top < viewport && rect.bottom > 0) {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
         setNewspapersLaunched(true);
-        window.removeEventListener("scroll", requestCheck, { capture: false });
-        window.removeEventListener("resize", requestCheck, { capture: false });
+        observer.disconnect();
       }
-    };
-    const requestCheck = () => {
-      if (!frame) frame = window.requestAnimationFrame(checkTickerVisibility);
-    };
-    checkTickerVisibility();
-    window.addEventListener("scroll", requestCheck, { passive: true });
-    window.addEventListener("resize", requestCheck);
-    return () => {
-      window.removeEventListener("scroll", requestCheck);
-      window.removeEventListener("resize", requestCheck);
-      if (frame) window.cancelAnimationFrame(frame);
-    };
+    }, { threshold: 0 });
+    observer.observe(ticker);
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
