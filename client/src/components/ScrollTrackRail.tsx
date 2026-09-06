@@ -1,6 +1,5 @@
 import { useReducedMotion } from "framer-motion";
-import { type CSSProperties, type FocusEvent, useEffect, useRef } from "react";
-import { Link } from "wouter";
+import { type CSSProperties, useEffect, useRef } from "react";
 import { type Track } from "@/data/artistData";
 import { TrackDialog } from "@/components/TrackDialog";
 
@@ -11,21 +10,9 @@ type ScrollTrackRailProps = {
 
 const noteLines = [2, 4, 1, 3, 0, 2, 4, 1, 3, 2, 0, 3, 1, 4, 2, 0, 2, 3, 1, 4, 2, 1, 3] as const;
 
-function TrackCloneLink({ track, position }: { track: Track; position: "before" | "after" }) {
+function TrackCloneLink({ track, position, onListenRequest }: { track: Track; position: "before" | "after"; onListenRequest: (track: Track) => void }) {
   return (
-    <Link
-      href={`/music/${track.slug}`}
-      className={`release-tile ${track.coverStyle} scroll-track-card scroll-track-clone`}
-      tabIndex={-1}
-      aria-hidden="true"
-      data-clone-position={position}
-    >
-      {track.cover ? <img src={track.cover} alt="" className="release-tile-image" loading="lazy" /> : <span className="release-generated-art" aria-hidden="true" />}
-      <span className="tile-number">{track.id}</span>
-      <span className="tile-state">ARCHIVE / 23</span>
-      <span className="tile-title">{track.title}</span>
-      <span className="tile-mood">{track.mood}</span>
-    </Link>
+    <TrackDialog track={track} onListenRequest={onListenRequest} triggerClassName={`scroll-track-card scroll-track-clone data-clone-${position}`} />
   );
 }
 
@@ -54,7 +41,6 @@ function NotationSegment({ tracks, segment }: { tracks: readonly Track[]; segmen
  */
 export function ScrollTrackRail({ tracks, onListenRequest }: ScrollTrackRailProps) {
   const sectionRef = useRef<HTMLElement>(null);
-  const windowRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const notationRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
@@ -79,8 +65,6 @@ export function ScrollTrackRail({ tracks, onListenRequest }: ScrollTrackRailProp
     // Start immediately; IntersectionObserver can deliver its first callback a
     // frame later, which otherwise makes the rail appear frozen on fast scrolls.
     let active = true;
-    let keyboardPause = false;
-    let focusResumeTimer = 0;
 
     const measure = () => {
       loopWidth = track.scrollWidth / 3;
@@ -108,7 +92,7 @@ export function ScrollTrackRail({ tracks, onListenRequest }: ScrollTrackRailProp
       const deltaSeconds = Math.min((timestamp - lastTimestamp) / 1000, .05);
       lastTimestamp = timestamp;
 
-      if (active && !keyboardPause && loopWidth && notationLoopWidth) {
+      if (active && loopWidth && notationLoopWidth) {
         const idleSpeed = window.matchMedia("(max-width: 820px)").matches ? 34 : 48;
         const speed = idleSpeed + boost;
         offset += direction * speed * deltaSeconds;
@@ -142,34 +126,12 @@ export function ScrollTrackRail({ tracks, onListenRequest }: ScrollTrackRailProp
       { rootMargin: "35% 0px 35% 0px" },
     );
 
-    const onFocusIn = () => {
-      keyboardPause = true;
-      window.clearTimeout(focusResumeTimer);
-      const focusedOffset = Number(track.dataset.focusOffset);
-      if (Number.isFinite(focusedOffset)) {
-        offset = focusedOffset;
-        wrapOffset();
-      }
-    };
-    const onFocusOut = () => {
-      keyboardPause = false;
-      lastTimestamp = performance.now();
-      // Dialog primitives can restore focus to the trigger without emitting
-      // another focusout on the rail. Never leave the rail paused forever.
-      focusResumeTimer = window.setTimeout(() => {
-        keyboardPause = false;
-        lastTimestamp = performance.now();
-      }, 650);
-    };
-
     measure();
     section.dataset.trackRailReady = "true";
     section.dataset.trackDirection = "left";
     observer.observe(section);
     sizeObserver.observe(track);
     sizeObserver.observe(notation);
-    track.addEventListener("focusin", onFocusIn);
-    track.addEventListener("focusout", onFocusOut);
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize, { passive: true });
     animationFrame = window.requestAnimationFrame(animate);
@@ -177,47 +139,22 @@ export function ScrollTrackRail({ tracks, onListenRequest }: ScrollTrackRailProp
     return () => {
       observer.disconnect();
       sizeObserver.disconnect();
-      track.removeEventListener("focusin", onFocusIn);
-      track.removeEventListener("focusout", onFocusOut);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
       window.cancelAnimationFrame(animationFrame);
-      window.clearTimeout(focusResumeTimer);
       delete section.dataset.trackRailReady;
       delete section.dataset.trackDirection;
-      delete track.dataset.focusOffset;
       track.style.removeProperty("transform");
       notation.style.removeProperty("transform");
     };
   }, [reduceMotion, tracks.length]);
 
-  const revealFocusedTrack = (event: FocusEvent<HTMLElement>) => {
-    const viewport = windowRef.current;
-    const track = trackRef.current;
-    const card = (event.target as HTMLElement).closest<HTMLElement>(".scroll-track-card");
-    if (!viewport || !track || !card) return;
-
-    const targetOffset = Math.min(
-      Math.max(card.offsetLeft - (viewport.clientWidth - card.clientWidth) / 2, 0),
-      Math.max(track.scrollWidth - viewport.clientWidth, 0),
-    );
-
-    if (reduceMotion) {
-      viewport.scrollTo({ left: targetOffset, behavior: "auto" });
-      return;
-    }
-
-    const focusedOffset = -targetOffset;
-    track.dataset.focusOffset = focusedOffset.toFixed(2);
-    track.style.transform = `translate3d(${focusedOffset.toFixed(2)}px, 0, 0)`;
-  };
-
   return (
     <section ref={sectionRef} className="scroll-track-rail-section" aria-labelledby="music-title">
-      <div ref={windowRef} className="scroll-track-rail-window" role="region" aria-label="23 anklickbare Trackkader in einer richtungsabhängigen Endlosbewegung">
-        <div ref={trackRef} className="scroll-track-rail" onFocusCapture={revealFocusedTrack}>
+      <div className="scroll-track-rail-window" role="region" aria-label="23 anklickbare Trackkader in einer richtungsabhängigen Endlosbewegung">
+        <div ref={trackRef} className="scroll-track-rail">
           <div className="scroll-track-rail-segment" aria-hidden="true">
-            {tracks.map((track) => <TrackCloneLink key={`before-${track.id}`} track={track} position="before" />)}
+            {tracks.map((track) => <TrackCloneLink key={`before-${track.id}`} track={track} position="before" onListenRequest={onListenRequest} />)}
           </div>
           <div className="scroll-track-rail-segment scroll-track-rail-segment--interactive">
             {tracks.map((track) => (
@@ -230,7 +167,7 @@ export function ScrollTrackRail({ tracks, onListenRequest }: ScrollTrackRailProp
             ))}
           </div>
           <div className="scroll-track-rail-segment" aria-hidden="true">
-            {tracks.map((track) => <TrackCloneLink key={`after-${track.id}`} track={track} position="after" />)}
+            {tracks.map((track) => <TrackCloneLink key={`after-${track.id}`} track={track} position="after" onListenRequest={onListenRequest} />)}
           </div>
         </div>
       </div>

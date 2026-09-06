@@ -777,6 +777,8 @@ main > .marquee[data-flow-ready="true"] {
 .scroll-track-card .tile-mood { bottom: 1.12rem; font-size: .62rem; letter-spacing: .11em; opacity: .8; text-transform: uppercase; }
 .scroll-track-card .tile-listen { display: none; }
 .scroll-track-clone { text-decoration: none; }
+.scroll-track-card:focus,
+.scroll-track-card:focus-visible { outline: none; }
 
 .scroll-track-rail-note {
   display: flex;
