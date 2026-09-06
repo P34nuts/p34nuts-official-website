@@ -25,6 +25,7 @@ import {
 import { useEffect, useState } from "react";
 import { AlbumIntroPlayer } from "@/components/AlbumIntroPlayer";
 import { CurrentTrackPlayer } from "@/components/CurrentTrackPlayer";
+import { shouldShowIntroPreview } from "@/lib/introPreview";
 import { shopHref } from "@/lib/shopLink";
 import { Marquee } from "@/components/Marquee";
 import { ScrollFollowWatermark, ScrollWatermarkInterlude } from "@/components/ScrollWatermark";
@@ -88,8 +89,8 @@ const archivePolaroidImages = [
 
 export default function Home() {
   const reduceMotion = useReducedMotion();
-  const [introVisible, setIntroVisible] = useState(true);
-  const [loadProgress, setLoadProgress] = useState(8);
+  const introPreview = typeof window !== "undefined" && shouldShowIntroPreview(window.location.search);
+  const [introVisible, setIntroVisible] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [headerSolid, setHeaderSolid] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
@@ -120,23 +121,19 @@ export default function Home() {
   });
 
   useEffect(() => {
-    let completed = false;
-    const finishLoading = () => {
-      if (completed) return;
-      completed = true;
-      setLoadProgress(100);
-      window.setTimeout(() => setIntroVisible(false), reduceMotion ? 0 : 360);
-    };
-    const progressTimer = window.setInterval(() => {
-      setLoadProgress((current) => Math.min(current + Math.ceil(Math.random() * 7), 94));
-    }, 150);
-    if (document.readyState === "complete") finishLoading();
-    else window.addEventListener("load", finishLoading, { once: true });
-    return () => {
-      window.clearInterval(progressTimer);
-      window.removeEventListener("load", finishLoading);
-    };
-  }, [reduceMotion]);
+    if (introPreview || (!reduceMotion && window.sessionStorage.getItem("p34nuts-intro-seen") !== "true")) {
+      setIntroVisible(true);
+    }
+  }, [introPreview, reduceMotion]);
+
+  useEffect(() => {
+    if (!introVisible || introPreview) return;
+    const introTimer = window.setTimeout(() => {
+      window.sessionStorage.setItem("p34nuts-intro-seen", "true");
+      setIntroVisible(false);
+    }, 1250);
+    return () => window.clearTimeout(introTimer);
+  }, [introPreview, introVisible]);
 
   useEffect(() => {
     const scrollToHashTarget = () => {
@@ -176,6 +173,11 @@ export default function Home() {
 
   const showPlaceholder = (message: string) => setNotice(message);
 
+  const dismissIntro = () => {
+    window.sessionStorage.setItem("p34nuts-intro-seen", "true");
+    setIntroVisible(false);
+  };
+
   return (
     <div className="site-shell">
       <AnimatePresence>
@@ -185,13 +187,9 @@ export default function Home() {
             initial={{ opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 0.38 } }}
           >
-            <div className="next-frame-loader" role="status" aria-live="polite" aria-label={`P34nuts wird geladen: ${loadProgress} Prozent`}>
-              <div className="intro-mark"><img src={assets.mark} alt="P34nuts" /></div>
-              <p className="next-frame-loader__title">THE NEXT FRAME</p>
-              <strong className="next-frame-loader__progress">{loadProgress}<span>%</span></strong>
-              <div className="next-frame-loader__bar" aria-hidden="true"><span style={{ width: `${loadProgress}%` }} /></div>
-              <small>{loadProgress === 100 ? "FRAME READY" : "LOADING SIGNAL"}</small>
-            </div>
+            <div className="intro-mark"><img src={assets.mark} alt="" /></div>
+            <div className="intro-wordmark" aria-label="P34nuts"><span>P34</span><i>nuts</i></div>
+            <button type="button" onClick={dismissIntro}>SKIP INTRO</button>
           </motion.div>
         )}
       </AnimatePresence>
