@@ -1201,7 +1201,7 @@ main > .marquee[data-flow-ready="true"] {
 
 .final-press-transition__newspaper.is-launched img {
   animation-duration: 4s;
-  animation-timing-function: ease-out;
+  animation-timing-function: cubic-bezier(.12, .78, .18, 1);
   animation-fill-mode: both;
 }
 .final-press-transition__newspaper--primary.is-launched img { animation-name: pressNewspaperSpinPrimary; }
@@ -1223,19 +1223,13 @@ main > .marquee[data-flow-ready="true"] {
   100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
 }
 
-/* Quadratic easing expressed as explicit angles: the spin visibly decelerates throughout the flight. */
+/* One continuous easing curve prevents the rotation from re-accelerating between keyframes. */
 @keyframes pressNewspaperSpinPrimary {
   0% { transform: rotate(-1080deg); }
-  25% { transform: rotate(-607.5deg); }
-  50% { transform: rotate(-270deg); }
-  75% { transform: rotate(-67.5deg); }
   100% { transform: rotate(0deg); }
 }
 @keyframes pressNewspaperSpinSecondary {
   0% { transform: rotate(1080deg); }
-  25% { transform: rotate(607.5deg); }
-  50% { transform: rotate(270deg); }
-  75% { transform: rotate(67.5deg); }
   100% { transform: rotate(0deg); }
 }
 
