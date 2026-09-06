@@ -604,7 +604,7 @@ export default function Home() {
           </details>
         </section>
 
-        <FinalPressTransition mark={assets.mark} newspaper="/press/p34nuts-morgenpost.png" newspaperSecondary="/press/p34nuts-berliner-zeitung.png" />
+        <FinalPressTransition mark={assets.mark} newspaper="/uploads/page-images/file_0000000074a88210837b6b27efe8084d.png" newspaperSecondary="/press/p34nuts-berliner-zeitung.png" />
 
         <section className="press-section section-wrap" aria-labelledby="press-title">
           <div className="press-box">
