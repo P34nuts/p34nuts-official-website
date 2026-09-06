@@ -80,6 +80,7 @@ export function ScrollTrackRail({ tracks, onListenRequest }: ScrollTrackRailProp
     // frame later, which otherwise makes the rail appear frozen on fast scrolls.
     let active = true;
     let keyboardPause = false;
+    let focusResumeTimer = 0;
 
     const measure = () => {
       loopWidth = track.scrollWidth / 3;
@@ -143,13 +144,23 @@ export function ScrollTrackRail({ tracks, onListenRequest }: ScrollTrackRailProp
 
     const onFocusIn = () => {
       keyboardPause = true;
+      window.clearTimeout(focusResumeTimer);
       const focusedOffset = Number(track.dataset.focusOffset);
       if (Number.isFinite(focusedOffset)) {
         offset = focusedOffset;
         wrapOffset();
       }
     };
-    const onFocusOut = () => { keyboardPause = false; lastTimestamp = performance.now(); };
+    const onFocusOut = () => {
+      keyboardPause = false;
+      lastTimestamp = performance.now();
+      // Dialog primitives can restore focus to the trigger without emitting
+      // another focusout on the rail. Never leave the rail paused forever.
+      focusResumeTimer = window.setTimeout(() => {
+        keyboardPause = false;
+        lastTimestamp = performance.now();
+      }, 650);
+    };
 
     measure();
     section.dataset.trackRailReady = "true";
@@ -171,6 +182,7 @@ export function ScrollTrackRail({ tracks, onListenRequest }: ScrollTrackRailProp
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
       window.cancelAnimationFrame(animationFrame);
+      window.clearTimeout(focusResumeTimer);
       delete section.dataset.trackRailReady;
       delete section.dataset.trackDirection;
       delete track.dataset.focusOffset;
