@@ -35,6 +35,7 @@ import { SectionTransitionScene } from "@/components/SectionTransitionScene";
 import { FinalPressTransition } from "@/components/FinalPressTransition";
 import { NoStaticGalleryController } from "@/components/NoStaticGalleryController";
 import { DiscoveryRail } from "@/components/DiscoveryRail";
+import { DiscoverySignalField } from "@/components/DiscoverySignalField";
 import { BookingForm } from "@/components/BookingForm";
 import { SectionLabel } from "@/components/SectionLabel";
 import { VideoDialog } from "@/components/VideoDialog";
@@ -315,6 +316,8 @@ export default function Home() {
             <span>01.5 / frame fracture</span>
             <strong>ONE FRAME.<br /><em>SIX WAYS IN.</em></strong>
           </div>
+          <DiscoverySignalField />
+          <span className="entry-frame-fracture__edge">FIND YOUR ENTRY →</span>
         </section>
 
         <DiscoveryRail />
