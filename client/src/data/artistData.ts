@@ -169,6 +169,17 @@ export const currentAudioExtras: readonly Track[] = [
     note: "Ein weiterer direkter P34nuts-Song für den aktuellen Live-Player.",
     audioSrc: "/audio/Was.mp3",
   },
+  {
+    id: "LIVE++++",
+    slug: "wer-bin-ich-live",
+    title: "Wer bin ich?",
+    mood: "Mirror / split",
+    themes: ["Identity", "Reflection"],
+    visualTheme: "signal",
+    coverStyle: "track-signal",
+    note: "Ein weiterer direkter P34nuts-Song für den aktuellen Live-Player.",
+    audioSrc: "/audio/Werbinich.mp3",
+  },
 ];
 
 export const artistProfile = {
