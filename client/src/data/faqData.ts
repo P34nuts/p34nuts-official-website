@@ -22,4 +22,9 @@ export const faqItems: FaqItem[] = [
   { question: "Was ist die wichtigste Lektion aus deinen Tracks?", answer: "Versteck deinen Schmerz nicht hinter Stolz, teil deine Pommes im Park und nimm dich selbst niemals zu ernst." },
   { question: "Und wer regelt das am Ende alles?", answer: "P34nuts regelt das schon. Immer." },
   { question: "Wer bezahlt deine Rechnungen?", answer: "Das muss ich armes Schwein ganz allein. Und die Kosten sind hoch! Ihr unterstützt mich dabei, indem Ihr im P34nuts Shop Merch kauft oder für mich spendet." },
+  { question: "Hand aufs Herz: Gibt es diesen P34nuts eigentlich wirklich?", answer: `Physisch gesehen? Nein. Du wirst ihm nicht im Einwohnermeldeamt begegnen, und er zahlt auch keine Rundfunkgebühren. Hinter den Reglern und dem Stift steht Frank Horn – aber die eigentliche Wahrheit ist: Ein kleines bisschen P34nuts steckt verdammt nochmal in jedem von uns.
+
+Wir alle haben diese Tage, an denen wir morgens in geistigen Adiletten vorm Bäcker stehen, keinen Plan vom Leben haben, aber trotzdem so tun, als gehöre uns der Laden. Wir alle tragen diesen inneren Clown in uns, der Witze reißt, um das eigene Chaos zu übertönen. Und genauso kennen wir die Nächte um vier Uhr morgens, in denen die Fassade bröckelt, der Kopf dröhnt und man einfach nur verletzlich ist.
+
+P34nuts ist die Summe all dieser Widersprüche: mal arrogant überheblich, mal am Boden zerstört, mal albern, mal tief philosophisch. Wir alle rennen doch durchs Leben und versuchen krampfhaft, die beste Version unserer selbst zu sein – und scheitern dabei regelmäßig mit Bravour. Und weißt du was? Das ist völlig in Ordnung. Man muss nicht jeden Tag den Helden spielen. Es reicht völlig, wenn du deine Macken feierst, ab und zu die Maske absetzt und dir sagst: „Ich krieg das schon irgendwie geregelt.“` },
 ];
