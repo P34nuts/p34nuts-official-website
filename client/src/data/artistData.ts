@@ -147,6 +147,17 @@ export const currentAudioExtras: readonly Track[] = [
     note: "Ein weiterer direkter P34nuts-Song für den aktuellen Live-Player.",
     audioSrc: "/audio/Tunnelblick.mp3",
   },
+  {
+    id: "LIVE++",
+    slug: "was-waere-wenn-live",
+    title: "WAS WÄRE WENN?",
+    mood: "Uplifting / possible",
+    themes: ["Hope", "Possibility"],
+    visualTheme: "signal",
+    coverStyle: "track-signal",
+    note: "Ein weiterer direkter P34nuts-Song für den aktuellen Live-Player.",
+    audioSrc: "/audio/Waswaerewenn.mp3",
+  },
 ];
 
 export const artistProfile = {
