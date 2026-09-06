@@ -158,6 +158,17 @@ export const currentAudioExtras: readonly Track[] = [
     note: "Ein weiterer direkter P34nuts-Song für den aktuellen Live-Player.",
     audioSrc: "/audio/Waswaerewenn.mp3",
   },
+  {
+    id: "LIVE+++",
+    slug: "was-live",
+    title: "WAS?",
+    mood: "Academic / absurd",
+    themes: ["Question", "Irony"],
+    visualTheme: "signal",
+    coverStyle: "track-signal",
+    note: "Ein weiterer direkter P34nuts-Song für den aktuellen Live-Player.",
+    audioSrc: "/audio/Was.mp3",
+  },
 ];
 
 export const artistProfile = {
