@@ -17,7 +17,8 @@ function shuffleTracks<T>(items: readonly T[]) {
 }
 
 export function CurrentTrackPlayer({ tracks }: CurrentTrackPlayerProps) {
-  const playableTracks = useMemo(() => tracks.filter((track) => track.audioSrc), [tracks]);
+  const trackSignature = tracks.map((track) => `${track.id}:${track.audioSrc ?? ""}`).join("|");
+  const playableTracks = useMemo(() => tracks.filter((track) => track.audioSrc), [trackSignature]);
   const playerRef = useRef<HTMLElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playlist, setPlaylist] = useState<readonly Track[]>(() => shuffleTracks(playableTracks));
@@ -33,7 +34,7 @@ export function CurrentTrackPlayer({ tracks }: CurrentTrackPlayerProps) {
   useEffect(() => {
     setPlaylist(shuffleTracks(playableTracks));
     setCurrentIndex(0);
-  }, [playableTracks]);
+  }, [trackSignature]);
 
   useEffect(() => {
     const onScroll = () => {
