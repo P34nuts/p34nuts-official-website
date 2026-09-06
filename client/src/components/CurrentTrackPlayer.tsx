@@ -7,17 +7,20 @@ type CurrentTrackPlayerProps = {
   tracks: readonly Track[];
 };
 
-function nextIndex(current: number, length: number) {
-  if (length <= 1) return current;
-  let next = current;
-  while (next === current) next = Math.floor(Math.random() * length);
-  return next;
+function shuffleTracks<T>(items: readonly T[]) {
+  const shuffled = [...items];
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const randomIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[index]];
+  }
+  return shuffled;
 }
 
 export function CurrentTrackPlayer({ tracks }: CurrentTrackPlayerProps) {
   const playableTracks = useMemo(() => tracks.filter((track) => track.audioSrc), [tracks]);
   const playerRef = useRef<HTMLElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [playlist, setPlaylist] = useState<readonly Track[]>(() => shuffleTracks(playableTracks));
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
@@ -25,7 +28,12 @@ export function CurrentTrackPlayer({ tracks }: CurrentTrackPlayerProps) {
   const [miniVisible, setMiniVisible] = useState(false);
   const [miniDismissed, setMiniDismissed] = useState(false);
 
-  const currentTrack = playableTracks[currentIndex] ?? playableTracks[0];
+  const currentTrack = playlist[currentIndex] ?? playlist[0] ?? playableTracks[0];
+
+  useEffect(() => {
+    setPlaylist(shuffleTracks(playableTracks));
+    setCurrentIndex(0);
+  }, [playableTracks]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -109,7 +117,12 @@ export function CurrentTrackPlayer({ tracks }: CurrentTrackPlayerProps) {
   };
 
   const handleEnded = () => {
-    setCurrentIndex((index) => nextIndex(index, playableTracks.length));
+    if (currentIndex + 1 < playlist.length) {
+      setCurrentIndex((index) => index + 1);
+    } else {
+      setPlaylist(shuffleTracks(playableTracks));
+      setCurrentIndex(0);
+    }
     setIsPlaying(true);
   };
 
