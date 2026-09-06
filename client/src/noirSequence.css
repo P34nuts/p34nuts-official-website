@@ -1174,8 +1174,8 @@ main > .marquee[data-flow-ready="true"] {
 }
 
 .final-press-transition__newspaper--secondary {
-  left: 65%;
-  top: 54%;
+  left: 54%;
+  top: 48%;
   width: clamp(13rem, 23vw, 23rem);
 }
 
@@ -1228,9 +1228,21 @@ main > .marquee[data-flow-ready="true"] {
 }
 .final-press-transition__newspaper.is-selected img {
   animation: none !important;
-  transform: scale(1.32) rotate(0deg);
+  transform: scale(1.55) rotate(0deg);
   transition: transform .55s cubic-bezier(.2, .8, .2, 1), box-shadow .55s ease;
   box-shadow: 1.8rem 2.4rem 4rem rgba(0, 0, 0, .45), -.3rem .4rem .7rem rgba(255, 255, 255, .25);
+}
+
+.final-press-transition__newspaper.is-locked {
+  animation: none !important;
+  transform: translate3d(0, 0, 0) scale(1) !important;
+}
+.final-press-transition__newspaper.is-locked img {
+  animation: none !important;
+  transform: rotate(0deg);
+}
+.final-press-transition__newspaper.is-locked.is-selected img {
+  transform: scale(1.55) rotate(0deg);
 }
 
 .press-section {
@@ -1302,10 +1314,13 @@ main > .marquee[data-flow-ready="true"] {
   }
 
   .final-press-transition__newspaper--secondary {
-    left: 73%;
-    top: 66%;
+    left: 54%;
+    top: 56%;
     width: min(32vw, 9rem);
   }
+
+  .final-press-transition__newspaper.is-selected img,
+  .final-press-transition__newspaper.is-locked.is-selected img { transform: scale(1.45) rotate(0deg); }
 }
 
 @media (prefers-reduced-motion: reduce) {
