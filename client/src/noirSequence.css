@@ -357,9 +357,11 @@
   height: 100%;
   color: rgba(241, 238, 229, .84);
   font-family: serif;
-  font-size: clamp(3.6rem, 7vw, 6.6rem);
-  line-height: 1;
+  font-size: clamp(5.8rem, 10vw, 9rem);
+  line-height: .82;
   background: transparent;
+  transform: translateY(-.02rem) scaleY(1.12);
+  transform-origin: center;
   text-shadow: 0 0 .45rem #08080a, 0 0 .8rem rgba(255, 59, 48, .22);
 }
 
@@ -805,6 +807,10 @@ main > .marquee[data-flow-ready="true"] {
     top: calc(4.75rem + 15.2rem + .9rem);
     height: 8.6rem;
     margin-top: .9rem;
+  }
+
+  .notation-clef {
+    font-size: clamp(5.2rem, 19vw, 7.2rem);
   }
 
   .scroll-track-rail,
