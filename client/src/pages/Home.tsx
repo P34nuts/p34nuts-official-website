@@ -315,7 +315,6 @@ export default function Home() {
             <span>01.5 / frame fracture</span>
             <strong>ONE FRAME.<br /><em>SIX WAYS IN.</em></strong>
           </div>
-          <span className="entry-frame-fracture__edge">FIND YOUR ENTRY →</span>
         </section>
 
         <DiscoveryRail />
