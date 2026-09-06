@@ -39,11 +39,11 @@ export function FinalPressTransition({ mark, newspaper, newspaperSecondary }: Fi
     const ticker = tickerRef.current;
     if (!ticker) return;
     const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && entry.intersectionRatio >= .18) {
+      if (entry.isIntersecting) {
         setNewspapersLaunched(true);
         observer.disconnect();
       }
-    }, { threshold: [.18] });
+    }, { threshold: 0 });
     observer.observe(ticker);
     return () => observer.disconnect();
   }, []);
