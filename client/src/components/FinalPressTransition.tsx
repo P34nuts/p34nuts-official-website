@@ -17,19 +17,20 @@ const clamp = (value: number) => Math.min(1, Math.max(0, value));
 export function FinalPressTransition({ mark, newspaper, newspaperSecondary }: FinalPressTransitionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const kickerRef = useRef<HTMLParagraphElement>(null);
+  const tickerRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
   const [newspapersLaunched, setNewspapersLaunched] = useState(false);
 
   useEffect(() => {
-    const kicker = kickerRef.current;
-    if (!kicker) return;
+    const ticker = tickerRef.current;
+    if (!ticker) return;
     const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && entry.intersectionRatio >= .5) {
+      if (entry.isIntersecting && entry.intersectionRatio >= .18) {
         setNewspapersLaunched(true);
         observer.disconnect();
       }
-    }, { threshold: [.5] });
-    observer.observe(kicker);
+    }, { threshold: [.18] });
+    observer.observe(ticker);
     return () => observer.disconnect();
   }, []);
 
@@ -85,7 +86,7 @@ export function FinalPressTransition({ mark, newspaper, newspaperSecondary }: Fi
         </div>
         <div className="final-press-transition__reveal">
           <p ref={kickerRef} className="final-press-transition__kicker">final frame / press archive</p>
-          <div className="final-press-transition__ticker" aria-hidden="true">
+          <div ref={tickerRef} className="final-press-transition__ticker" aria-hidden="true">
             <span>PRESS KIT — PRESS KIT — PRESS KIT — PRESS KIT —</span>
             <em>PRESS KIT — PRESS KIT — PRESS KIT — PRESS KIT —</em>
           </div>
