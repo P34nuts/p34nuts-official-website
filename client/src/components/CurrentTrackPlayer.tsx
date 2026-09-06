@@ -21,6 +21,7 @@ export function CurrentTrackPlayer({ tracks }: CurrentTrackPlayerProps) {
   const playableTracks = useMemo(() => tracks.filter((track) => track.audioSrc), [trackSignature]);
   const playerRef = useRef<HTMLElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const isMutedRef = useRef(true);
   const [playlist, setPlaylist] = useState<readonly Track[]>(() => shuffleTracks(playableTracks));
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -50,12 +51,14 @@ export function CurrentTrackPlayer({ tracks }: CurrentTrackPlayerProps) {
   useEffect(() => {
     if (!currentTrack || !audioRef.current) return;
     const audio = audioRef.current;
-    audio.muted = true;
-    audio.defaultMuted = true;
+    audio.pause();
+    audio.currentTime = 0;
+    audio.muted = isMutedRef.current;
+    audio.defaultMuted = isMutedRef.current;
     audio.autoplay = true;
 
     const startWhenReady = () => {
-      audio.muted = true;
+      audio.muted = isMutedRef.current;
       void audio.play()
         .then(() => {
           setIsPlaying(true);
@@ -75,6 +78,7 @@ export function CurrentTrackPlayer({ tracks }: CurrentTrackPlayerProps) {
     return () => {
       audio.removeEventListener("loadedmetadata", startWhenReady);
       audio.removeEventListener("canplay", startWhenReady);
+      audio.pause();
     };
   }, [currentTrack]);
 
@@ -96,6 +100,7 @@ export function CurrentTrackPlayer({ tracks }: CurrentTrackPlayerProps) {
 
     if (isMuted) {
       const position = audio.currentTime;
+      isMutedRef.current = false;
       audio.muted = false;
       try {
         await audio.play();
@@ -106,6 +111,7 @@ export function CurrentTrackPlayer({ tracks }: CurrentTrackPlayerProps) {
         setIsPlaying(true);
         setAutoplayBlocked(false);
       } catch {
+        isMutedRef.current = true;
         audio.muted = true;
         setIsMuted(true);
         setIsPlaying(false);
@@ -114,17 +120,18 @@ export function CurrentTrackPlayer({ tracks }: CurrentTrackPlayerProps) {
     }
 
     audio.muted = true;
+    isMutedRef.current = true;
     setIsMuted(true);
   };
 
   const handleEnded = () => {
+    setIsPlaying(false);
     if (currentIndex + 1 < playlist.length) {
       setCurrentIndex((index) => index + 1);
     } else {
       setPlaylist(shuffleTracks(playableTracks));
       setCurrentIndex(0);
     }
-    setIsPlaying(true);
   };
 
   const statusLabel = isPlaying ? "AKTUELL LÄUFT" : autoplayBlocked ? "BEREIT ZUM START" : "AUDIO WIRD GELADEN";
