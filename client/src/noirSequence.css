@@ -1152,11 +1152,12 @@ main > .marquee[data-flow-ready="true"] {
 .final-press-transition__newspaper {
   position: absolute;
   z-index: 4;
-  top: 31%;
+  top: 18%;
   height: auto;
   transform-origin: 50% 18%;
   opacity: 0;
-  pointer-events: none;
+  cursor: zoom-in;
+  pointer-events: auto;
 }
 
 .final-press-transition__newspaper img {
@@ -1174,11 +1175,12 @@ main > .marquee[data-flow-ready="true"] {
 
 .final-press-transition__newspaper--secondary {
   left: 65%;
+  top: 54%;
   width: clamp(13rem, 23vw, 23rem);
 }
 
 .final-press-transition.is-newspapers-launched .final-press-transition__newspaper {
-  animation-duration: 6s;
+  animation-duration: 4s;
   animation-timing-function: cubic-bezier(.18, .82, .22, 1);
   animation-fill-mode: both;
   animation-iteration-count: 1;
@@ -1194,7 +1196,7 @@ main > .marquee[data-flow-ready="true"] {
 }
 
 .final-press-transition.is-newspapers-launched .final-press-transition__newspaper img {
-  animation-duration: 6s;
+  animation-duration: 4s;
   animation-timing-function: linear;
   animation-fill-mode: both;
 }
@@ -1217,8 +1219,19 @@ main > .marquee[data-flow-ready="true"] {
   100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
 }
 
-@keyframes pressNewspaperSpinPrimary { from { transform: rotate(-720deg); } to { transform: rotate(717deg); } }
-@keyframes pressNewspaperSpinSecondary { from { transform: rotate(760deg); } to { transform: rotate(-715deg); } }
+@keyframes pressNewspaperSpinPrimary { from { transform: rotate(-1080deg); } to { transform: rotate(1080deg); } }
+@keyframes pressNewspaperSpinSecondary { from { transform: rotate(1080deg); } to { transform: rotate(-1080deg); } }
+
+.final-press-transition__newspaper.is-selected {
+  z-index: 12;
+  cursor: zoom-out;
+}
+.final-press-transition__newspaper.is-selected img {
+  animation: none !important;
+  transform: scale(1.32) rotate(0deg);
+  transition: transform .55s cubic-bezier(.2, .8, .2, 1), box-shadow .55s ease;
+  box-shadow: 1.8rem 2.4rem 4rem rgba(0, 0, 0, .45), -.3rem .4rem .7rem rgba(255, 255, 255, .25);
+}
 
 .press-section {
   position: relative;
@@ -1284,11 +1297,13 @@ main > .marquee[data-flow-ready="true"] {
 
   .final-press-transition__newspaper--primary {
     left: 27%;
+    top: 16%;
     width: min(36vw, 10rem);
   }
 
   .final-press-transition__newspaper--secondary {
     left: 73%;
+    top: 66%;
     width: min(32vw, 9rem);
   }
 }

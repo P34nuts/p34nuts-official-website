@@ -20,6 +20,16 @@ export function FinalPressTransition({ mark, newspaper, newspaperSecondary }: Fi
   const tickerRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
   const [newspapersLaunched, setNewspapersLaunched] = useState(false);
+  const [selectedNewspaper, setSelectedNewspaper] = useState<"primary" | "secondary" | null>(null);
+
+  useEffect(() => {
+    const closeOnOutsideClick = (event: PointerEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest(".final-press-transition__newspaper")) setSelectedNewspaper(null);
+    };
+    document.addEventListener("pointerdown", closeOnOutsideClick);
+    return () => document.removeEventListener("pointerdown", closeOnOutsideClick);
+  }, []);
 
   useEffect(() => {
     const ticker = tickerRef.current;
@@ -93,8 +103,8 @@ export function FinalPressTransition({ mark, newspaper, newspaperSecondary }: Fi
           <img className="final-press-transition__mark" src={mark} alt="" aria-hidden="true" />
           {newspapersLaunched ? (
             <>
-              <div className="final-press-transition__newspaper final-press-transition__newspaper--primary"><img src={newspaper} alt="P34nuts in der Morgenpost – Press-Archiv" loading="lazy" /></div>
-              <div className="final-press-transition__newspaper final-press-transition__newspaper--secondary"><img src={newspaperSecondary} alt="P34nuts in der Berliner Zeitung – Press-Archiv" loading="lazy" /></div>
+              <div onClick={(event) => { event.stopPropagation(); setSelectedNewspaper("primary"); }} className={`final-press-transition__newspaper final-press-transition__newspaper--primary${selectedNewspaper === "primary" ? " is-selected" : ""}`}><img src={newspaper} alt="P34nuts in der Morgenpost – Press-Archiv" loading="lazy" /></div>
+              <div onClick={(event) => { event.stopPropagation(); setSelectedNewspaper("secondary"); }} className={`final-press-transition__newspaper final-press-transition__newspaper--secondary${selectedNewspaper === "secondary" ? " is-selected" : ""}`}><img src={newspaperSecondary} alt="P34nuts in der Berliner Zeitung – Press-Archiv" loading="lazy" /></div>
             </>
           ) : null}
         </div>
