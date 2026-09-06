@@ -36,7 +36,6 @@ import { FinalPressTransition } from "@/components/FinalPressTransition";
 import { NoStaticGalleryController } from "@/components/NoStaticGalleryController";
 import { DiscoveryRail } from "@/components/DiscoveryRail";
 import { BookingForm } from "@/components/BookingForm";
-import { SignalFluidField } from "@/components/SignalFluidField";
 import { SectionLabel } from "@/components/SectionLabel";
 import { VideoDialog } from "@/components/VideoDialog";
 import { trpc } from "@/lib/trpc";
@@ -497,7 +496,6 @@ export default function Home() {
 
       {announcementEnabled && announcementText ? <div className="section-wrap" role="status"><div className="rounded-sm border border-red-400/40 bg-red-950/20 px-5 py-4 text-sm text-white">{announcementText}</div></div> : null}
 
-        <SignalFluidField>
         <section id="contact" className="contact-section" aria-labelledby="contact-title">
           <div className="section-wrap contact-layout">
             <SectionLabel index="07" label="Contact / booking + social" />
@@ -615,7 +613,6 @@ export default function Home() {
             <div className="press-content"><div className="press-items">{pressKitItems.map((item) => <span key={item}>{item}</span>)}</div><a href={sitePath("/press")}>OPEN PRESS FRAME <Download size={15} /></a></div>
           </div>
         </section>
-        </SignalFluidField>
       </main>
 
       <footer className="site-footer">
