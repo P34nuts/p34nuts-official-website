@@ -36,6 +36,19 @@ export function FinalPressTransition({ mark, newspaper, newspaperSecondary }: Fi
   }, []);
 
   useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setNewspapersLaunched(true);
+        observer.disconnect();
+      }
+    }, { threshold: 0.01 });
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
     if (reduceMotion) {
       setNewspapersLaunched(true);
       return;
