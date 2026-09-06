@@ -209,7 +209,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid #ff3b30; outline-offs
 .guestbook-reaction:active { transform: scale(.97); }
 .guestbook-reaction:disabled { cursor: wait; opacity: .55; }
 .guestbook-reaction span { font-size: .9rem; line-height: 1; }
-.guestbook-form { align-self: start; padding: clamp(1.4rem, 3vw, 2.4rem); background: #e9e4d9; color: #101012; }
+.guestbook-form { align-self: start; justify-self: end; width: min(100%, 28rem); padding: clamp(1.4rem, 3vw, 2.4rem); background: #e9e4d9; color: #101012; }
 .guestbook-form .contact-kicker { color: rgba(16,16,18,.6); }
 .guestbook-form > label:not(.guestbook-honeypot) { display: block; margin-top: 2rem; font-family: monospace; font-size: .58rem; letter-spacing: .08em; text-transform: uppercase; }
 .guestbook-form .guestbook-name-input { display: block; width: 100%; margin-top: .55rem; padding: .8rem 0; border: 0; border-bottom: 1px solid rgba(16,16,18,.45); border-radius: 0; outline: 0; background: transparent; color: #101012; font: inherit; font-size: 1rem; line-height: 1.5; }
