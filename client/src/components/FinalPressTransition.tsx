@@ -40,7 +40,7 @@ export function FinalPressTransition({ mark, newspaper, newspaperSecondary }: Fi
       // The transition is taller than one viewport. Wait until its visual
       // hand-off is in the middle of the screen so the complete flight path
       // remains visible instead of launching at the very first entry.
-      if (rect.top <= viewport * .56 && rect.bottom >= viewport * .28) {
+      if (rect.top <= viewport * .24 && rect.bottom >= viewport * .12) {
         setNewspapersLaunched(true);
         return true;
       }
