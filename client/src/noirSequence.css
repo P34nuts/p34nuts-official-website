@@ -1202,7 +1202,7 @@ main > .marquee[data-flow-ready="true"] {
 
 .final-press-transition__newspaper--tertiary {
   left: 16%;
-  top: 48%;
+  top: 43%;
   width: clamp(11rem, 19vw, 19rem);
 }
 
@@ -1361,7 +1361,7 @@ main > .marquee[data-flow-ready="true"] {
 
   .final-press-transition__newspaper--tertiary {
     left: 14%;
-    top: 56%;
+    top: 50%;
     width: min(30vw, 8.5rem);
   }
 
