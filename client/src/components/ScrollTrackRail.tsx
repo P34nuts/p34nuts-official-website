@@ -76,7 +76,9 @@ export function ScrollTrackRail({ tracks, onListenRequest }: ScrollTrackRailProp
     let notationOffset = 0;
     let direction: -1 | 1 = -1;
     let boost = 0;
-    let active = false;
+    // Start immediately; IntersectionObserver can deliver its first callback a
+    // frame later, which otherwise makes the rail appear frozen on fast scrolls.
+    let active = true;
     let keyboardPause = false;
 
     const measure = () => {
@@ -133,6 +135,7 @@ export function ScrollTrackRail({ tracks, onListenRequest }: ScrollTrackRailProp
     };
 
     const onResize = () => measure();
+    const sizeObserver = new ResizeObserver(measure);
     const observer = new IntersectionObserver(
       ([entry]) => { active = entry.isIntersecting; },
       { rootMargin: "35% 0px 35% 0px" },
@@ -152,6 +155,8 @@ export function ScrollTrackRail({ tracks, onListenRequest }: ScrollTrackRailProp
     section.dataset.trackRailReady = "true";
     section.dataset.trackDirection = "left";
     observer.observe(section);
+    sizeObserver.observe(track);
+    sizeObserver.observe(notation);
     track.addEventListener("focusin", onFocusIn);
     track.addEventListener("focusout", onFocusOut);
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -160,6 +165,7 @@ export function ScrollTrackRail({ tracks, onListenRequest }: ScrollTrackRailProp
 
     return () => {
       observer.disconnect();
+      sizeObserver.disconnect();
       track.removeEventListener("focusin", onFocusIn);
       track.removeEventListener("focusout", onFocusOut);
       window.removeEventListener("scroll", onScroll);
