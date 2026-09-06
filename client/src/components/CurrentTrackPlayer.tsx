@@ -92,6 +92,55 @@ export function CurrentTrackPlayer({ tracks }: CurrentTrackPlayerProps) {
     };
   }, []);
 
+  const goToNextTrack = () => {
+    setIsPlaying(false);
+    if (currentIndex + 1 < playlist.length) {
+      setCurrentIndex((index) => index + 1);
+    } else {
+      setPlaylist(shuffleTracks(playableTracks));
+      setCurrentIndex(0);
+    }
+  };
+
+  const goToPreviousTrack = () => {
+    const audio = audioRef.current;
+    if (audio && audio.currentTime > 3) {
+      audio.currentTime = 0;
+      return;
+    }
+    setIsPlaying(false);
+    setCurrentIndex((index) => (index > 0 ? index - 1 : playlist.length - 1));
+  };
+
+  useEffect(() => {
+    if (typeof navigator === "undefined" || !("mediaSession" in navigator) || !currentTrack) return;
+    const mediaSession = navigator.mediaSession;
+    const artwork = currentTrack.cover ? [{ src: currentTrack.cover, sizes: "512x512", type: "image/webp" }] : [];
+
+    if ("MediaMetadata" in window) {
+      mediaSession.metadata = new MediaMetadata({
+        title: currentTrack.title,
+        artist: "P34nuts",
+        album: "P34nuts — Direct Audio",
+        artwork,
+      });
+    }
+
+    const setAction = (action: MediaSessionAction, handler: MediaSessionActionHandler) => {
+      try { mediaSession.setActionHandler(action, handler); } catch { /* unsupported action */ }
+    };
+    setAction("play", () => { void audioRef.current?.play(); });
+    setAction("pause", () => audioRef.current?.pause());
+    setAction("nexttrack", goToNextTrack);
+    setAction("previoustrack", goToPreviousTrack);
+
+    return () => {
+      ["play", "pause", "nexttrack", "previoustrack"].forEach((action) => {
+        try { mediaSession.setActionHandler(action as MediaSessionAction, null); } catch { /* unsupported action */ }
+      });
+    };
+  }, [currentTrack, currentIndex, playlist.length, playableTracks]);
+
   if (!currentTrack) return null;
 
   const toggleSound = async () => {
@@ -125,13 +174,7 @@ export function CurrentTrackPlayer({ tracks }: CurrentTrackPlayerProps) {
   };
 
   const handleEnded = () => {
-    setIsPlaying(false);
-    if (currentIndex + 1 < playlist.length) {
-      setCurrentIndex((index) => index + 1);
-    } else {
-      setPlaylist(shuffleTracks(playableTracks));
-      setCurrentIndex(0);
-    }
+    goToNextTrack();
   };
 
   const statusLabel = isPlaying ? "AKTUELL LÄUFT" : autoplayBlocked ? "BEREIT ZUM START" : "AUDIO WIRD GELADEN";
