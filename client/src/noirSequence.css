@@ -367,12 +367,16 @@
 
 .notation-staff {
   position: absolute;
+  z-index: 1;
   inset: 0;
-  overflow: hidden;
+  overflow: visible;
+  clip-path: inset(-20% 0 -20% 0);
   background: linear-gradient(to bottom, transparent 0 9.5%, rgba(241, 238, 229, .52) 9.5% 10.5%, transparent 10.5% 29.5%, rgba(241, 238, 229, .52) 29.5% 30.5%, transparent 30.5% 49.5%, rgba(241, 238, 229, .52) 49.5% 50.5%, transparent 50.5% 69.5%, rgba(241, 238, 229, .52) 69.5% 70.5%, transparent 70.5% 89.5%, rgba(241, 238, 229, .52) 89.5% 90.5%, transparent 90.5%);
 }
 
 .notation-roll {
+  position: relative;
+  z-index: 2;
   display: flex;
   width: max-content;
   height: 100%;
@@ -394,6 +398,7 @@
 
 .notation-note {
   position: relative;
+  z-index: 2;
   top: calc((var(--note-line) - 2) * 20%);
   display: block;
   flex: 0 0 clamp(2.3rem, 4.3vw, 4.8rem);
