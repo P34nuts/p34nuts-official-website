@@ -81,3 +81,19 @@
 
 .archive-polaroid.is-selected{transform:translate(-50%,-50%) rotate(0deg) scale(3.185)}
 @media (max-width:820px){.archive-polaroid.is-selected{transform:translate(-50%,-50%) rotate(0deg) scale(2.236)}}
+
+
+/* Six smoke threads connect the cigarette portrait to the rotating discovery entries. */
+.discovery-signal-field{position:relative;height:clamp(29rem,56vw,43rem);margin:clamp(3rem,6vw,5rem) 0 0;overflow:hidden;background:radial-gradient(circle at 50% 18%,rgba(255,59,48,.08),transparent 25%),linear-gradient(180deg,rgba(16,16,18,.04),rgba(16,16,18,.14));isolation:isolate}
+.discovery-signal-field::before{position:absolute;inset:0;content:"";background:linear-gradient(180deg,transparent 0 58%,rgba(16,16,18,.07));pointer-events:none}
+.discovery-signal-portrait{position:absolute;z-index:3;top:1%;left:50%;width:min(31vw,22rem);height:42%;transform:translateX(-50%);filter:drop-shadow(0 1.6rem 1.8rem rgba(16,16,18,.24));pointer-events:none}
+.discovery-signal-portrait img{display:block;width:100%;height:100%;object-fit:contain;object-position:center top}
+.discovery-smoke-map{position:absolute;z-index:2;inset:0;width:100%;height:100%;overflow:visible}
+.discovery-smoke-path{fill:none;stroke:#101012;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;opacity:.72;stroke-dasharray:1;stroke-dashoffset:calc(1 - var(--smoke-progress,0));filter:drop-shadow(0 0 .18rem rgba(16,16,18,.28));transition:stroke-dashoffset .12s linear}
+.discovery-smoke-path--1,.discovery-smoke-path--6{stroke:#ff3b30;opacity:.62}
+.discovery-smoke-path--2,.discovery-smoke-path--5{stroke:#4f6860;opacity:.68}
+.discovery-smoke-path--3,.discovery-smoke-path--4{stroke:#101012;opacity:.78}
+.discovery-signal-caption{position:absolute;z-index:4;right:1rem;bottom:1rem;color:rgba(16,16,18,.42);font: .52rem monospace;letter-spacing:.14em;text-transform:uppercase}
+.discovery-grid{margin-top:clamp(1.4rem,3vw,2.4rem)}
+@media (max-width:820px){.discovery-signal-field{height:31rem;margin-top:2.6rem}.discovery-signal-portrait{top:1%;width:min(58vw,15rem);height:37%}.discovery-smoke-path{stroke-width:2.8}.discovery-signal-caption{right:.4rem;bottom:.6rem;font-size:.44rem}}
+@media (prefers-reduced-motion:reduce){.discovery-smoke-path{stroke-dashoffset:0;transition:none}}
