@@ -866,7 +866,7 @@ main > .marquee[data-flow-ready="true"] {
 .section-transition-scene {
   position: relative;
   z-index: 2;
-  height: clamp(94rem, 205vh, 148rem);
+  height: clamp(82rem, 178vh, 128rem);
   margin-top: clamp(-6rem, -9vw, -2.5rem);
   padding: 0;
   border-radius: 0;
@@ -988,18 +988,18 @@ main > .marquee[data-flow-ready="true"] {
 
 @media (max-width: 820px) {
   .section-transition-scene {
-    height: 140vh;
-    min-height: 54rem;
-    margin-top: -1.4rem;
+    height: 116vh;
+    min-height: 44rem;
+    margin-top: -2rem;
     padding: 0 .65rem;
     overflow: visible;
   }
 
   .section-transition-scene__sticky {
     position: sticky;
-    top: 7vh;
-    height: 86vh;
-    min-height: 34rem;
+    top: 5vh;
+    height: 82vh;
+    min-height: 31rem;
     border-radius: 2.6rem;
     box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, .42);
   }
