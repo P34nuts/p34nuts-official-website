@@ -1121,6 +1121,20 @@ main > .marquee[data-flow-ready="true"] {
   overflow: visible;
 }
 
+@media (min-width: 821px) {
+  .final-press-transition:has(.final-press-transition__newspaper.is-selected) {
+    z-index: 20;
+  }
+
+  .final-press-transition__sticky:has(.final-press-transition__newspaper.is-selected) {
+    overflow: visible;
+  }
+
+  .final-press-transition__reveal:has(.final-press-transition__newspaper.is-selected) {
+    z-index: 20;
+  }
+}
+
 .final-press-transition__kicker {
   position: absolute;
   z-index: 2;
