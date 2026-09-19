@@ -37,6 +37,7 @@ import { NoStaticGalleryController } from "@/components/NoStaticGalleryControlle
 import { DiscoveryRail } from "@/components/DiscoveryRail";
 import { DiscoverySignalField } from "@/components/DiscoverySignalField";
 import { BookingForm } from "@/components/BookingForm";
+import { NewsletterSignup } from "@/components/NewsletterSignup";
 import { SectionLabel } from "@/components/SectionLabel";
 import { VideoDialog } from "@/components/VideoDialog";
 import { trpc } from "@/lib/trpc";
@@ -537,6 +538,7 @@ export default function Home() {
                 <small>Freiwillige Unterstützung über PayPal. Kein Kauf und keine Gegenleistung erforderlich.</small>
               </div>
             </article>
+            <NewsletterSignup onNotice={setNotice} />
             <BookingForm recipient={booking.email} />
           </div>
         </section>

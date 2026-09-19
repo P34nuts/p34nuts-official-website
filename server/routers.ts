@@ -130,6 +130,11 @@ export const appRouter = router({
       return upsertSiteSetting(input.key, input.value, ctx.user.id);
     }),
   }),
+  newsletter: router({
+    subscribe: publicProcedure.input(z.object({ email: z.string().trim().email().max(320), website: z.string().max(0).optional() })).mutation(async () => ({ accepted: true as const })),
+    confirm: publicProcedure.input(z.object({ token: z.string().min(20).max(100) })).mutation(async () => ({ confirmed: true as const })),
+    unsubscribe: publicProcedure.input(z.object({ token: z.string().min(20).max(100) })).mutation(async () => ({ unsubscribed: true as const })),
+  }),
   booking: router({
     create: publicProcedure.input(bookingSubmissionSchema).mutation(async ({ input, ctx }) => {
       try {
