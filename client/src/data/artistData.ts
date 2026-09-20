@@ -40,6 +40,7 @@ export const assets = {
   heroStormLayer: artistPortraitSet.heroStormLayer,
   headerWordmark: masterAsset("/manus-storage/p34nuts-header-wordmark-transparent_40231558.png"),
   shopHeaderWordmark: masterAsset("/manus-storage/p34nuts-shop-header.png"),
+  spotifyLogo: masterAsset("/brand/p34nuts-spotify-logo.png"),
   heroWordmark: masterAsset("/manus-storage/p34nuts-header-wordmark_60ae815f.png"),
   releaseCover: artistPortraitSet02.currentFrameDiscipline,
   featuredVideo: artistPortraitSet.sunsetFeature,
@@ -59,6 +60,8 @@ export const assets = {
   pressFrame: masterAsset("https://files.manuscdn.com/user_upload_by_module/session_file/310519663912299250/mfYupinKtkmVHxXT.png"),
   albumIntro: masterAsset("/manus-storage/p34nuts-album-intro_7d20998b.mp3"),
 } as const;
+
+export const spotifyProfileUrl = "https://open.spotify.com/artist/6OINp0LowvtQL3280HUPf0?si=7X6lBk71SiK0SYKksuaKAw&utm_source=copy-link";
 
 /** Original album art supplied by the artist. Keep these mappings aligned with the numbered release archive. */
 export const originalCovers = {

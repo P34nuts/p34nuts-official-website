@@ -56,6 +56,7 @@ import {
   releases,
   sitePath,
   socialLinks,
+  spotifyProfileUrl,
   visuals,
 } from "@/data/artistData";
 
@@ -205,6 +206,9 @@ export default function Home() {
           </a>
           <a href={shopHref} className="brand-lockup brand-shop-wordmark" aria-label="P34nuts Shop, zur Shop-Startseite">
             <img src={assets.shopHeaderWordmark} alt="P34nuts Shop" />
+          </a>
+          <a href={spotifyProfileUrl} className="brand-lockup brand-spotify-wordmark" aria-label="P34nuts auf Spotify öffnen" target="_blank" rel="noreferrer">
+            <img src={assets.spotifyLogo} alt="P34nuts auf Spotify" />
           </a>
         </div>
         <nav className="desktop-nav" aria-label="Hauptnavigation">
