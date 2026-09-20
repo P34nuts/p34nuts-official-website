@@ -103,7 +103,7 @@ export const latestRelease = {
   date: "Direct audio / click to play",
   description: "Ein Einstieg in den Albumkader. Das Intro startet direkt hier nach deinem Klick – ohne Plattformwechsel und ohne Autoplay.",
   links: [
-    { label: "Spotify", href: "", note: "Der Spotify-Link wird nach der Freigabe ergänzt." },
+    { label: "Spotify", href: "https://open.spotify.com/artist/6OINp0LowvtQL3280HUPf0?si=7X6lBk71SiK0SYKksuaKAw&utm_source=copy-link", note: "P34nuts / artist profile" },
     { label: "Apple Music", href: "", note: "Der Apple-Music-Link wird nach der Freigabe ergänzt." },
     { label: "YouTube", href: "", note: "Der YouTube-Link wird nach der Freigabe ergänzt." },
   ],
