@@ -380,9 +380,9 @@ export const gallery = [
 ] as const;
 
 export const socialLinks = [
-  { label: "Instagram", detail: "@p34nuts_official", href: "https://www.instagram.com/p34nuts_official?igsh=MTI1cW4xMXd2cGFrdA==" },
-  { label: "YouTube", detail: "@p34nuts_official", href: "https://youtube.com/@p34nuts_official" },
   { label: "Spotify", detail: "P34nuts / artist profile", href: "https://open.spotify.com/artist/6OINp0LowvtQL3280HUPf0?si=7X6lBk71SiK0SYKksuaKAw&utm_source=copy-link" },
+  { label: "YouTube", detail: "@p34nuts_official", href: "https://youtube.com/@p34nuts_official" },
+  { label: "Instagram", detail: "@p34nuts_official", href: "https://www.instagram.com/p34nuts_official?igsh=MTI1cW4xMXd2cGFrdA==" },
   { label: "X", detail: "@p34nutsofficial", href: "https://x.com/p34nutsofficial" },
   { label: "TikTok", detail: "@p34nuts_official", href: "https://pro.tiktok.com/t/ZG9BFUgVXkFkN-8sClc/" },
 ] as const;
