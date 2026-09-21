@@ -14,6 +14,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { SunoPlayer } from "@/components/SunoPlayer";
+import { SpotifyPlayer } from "@/components/SpotifyPlayer";
 import { getTrackStory, type Track } from "@/data/artistData";
 
 type TrackDialogProps = {
@@ -51,9 +52,9 @@ export function TrackDialog({ track, onListenRequest, triggerClassName = "" }: T
             {track.themes.map((theme) => <span key={theme}>{theme}</span>)}
           </div>
           <p className="track-dialog-message"><span>KERN</span>{story.message}</p>
-          {track.sunoId && <span className="track-source-badge">FULL TRACK / SUNO</span>}
+          {track.spotifyTrackId ? <span className="track-source-badge">FULL TRACK / SPOTIFY</span> : track.sunoId && <span className="track-source-badge">FULL TRACK / SUNO</span>}
           <Link href={`/music/${track.slug}`} className="text-link">TRACK PAGE <ArrowUpRight size={14} /></Link>
-          {track.sunoId ? <SunoPlayer track={track} /> : <button type="button" className="track-pending-link" onClick={() => onListenRequest(track)}><Play size={14} fill="currentColor" /> STREAMING / QUELLE AUSSTEHEND</button>}
+          {track.spotifyTrackId ? <><SpotifyPlayer track={track} /><a className="text-link" href={`https://open.spotify.com/track/${track.spotifyTrackId}?utm_source=p34nuts`} target="_blank" rel="noreferrer">IN SPOTIFY ÖFFNEN <ArrowUpRight size={14} /></a></> : track.sunoId ? <SunoPlayer track={track} /> : <button type="button" className="track-pending-link" onClick={() => onListenRequest(track)}><Play size={14} fill="currentColor" /> STREAMING / QUELLE AUSSTEHEND</button>}
         </div>
       </DialogContent>
     </Dialog>
