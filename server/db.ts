@@ -96,6 +96,10 @@ export async function listApprovedGuestbookEntries() {
     id: guestbookEntries.id,
     name: guestbookEntries.name,
     message: guestbookEntries.message,
+    mediaKind: guestbookEntries.mediaKind,
+    mediaUrl: guestbookEntries.mediaUrl,
+    mediaMimeType: guestbookEntries.mediaMimeType,
+    mediaBytes: guestbookEntries.mediaBytes,
     heartCount: guestbookEntries.heartCount,
     createdAt: guestbookEntries.createdAt,
   }).from(guestbookEntries)

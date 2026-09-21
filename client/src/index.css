@@ -491,3 +491,19 @@ button:focus-visible, a:focus-visible { outline: 2px solid #ff3b30; outline-offs
 .newsletter-honeypot { position: absolute; left: -10000px; width: 1px; height: 1px; opacity: 0; }
 @media (max-width: 820px) { .newsletter-panel { grid-template-columns: 1fr; gap: 2rem; }.newsletter-form { max-width: none; } }
 @media (max-width: 480px) { .newsletter-panel { padding: 1.25rem; }.newsletter-input-row { flex-direction: column; }.newsletter-input-row button { justify-content: center; } }
+
+
+/* Guestbook media signals */
+.guestbook-media-tools { display: flex; flex-wrap: wrap; align-items: center; gap: .55rem; margin-top: .85rem; }
+.guestbook-media-button, .guestbook-media-remove { display: inline-flex; align-items: center; gap: .45rem; min-height: 2.5rem; padding: .65rem .8rem; border: 1px solid rgba(16,16,18,.24); background: rgba(16,16,18,.05); color: #101012; font-family: monospace; font-size: .58rem; font-weight: 700; letter-spacing: .08em; cursor: pointer; }
+.guestbook-media-button:hover, .guestbook-media-button:focus-within, .guestbook-media-remove:hover { border-color: #ff3b30; background: #ff3b30; }
+.guestbook-media-button input { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.guestbook-media-button.is-recording { border-color: #ff3b30; background: #ff3b30; animation: guestbook-pulse 1.2s ease-in-out infinite; }
+.guestbook-media-remove { color: #7a1612; }
+.guestbook-media-notice { display: block; margin-top: .55rem; color: #a8211b; font-size: .72rem; }
+.guestbook-media-preview { display: grid; gap: .4rem; margin-top: .75rem; padding: .65rem; border: 1px dashed rgba(16,16,18,.3); font-family: monospace; font-size: .58rem; color: rgba(16,16,18,.7); }
+.guestbook-media-preview img { width: min(100%, 18rem); max-height: 13rem; object-fit: cover; }
+.guestbook-media-preview audio, .guestbook-entry-audio { width: 100%; max-width: 26rem; }
+.guestbook-entry-media { display: block; width: min(100%, 24rem); max-height: 22rem; margin-top: .8rem; object-fit: cover; border: 1px solid rgba(16,16,18,.18); }
+@keyframes guestbook-pulse { 50% { box-shadow: 0 0 0 .25rem rgba(255,59,48,.14); } }
+@media (max-width: 640px) { .guestbook-media-tools { align-items: stretch; }.guestbook-media-button, .guestbook-media-remove { flex: 1 1 100%; justify-content: center; } }

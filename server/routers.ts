@@ -14,6 +14,7 @@ import { addGuestbookHeart, addGuestbookReaction, createBookingSubmission, creat
 export const guestbookEntrySchema = z.object({
   name: z.string().trim().min(2).max(80),
   message: z.string().trim().min(2).max(600),
+  media: z.object({ kind: z.enum(["image", "audio"]), dataUrl: z.string().max(7_500_000) }).optional(),
   website: z.string().max(0).optional(),
 });
 

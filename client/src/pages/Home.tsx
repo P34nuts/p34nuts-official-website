@@ -16,13 +16,17 @@ import {
   Heart,
   Laugh,
   Menu,
+  ImagePlus,
+  Mic,
   Plus,
   Send,
   Sparkles,
   ThumbsUp,
+  Square,
+  Trash2,
   X,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import { AlbumIntroPlayer } from "@/components/AlbumIntroPlayer";
 import { CurrentTrackPlayer } from "@/components/CurrentTrackPlayer";
 import { shouldShowIntroPreview } from "@/lib/introPreview";
@@ -100,6 +104,12 @@ export default function Home() {
   const [guestbookName, setGuestbookName] = useState("");
   const [guestbookMessage, setGuestbookMessage] = useState("");
   const [guestbookWebsite, setGuestbookWebsite] = useState("");
+  const [guestbookMedia, setGuestbookMedia] = useState<{ kind: "image" | "audio"; dataUrl: string; name: string; bytes: number } | null>(null);
+  const [recording, setRecording] = useState(false);
+  const [mediaNotice, setMediaNotice] = useState<string | null>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const mediaChunksRef = useRef<Blob[]>([]);
+  const mediaStreamRef = useRef<MediaStream | null>(null);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [activeArchivePolaroid, setActiveArchivePolaroid] = useState<number | null>(null);
   const trpcUtils = trpc.useUtils();
@@ -114,6 +124,8 @@ export default function Home() {
       setGuestbookName("");
       setGuestbookMessage("");
       setGuestbookWebsite("");
+      setGuestbookMedia(null);
+      setMediaNotice(null);
       setNotice("Danke. Dein Eintrag ist jetzt sichtbar.");
     },
     onError: error => setNotice(error.message),
@@ -175,6 +187,69 @@ export default function Home() {
   }, [notice]);
 
   const showPlaceholder = (message: string) => setNotice(message);
+
+  const readMediaAsDataUrl = (blob: Blob, kind: "image" | "audio", name: string) => {
+    if (blob.size > 5 * 1024 * 1024) {
+      setMediaNotice("Die Datei darf höchstens 5 MB groß sein.");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => setGuestbookMedia({ kind, dataUrl: String(reader.result), name, bytes: blob.size });
+    reader.onerror = () => setMediaNotice("Die Datei konnte nicht gelesen werden.");
+    reader.readAsDataURL(blob);
+  };
+
+  const chooseGuestbookImage = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+    if (!["image/jpeg", "image/png", "image/webp", "image/gif"].includes(file.type)) {
+      setMediaNotice("Bitte wähle JPG, PNG, WEBP oder GIF.");
+      return;
+    }
+    readMediaAsDataUrl(file, "image", file.name);
+  };
+
+  const stopRecording = () => {
+    mediaRecorderRef.current?.stop();
+    mediaStreamRef.current?.getTracks().forEach(track => track.stop());
+    mediaStreamRef.current = null;
+    setRecording(false);
+  };
+
+  const toggleRecording = async () => {
+    if (recording) {
+      stopRecording();
+      return;
+    }
+    if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === "undefined") {
+      setMediaNotice("Sprachaufnahme wird von diesem Browser nicht unterstützt.");
+      return;
+    }
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mimeType = ["audio/webm;codecs=opus", "audio/webm", "audio/ogg"].find(type => MediaRecorder.isTypeSupported(type)) || "";
+      const recorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
+      mediaChunksRef.current = [];
+      recorder.ondataavailable = event => { if (event.data.size) mediaChunksRef.current.push(event.data); };
+      recorder.onstop = () => {
+        const blob = new Blob(mediaChunksRef.current, { type: recorder.mimeType || "audio/webm" });
+        readMediaAsDataUrl(blob, "audio", `voice-${new Date().toISOString().replace(/[:.]/g, "-")}.webm`);
+      };
+      mediaRecorderRef.current = recorder;
+      mediaStreamRef.current = stream;
+      recorder.start();
+      setMediaNotice(null);
+      setRecording(true);
+    } catch {
+      setMediaNotice("Der Zugriff auf das Mikrofon wurde nicht erlaubt.");
+    }
+  };
+
+  useEffect(() => () => {
+    mediaRecorderRef.current?.stop();
+    mediaStreamRef.current?.getTracks().forEach(track => track.stop());
+  }, []);
 
   const dismissIntro = () => {
     window.sessionStorage.setItem("p34nuts-intro-seen", "true");
@@ -569,20 +644,29 @@ export default function Home() {
                   <div className="guestbook-entry-meta"><span>ENTRY / {String(entry.id).padStart(3, "0")}</span><time dateTime={new Date(entry.createdAt).toISOString()}>{new Date(entry.createdAt).toLocaleString("de-DE", { dateStyle: "medium", timeStyle: "short" })}</time></div>
                   <p className="guestbook-entry-name">{entry.name}</p>
                   <p>{entry.message}</p>
+                  {entry.mediaKind === "image" && entry.mediaUrl && <img className="guestbook-entry-media" src={entry.mediaUrl} alt={`Bild von ${entry.name} im Gästebuch`} loading="lazy" />}
+                  {entry.mediaKind === "audio" && entry.mediaUrl && <audio className="guestbook-entry-audio" src={entry.mediaUrl} controls preload="metadata">Dein Browser unterstützt keine Audio-Wiedergabe.</audio>}
                   <div className="guestbook-reactions" aria-label={`Reaktionen für Eintrag ${entry.id}`}>
                     {guestbookReactions.map(({ key, label, symbol, Icon }) => <button key={key} className="guestbook-reaction" type="button" onClick={() => reactGuestbook.mutate({ entryId: entry.id, reaction: key })} disabled={reactGuestbook.isPending} aria-label={`${label} für Eintrag ${entry.id} geben`}><Icon size={14} aria-hidden="true" /><span>{symbol}</span><strong>{entry.reactions?.[key] ?? 0}</strong></button>)}
                   </div>
                 </article>
               ))}
             </div>
-            <form className="guestbook-form" onSubmit={event => { event.preventDefault(); submitGuestbook.mutate({ name: guestbookName, message: guestbookMessage, website: guestbookWebsite }); }}>
+            <form className="guestbook-form" onSubmit={event => { event.preventDefault(); submitGuestbook.mutate({ name: guestbookName, message: guestbookMessage, website: guestbookWebsite, media: guestbookMedia ? { kind: guestbookMedia.kind, dataUrl: guestbookMedia.dataUrl } : undefined }); }}>
               <p className="contact-kicker">Drop a line / direct signal</p>
               <label htmlFor="guestbook-name">Dein Name</label>
               <input id="guestbook-name" className="guestbook-name-input" value={guestbookName} onChange={event => setGuestbookName(event.target.value)} maxLength={80} minLength={2} required autoComplete="name" placeholder="Wie dürfen wir dich nennen?" />
               <label htmlFor="guestbook-message">Deine Nachricht</label>
               <textarea id="guestbook-message" value={guestbookMessage} onChange={event => setGuestbookMessage(event.target.value)} maxLength={600} minLength={2} required placeholder="Etwas Nettes, ein Gedanke, ein Signal …" />
+              <div className="guestbook-media-tools">
+                <label className="guestbook-media-button"><ImagePlus size={16} /><span>BILD HINZUFÜGEN</span><input type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={chooseGuestbookImage} /></label>
+                <button className={`guestbook-media-button${recording ? " is-recording" : ""}`} type="button" onClick={toggleRecording}>{recording ? <Square size={15} fill="currentColor" /> : <Mic size={16} />}<span>{recording ? "AUFNAHME STOPPEN" : "SPRACHNACHRICHT"}</span></button>
+                {guestbookMedia && <button className="guestbook-media-remove" type="button" onClick={() => setGuestbookMedia(null)}><Trash2 size={15} /> ENTFERNEN</button>}
+              </div>
+              {mediaNotice && <small className="guestbook-media-notice" role="status">{mediaNotice}</small>}
+              {guestbookMedia && <div className="guestbook-media-preview">{guestbookMedia.kind === "image" ? <img src={guestbookMedia.dataUrl} alt="Ausgewähltes Gästebuchbild" /> : <audio src={guestbookMedia.dataUrl} controls />}<span>{guestbookMedia.name} · {(guestbookMedia.bytes / 1024 / 1024).toFixed(2)} MB</span></div>}
               <label className="guestbook-honeypot" aria-hidden="true">Website<input tabIndex={-1} autoComplete="off" value={guestbookWebsite} onChange={event => setGuestbookWebsite(event.target.value)} /></label>
-              <div className="guestbook-submit-row"><small>Dein Eintrag wird direkt sichtbar. Bitte nenne nur den Namen, unter dem du erscheinen möchtest, und poste keine privaten Daten.</small><button type="submit" disabled={submitGuestbook.isPending || guestbookName.trim().length < 2 || guestbookMessage.trim().length < 2}><span>{submitGuestbook.isPending ? "WIRD GESENDET" : "SIGNAL SENDEN"}</span><Send size={16} /></button></div>
+              <div className="guestbook-submit-row"><small>Dein Eintrag wird direkt sichtbar. Bild oder Sprachmemo: jeweils maximal 5 MB.</small><button type="submit" disabled={submitGuestbook.isPending || recording || guestbookName.trim().length < 2 || guestbookMessage.trim().length < 2}><span>{submitGuestbook.isPending ? "WIRD GESENDET" : "SIGNAL SENDEN"}</span><Send size={16} /></button></div>
             </form>
           </div>
         </section>
