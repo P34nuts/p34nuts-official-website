@@ -5,7 +5,7 @@ import "../homepageConversion.css";
 const shopEntries = [
   { code: "01", title: "T-Shirts", text: "P34nuts-Motive direkt im Shop entdecken und deine Variante auswählen.", href: `${shopHref}/tshirts` },
   { code: "02", title: "Hoodies", text: "Hoodies aus dem aktuellen P34nuts-Katalog – direkt auswählen und konfigurieren.", href: `${shopHref}/hoodies` },
-  { code: "03", title: "Caps", text: "Caps und kleine Pieces aus dem P34nuts-Katalog für den Look ohne Uniform.", href: `${shopHref}/caps` },
+  { code: "03", title: "Caps & Mützen", text: "Caps, Beanies und kleine Pieces aus dem aktuellen P34nuts-Katalog für den Look ohne Uniform.", href: `${shopHref}/caps-muetzen` },
 ] as const;
 
 export function HomeShopConversion() {
