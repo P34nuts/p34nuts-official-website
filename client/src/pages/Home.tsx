@@ -641,12 +641,14 @@ export default function Home() {
               {!guestbookQuery.isLoading && guestbookQuery.data?.length === 0 && <p className="guestbook-state">Noch keine Einträge. Vielleicht bist du der erste gute Vibe.</p>}
               {guestbookQuery.data?.map(entry => {
                 const entryMediaKind = entry.mediaKind ?? (entry as typeof entry & { mediaType?: string }).mediaType;
+                const isImageSignal = entryMediaKind === "image" || entryMediaKind?.startsWith("image/");
+                const isAudioSignal = entryMediaKind === "audio" || entryMediaKind?.startsWith("audio/");
                 return <article className="guestbook-entry" key={entry.id}>
                   <div className="guestbook-entry-meta"><span>ENTRY / {String(entry.id).padStart(3, "0")}</span><time dateTime={new Date(entry.createdAt).toISOString()}>{new Date(entry.createdAt).toLocaleString("de-DE", { dateStyle: "medium", timeStyle: "short" })}</time></div>
                   <p className="guestbook-entry-name">{entry.name}</p>
                   <p>{entry.message}</p>
-                  {entryMediaKind === "image" && entry.mediaUrl && <img className="guestbook-entry-media" src={entry.mediaUrl} alt={`Bild von ${entry.name} im Gästebuch`} loading="lazy" />}
-                  {entryMediaKind === "audio" && entry.mediaUrl && <audio className="guestbook-entry-audio" src={entry.mediaUrl} controls preload="metadata">Dein Browser unterstützt keine Audio-Wiedergabe.</audio>}
+                  {isImageSignal && entry.mediaUrl && <img className="guestbook-entry-media" src={entry.mediaUrl} alt={`Bild von ${entry.name} im Gästebuch`} loading="lazy" />}
+                  {isAudioSignal && entry.mediaUrl && <audio className="guestbook-entry-audio" src={entry.mediaUrl} controls preload="metadata">Dein Browser unterstützt keine Audio-Wiedergabe.</audio>}
                   <div className="guestbook-reactions" aria-label={`Reaktionen für Eintrag ${entry.id}`}>
                     {guestbookReactions.map(({ key, label, symbol, Icon }) => <button key={key} className="guestbook-reaction" type="button" onClick={() => reactGuestbook.mutate({ entryId: entry.id, reaction: key })} disabled={reactGuestbook.isPending} aria-label={`${label} für Eintrag ${entry.id} geben`}><Icon size={14} aria-hidden="true" /><span>{symbol}</span><strong>{entry.reactions?.[key] ?? 0}</strong></button>)}
                   </div>
