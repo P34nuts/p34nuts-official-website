@@ -120,7 +120,8 @@ export default function Home() {
   const announcementEnabled = publicSettings.find(item => item.key === "announcementEnabled")?.value === "true";
   const announcementText = publicSettings.find(item => item.key === "announcementText")?.value;
   const submitGuestbook = trpc.guestbook.submit.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
+      await trpcUtils.guestbook.list.invalidate();
       setGuestbookName("");
       setGuestbookMessage("");
       setGuestbookWebsite("");
