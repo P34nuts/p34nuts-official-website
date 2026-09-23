@@ -284,7 +284,7 @@ export const releases: readonly Track[] = [
   { id: "21", slug: "tunnelblick", title: "TUNNELBLICK", mood: "Fast / dark", themes: ["Adrenalin", "Nacht", "Geschwindigkeit"], visualTheme: "motion", coverStyle: "track-tunnel", cover: originalCovers["21"], note: "Licht zieht vorbei, der Blick bleibt eng.", sunoId: "3fc527bc-cc46-4c2f-869b-ab66c9e30d91", spotifyTrackId: "1t7CeOlfWTBzdQiYmS9YHE" },
   { id: "22", slug: "wer-bin-ich", title: "WER BIN ICH?", mood: "Mirror / split", themes: ["Identität", "Zweifel", "Wahrheit"], visualTheme: "identity", coverStyle: "track-mirror", cover: originalCovers["22"], note: "Die Reflexion stimmt nicht ganz mit dir überein.", sunoId: "72153de1-a135-4d6d-b7b7-601ac88e915e" },
   { id: "23", slug: "zyklus-der-gewalt-gym", title: "ZYKLUS DER GEWALT (GYM)", mood: "Iron / force", themes: ["Disziplin", "Kraft", "Kreislauf"], visualTheme: "strength", coverStyle: "track-gym", cover: originalCovers["23"], note: "Eisen, Atem, Wiederholung. Kein Werbeversprechen.", sunoId: "aa77f9ba-5263-454e-a263-c23e96a4b041" },
-  { id: "24", slug: "der-reset-knopf", title: "DER RESET-KNOPF", mood: "Reset / direct", themes: ["Neustart", "Entscheidung", "Signal"], visualTheme: "signal", coverStyle: "track-signal", note: "Ein neuer P34nuts-Track für den Moment, in dem alles auf Anfang springt.", audioSrc: "/audio/DerReset-Knopf.mp3" },
+  { id: "24", slug: "der-reset-knopf", title: "DER RESET-KNOPF", mood: "Reset / direct", themes: ["Neustart", "Entscheidung", "Signal"], visualTheme: "signal", coverStyle: "track-signal", note: "Ein neuer P34nuts-Track für den Moment, in dem alles auf Anfang springt.", sunoId: "5f4f9c71-2954-4e96-8619-7e7fdd4004e5", audioSrc: "/audio/DerReset-Knopf.mp3" },
 ];
 
 export type DiscoveryPath = {
