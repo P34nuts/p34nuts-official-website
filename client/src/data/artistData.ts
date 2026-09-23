@@ -253,6 +253,7 @@ export const trackStories: Record<string, TrackStory> = {
   "21": { genre: "Trackprofil ausstehend", story: "Für Tunnelblick liegt im bereitgestellten Songbriefing noch keine freigegebene ausführliche Inhaltsbeschreibung vor.", perspective: "Die bestehende Archivnotiz und das Artwork bleiben sichtbar, bis eine autorisierte Trackbeschreibung folgt.", message: "Hintergrund und Kernbotschaft werden nach freigegebenem Briefing ergänzt." },
   "22": { genre: "Trackprofil ausstehend", story: "Für Wer bin ich? liegt im bereitgestellten Songbriefing noch keine freigegebene ausführliche Inhaltsbeschreibung vor.", perspective: "Die bestehende Archivnotiz und das Artwork bleiben sichtbar, bis eine autorisierte Trackbeschreibung folgt.", message: "Hintergrund und Kernbotschaft werden nach freigegebenem Briefing ergänzt." },
   "23": { genre: "Brutaler Gym-Phonk / Hardcore Rap", story: "Ein unerbittlicher Push-Pull-Legs-Trainingsplan wird zum Ventil für Wut und Schmerz.", perspective: "Das Fitnessstudio erscheint als Ort von Transformation und Disziplin.", message: "Wandle Wut in Eisen um: Disziplin schlägt Schmerz." },
+  "24": { genre: "Direct Reset Rap / Signal", story: "Der Reset-Knopf markiert den Moment, in dem ein festgefahrener Zustand nicht länger akzeptiert wird und ein Neustart möglich wird.", perspective: "Der Track setzt auf Entscheidung und Bewegung statt auf endloses Zurückblicken.", message: "Manchmal beginnt Veränderung mit einem klaren Schnitt und einem neuen Signal." },
 };
 
 export function getTrackStory(track: Track) {
@@ -283,6 +284,7 @@ export const releases: readonly Track[] = [
   { id: "21", slug: "tunnelblick", title: "TUNNELBLICK", mood: "Fast / dark", themes: ["Adrenalin", "Nacht", "Geschwindigkeit"], visualTheme: "motion", coverStyle: "track-tunnel", cover: originalCovers["21"], note: "Licht zieht vorbei, der Blick bleibt eng.", sunoId: "3fc527bc-cc46-4c2f-869b-ab66c9e30d91", spotifyTrackId: "1t7CeOlfWTBzdQiYmS9YHE" },
   { id: "22", slug: "wer-bin-ich", title: "WER BIN ICH?", mood: "Mirror / split", themes: ["Identität", "Zweifel", "Wahrheit"], visualTheme: "identity", coverStyle: "track-mirror", cover: originalCovers["22"], note: "Die Reflexion stimmt nicht ganz mit dir überein.", sunoId: "72153de1-a135-4d6d-b7b7-601ac88e915e" },
   { id: "23", slug: "zyklus-der-gewalt-gym", title: "ZYKLUS DER GEWALT (GYM)", mood: "Iron / force", themes: ["Disziplin", "Kraft", "Kreislauf"], visualTheme: "strength", coverStyle: "track-gym", cover: originalCovers["23"], note: "Eisen, Atem, Wiederholung. Kein Werbeversprechen.", sunoId: "aa77f9ba-5263-454e-a263-c23e96a4b041" },
+  { id: "24", slug: "der-reset-knopf", title: "DER RESET-KNOPF", mood: "Reset / direct", themes: ["Neustart", "Entscheidung", "Signal"], visualTheme: "signal", coverStyle: "track-signal", note: "Ein neuer P34nuts-Track für den Moment, in dem alles auf Anfang springt.", audioSrc: "/audio/DerReset-Knopf.mp3" },
 ];
 
 export type DiscoveryPath = {

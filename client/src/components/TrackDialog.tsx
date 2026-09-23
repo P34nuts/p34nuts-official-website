@@ -30,7 +30,7 @@ export function TrackDialog({ track, onListenRequest, triggerClassName = "" }: T
         <button type="button" className={`release-tile ${track.coverStyle} ${triggerClassName}`} aria-label={`${track.title} – Track-Archiv öffnen`}>
           {track.cover ? <img src={track.cover} alt="" className="release-tile-image" loading="lazy" /> : <span className="release-generated-art" aria-hidden="true" />}
           <span className="tile-number">{track.id}</span>
-          <span className="tile-state">ARCHIVE / 23</span>
+          <span className="tile-state">ARCHIVE / 24</span>
           <span className="tile-title">{track.title}</span>
           <span className="tile-mood">{track.mood}</span>
           <span className="tile-listen">VIEW FRAME <ArrowUpRight size={15} /></span>
@@ -40,7 +40,7 @@ export function TrackDialog({ track, onListenRequest, triggerClassName = "" }: T
         <DialogClose className="dialog-close" aria-label="Trackdialog schließen"><X size={18} /></DialogClose>
         <div className={`track-dialog-cover ${track.coverStyle}`}>
           {track.cover ? <img src={track.cover} alt="" /> : <span className="release-generated-art" aria-hidden="true" />}
-          <span className="track-dialog-index">{track.id} / 23</span>
+          <span className="track-dialog-index">{track.id} / 24</span>
         </div>
         <div className="track-dialog-copy">
           <p className="eyebrow">{track.visualTheme} / visual archive</p>

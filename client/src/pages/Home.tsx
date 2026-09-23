@@ -435,7 +435,7 @@ export default function Home() {
           <SectionLabel index="02" label="Music / structure ready" align="right" />
           <div className="section-heading split-heading">
             <h2 id="music-title">ALL<br /><em>FRAMES.</em></h2>
-            <p>23 visuelle Trackkader: Jeder Song ist direkt als vollständige Suno-Version verfügbar – ohne Plattformwechsel.</p>
+            <p>24 visuelle Trackkader: Jeder Song ist direkt als vollständige Suno-Version verfügbar – ohne Plattformwechsel.</p>
           </div>
           <ScrollTrackRail
             tracks={releases}

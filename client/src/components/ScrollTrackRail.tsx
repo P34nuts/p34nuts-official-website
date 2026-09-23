@@ -151,7 +151,7 @@ export function ScrollTrackRail({ tracks, onListenRequest }: ScrollTrackRailProp
 
   return (
     <section ref={sectionRef} className="scroll-track-rail-section" aria-labelledby="music-title">
-      <div className="scroll-track-rail-window" role="region" aria-label="23 anklickbare Trackkader in einer richtungsabhängigen Endlosbewegung">
+      <div className="scroll-track-rail-window" role="region" aria-label="24 anklickbare Trackkader in einer richtungsabhängigen Endlosbewegung">
         <div ref={trackRef} className="scroll-track-rail">
           <div className="scroll-track-rail-segment" aria-hidden="true">
             {tracks.map((track) => <TrackCloneLink key={`before-${track.id}`} track={track} position="before" onListenRequest={onListenRequest} />)}

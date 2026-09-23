@@ -23,7 +23,7 @@ export function MusicFinder({ tracks }: MusicFinderProps) {
   const refreshRecent = () => setRecent(getRecentTracks());
 
   return <section className="music-finder" aria-labelledby="music-finder-title">
-    <div className="music-finder-heading"><div><p className="eyebrow">Music finder / full source online</p><h2 id="music-finder-title">FIND<br /><em>YOUR FRAME.</em></h2></div><p>Alle 23 Tracks sind direkt als vollständige Suno-Version verfügbar. Suche nach Gefühl, Thema oder Titel – ohne externe Plattformwechsel.</p></div>
+    <div className="music-finder-heading"><div><p className="eyebrow">Music finder / full source online</p><h2 id="music-finder-title">FIND<br /><em>YOUR FRAME.</em></h2></div><p>Alle 24 Tracks sind direkt als vollständige Suno-Version verfügbar. Suche nach Gefühl, Thema oder Titel – ohne externe Plattformwechsel.</p></div>
     <div className="music-finder-controls">
       <label className="music-search"><Search size={16} aria-hidden="true" /><span className="sr-only">Tracks durchsuchen</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Titel, Stimmung oder Thema" /></label>
       <label className="music-theme"><span className="sr-only">Thema filtern</span><select value={theme} onChange={(event) => setTheme(event.target.value)}>{themes.map((entry) => <option key={entry}>{entry}</option>)}</select></label>
