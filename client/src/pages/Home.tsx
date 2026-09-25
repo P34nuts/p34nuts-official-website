@@ -427,7 +427,7 @@ export default function Home() {
 
         <section className="archive-index-lock" aria-label="Übergang vom Artist Manifest zum Track-Archiv">
           <div className="archive-index-lock__head"><span>01—03 / principle</span><span>02 / music structure ready</span></div>
-          <div className="archive-index-lock__counter" aria-hidden="true"><span>01</span><i>→</i><strong>23</strong></div>
+          <div className="archive-index-lock__counter" aria-hidden="true"><span>01</span><i>→</i><strong>24</strong></div>
           <p>THREE PRINCIPLES.<br /><em>TWENTY-THREE FRAMES.</em></p>
         </section>
 
