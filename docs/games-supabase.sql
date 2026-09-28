@@ -6,7 +6,7 @@ create table if not exists public.rooms (
   code text not null unique check (code ~ '^[A-Z0-9]{5}$'),
   host_id uuid not null,
   status text not null default 'lobby' check (status in ('lobby','countdown','playing','results')),
-  game text check (game is null or game in ('reaction','shake','pingpong','tetris','snake','memory')),
+  game text check (game is null or game in ('reaction','shake','pingpong','tetris','snake','memory','bombpass','aim','higherlower','bluffquiz')),
   round integer not null default 0 check (round >= 0),
   created_at timestamptz not null default now()
 );
@@ -34,7 +34,7 @@ create table if not exists public.room_messages (
 create table if not exists public.room_events (
   id uuid primary key default gen_random_uuid(),
   room_id uuid not null references public.rooms(id) on delete cascade,
-  type text not null check (type in ('start','result','memory_move')),
+  type text not null check (type in ('start','result','memory_move','round_winner')),
   payload jsonb not null default '{}'::jsonb,
   created_at timestamptz not null default now()
 );
@@ -70,7 +70,7 @@ create policy messages_public_insert on public.room_messages for insert to anon,
 drop policy if exists events_public_read on public.room_events;
 create policy events_public_read on public.room_events for select to anon, authenticated using (true);
 drop policy if exists events_public_insert on public.room_events;
-create policy events_public_insert on public.room_events for insert to anon, authenticated with check (type in ('start','result','memory_move'));
+create policy events_public_insert on public.room_events for insert to anon, authenticated with check (type in ('start','result','memory_move','round_winner'));
 
 -- Realtime replication for the four shared tables.
 alter publication supabase_realtime add table public.rooms;

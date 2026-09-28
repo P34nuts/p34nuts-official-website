@@ -60,15 +60,17 @@ export async function joinRoom(codeInput: string, nickname: string, avatar: stri
 
 export async function loadRoom(roomId: string) {
   const client = requiredClient();
-  const [room, players, messages] = await Promise.all([
+  const [room, players, messages, events] = await Promise.all([
     client.from("rooms").select("*").eq("id", roomId).single(),
     client.from("room_players").select("*").eq("room_id", roomId).order("joined_at"),
     client.from("room_messages").select("*").eq("room_id", roomId).order("created_at", { ascending: true }).limit(80),
+    client.from("room_events").select("id,room_id,type,payload,created_at").eq("room_id", roomId).order("created_at", { ascending: true }).limit(500),
   ]);
   if (room.error) throw room.error;
   if (players.error) throw players.error;
   if (messages.error) throw messages.error;
-  return { room: room.data as Room, players: (players.data ?? []) as Player[], messages: (messages.data ?? []) as ChatMessage[] };
+  if (events.error) throw events.error;
+  return { room: room.data as Room, players: (players.data ?? []) as Player[], messages: (messages.data ?? []) as ChatMessage[], events: (events.data ?? []) as RoomEvent[] };
 }
 
 export async function sendChat(roomId: string, nickname: string, message: string) {
