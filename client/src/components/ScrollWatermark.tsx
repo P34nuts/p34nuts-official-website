@@ -44,6 +44,7 @@ export function ScrollFollowWatermark() {
         type="button"
         aria-label={`P34nuts Wasserzeichen, Easteregg ${clicks} von 10 Klicks`}
         title={clicks > 0 ? `${clicks}/10` : "P34nuts"}
+        onClick={registerEasterEggClick}
         onKeyDown={(event) => {
           if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
