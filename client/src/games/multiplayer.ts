@@ -1,6 +1,6 @@
 import { createClient, type RealtimeChannel, type SupabaseClient } from "@supabase/supabase-js";
 
-export type GameId = "reaction" | "shake" | "pingpong" | "tetris" | "snake" | "memory";
+export type GameId = "reaction" | "shake" | "pingpong" | "tetris" | "snake" | "memory" | "bombpass" | "aim" | "higherlower" | "bluffquiz";
 export type RoomStatus = "lobby" | "countdown" | "playing" | "results";
 export type Player = { id: string; room_id: string; nickname: string; avatar: string; joined_at: string };
 export type ChatMessage = { id: string; room_id: string; nickname: string; message: string; created_at: string };
