@@ -91,9 +91,9 @@ export const originalCovers = {
 } as const;
 
 export const primaryNav = [
-  { label: "Music", href: sitePath("/music") },
-  { label: "Shop", href: shopHref },
-  { label: "Visuals", href: sitePath("/#visuals") },
+  { label: "Music", href: sitePath("/games") },
+  { label: "Shop", href: sitePath("/games") },
+  { label: "Visuals", href: sitePath("/games") },
   { label: "About", href: sitePath("/#about") },
   { label: "Booking", href: sitePath("/booking") },
   { label: "Social", href: sitePath("/#social") },
