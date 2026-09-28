@@ -533,6 +533,18 @@
   border-radius: 50%;
 }
 
+.scroll-follow-watermark-hotspot {
+  position: fixed;
+  z-index: 2147483647;
+  top: 25%;
+  right: 0;
+  width: min(19rem, 27vw);
+  height: 34%;
+  pointer-events: auto;
+  cursor: pointer;
+  background: transparent;
+}
+
 
 
 /* Organic section flow: neighboring homepage areas overlap instead of stopping at hard rectangles. */
