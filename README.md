@@ -65,12 +65,7 @@ Der `anon`-Key darf im Frontend verwendet werden. **Niemals** den `service_role`
 
 ## 3. GitHub Pages verbinden
 
-In GitHub im Repository unter **Settings → Secrets and variables → Actions** zwei Repository Secrets anlegen:
-
-- `VITE_SUPABASE_URL`
-- `VITE_SUPABASE_ANON_KEY`
-
-Der bestehende Workflow `.github/workflows/deploy-pages.yml` übergibt diese Secrets beim Build. Danach reicht ein Push auf `main`; GitHub Actions baut und veröffentlicht die Seite. Die Anwendung ist auf der bestehenden Website unter:
+Der bestehende Workflow `.github/workflows/deploy-pages.yml` enthält bereits die öffentliche Supabase-Projekt-URL und den öffentlichen Publishable-Key. Diese beiden Werte sind für den Frontend-Betrieb bestimmt und kein Server-Secret. Danach reicht ein Push auf `main`; GitHub Actions baut und veröffentlicht die Seite. Die Anwendung ist auf der bestehenden Website unter:
 
 ```text
 https://p34nuts.github.io/p34nuts-official-website/games
