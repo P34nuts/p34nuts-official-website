@@ -32,17 +32,6 @@ export function ScrollFollowWatermark() {
     }
   }, []);
 
-  useEffect(() => {
-    const handleCaptureClick = (event: MouseEvent) => {
-      const target = event.target;
-      const clickedWatermark = target instanceof Element && Boolean(target.closest(".scroll-follow-watermark, .scroll-follow-watermark-hotspot"));
-      const rightBand = event.clientX >= window.innerWidth - Math.min(280, window.innerWidth * 0.28);
-      const middleHeight = event.clientY >= window.innerHeight * 0.2 && event.clientY <= window.innerHeight * 0.8;
-      if (clickedWatermark || (rightBand && middleHeight)) registerEasterEggClick();
-    };
-    document.addEventListener("click", handleCaptureClick, true);
-    return () => document.removeEventListener("click", handleCaptureClick, true);
-  }, [registerEasterEggClick]);
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], ["-4vh", "48vh"]);
   const rotate = useTransform(scrollYProgress, [0, 1], [-10, 560]);
@@ -65,7 +54,12 @@ export function ScrollFollowWatermark() {
       >
         <img src={assets.mark} alt="" />
       </motion.button>
-      <span className="scroll-follow-watermark-hotspot" aria-hidden="true" />
+      <button
+        className="scroll-follow-watermark-hotspot"
+        type="button"
+        aria-label={`Easteregg: ${clicks} von 10 Klicks`}
+        onClick={registerEasterEggClick}
+      />
     </>
   );
 }

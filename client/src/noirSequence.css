@@ -542,6 +542,9 @@
   height: 34%;
   pointer-events: auto;
   cursor: pointer;
+  padding: 0;
+  border: 0;
+  appearance: none;
   background: transparent;
 }
 
