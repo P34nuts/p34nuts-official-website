@@ -48,10 +48,88 @@ function ReactionGame({ roomId, playerId, players, results, onResult, onDone }: 
 }
 
 function ShakeGame({ roomId, playerId, players, results, onResult, onDone }: { roomId: string; playerId: string; players: Player[]; results: Record<string, number>; onResult: (id: string, value: number) => void; onDone: () => void }) {
-  const [seconds, setSeconds] = useState(10); const [count, setCount] = useState(0); const [supported, setSupported] = useState(true); const countRef = useRef(0);
-  useEffect(() => { if (!("DeviceMotionEvent" in window)) setSupported(false); const handler = (event: DeviceMotionEvent) => { const x = event.accelerationIncludingGravity?.x ?? 0; const y = event.accelerationIncludingGravity?.y ?? 0; if (Math.abs(x) + Math.abs(y) > 22) { countRef.current += 1; setCount(countRef.current); } }; window.addEventListener("devicemotion", handler); const interval = window.setInterval(() => setSeconds(value => Math.max(0, value - 1)), 1000); const finish = window.setTimeout(() => { void emitRoomEvent(roomId, "result", { playerId, game: "shake", value: countRef.current }); onResult(playerId, countRef.current); }, 10000); return () => { window.removeEventListener("devicemotion", handler); window.clearInterval(interval); window.clearTimeout(finish); }; }, [playerId, roomId, onResult]);
-  if (!supported) return <div className="game-stage unsupported"><Smartphone size={36} /><h2>Sensor nicht verfügbar</h2><p>Dieses Spiel benötigt einen Bewegungssensor und funktioniert auf diesem Gerät nicht.</p><button className="game-secondary" onClick={onDone}>ZURÜCK</button></div>;
-  return <div className="game-stage shake-stage"><div className="stage-title"><span>SHAKE / 02</span><span>DEVICE MOTION</span></div><div className="shake-orbit"><div className="shake-count">{seconds === 0 ? count : count}<small>SHAKES</small></div></div><p className="shake-copy">Schüttle dein Handy so oft wie möglich.<br /><span>Noch {seconds} Sekunden · Bewegung wird lokal erkannt.</span></p>{seconds === 0 && Object.keys(results).length >= players.length && <button className="game-primary result-button" onClick={onDone}>RANGLISTE ÖFFNEN ↗</button>}</div>;
+  const [seconds, setSeconds] = useState(10);
+  const [count, setCount] = useState(0);
+  const [supported, setSupported] = useState(true);
+  const [desktopMode, setDesktopMode] = useState(false);
+  const countRef = useRef(0);
+  const finishedRef = useRef(false);
+  const onResultRef = useRef(onResult);
+  const onDoneRef = useRef(onDone);
+  const lastMouseY = useRef<number | null>(null);
+  const lastMouseDirection = useRef(0);
+  const permissionAsked = useRef(false);
+  onResultRef.current = onResult;
+  onDoneRef.current = onDone;
+
+  useEffect(() => {
+    const touchDevice = navigator.maxTouchPoints > 0 || "ontouchstart" in window;
+    const canUseMotion = touchDevice && "DeviceMotionEvent" in window;
+    const canUseMouse = !touchDevice;
+    setDesktopMode(canUseMouse);
+    if (!canUseMotion && !canUseMouse) setSupported(false);
+
+    const addShake = () => {
+      if (finishedRef.current) return;
+      countRef.current += 1;
+      setCount(countRef.current);
+    };
+    let lastMotion = 0;
+    const motionHandler = (event: DeviceMotionEvent) => {
+      const now = performance.now();
+      const x = event.accelerationIncludingGravity?.x ?? 0;
+      const y = event.accelerationIncludingGravity?.y ?? 0;
+      if (Math.abs(x) + Math.abs(y) > 22 && now - lastMotion > 120) {
+        lastMotion = now;
+        addShake();
+      }
+    };
+    const mouseHandler = (event: PointerEvent) => {
+      if (event.pointerType !== "mouse" || finishedRef.current) return;
+      if (lastMouseY.current !== null) {
+        const delta = event.clientY - lastMouseY.current;
+        if (Math.abs(delta) > 12) {
+          const direction = Math.sign(delta);
+          if (lastMouseDirection.current && direction !== lastMouseDirection.current) addShake();
+          lastMouseDirection.current = direction;
+        }
+      }
+      lastMouseY.current = event.clientY;
+    };
+    window.addEventListener("devicemotion", motionHandler);
+    window.addEventListener("pointermove", mouseHandler);
+    const startedAt = performance.now();
+    const interval = window.setInterval(() => {
+      const remaining = Math.max(0, 10 - (performance.now() - startedAt) / 1000);
+      setSeconds(Math.ceil(remaining));
+    }, 100);
+    const finish = window.setTimeout(() => {
+      if (finishedRef.current) return;
+      finishedRef.current = true;
+      const finalCount = countRef.current;
+      void emitRoomEvent(roomId, "result", { playerId, game: "shake", value: finalCount });
+      onResultRef.current(playerId, finalCount);
+      window.setTimeout(() => onDoneRef.current(), 350);
+    }, 10000);
+    return () => {
+      window.removeEventListener("devicemotion", motionHandler);
+      window.removeEventListener("pointermove", mouseHandler);
+      window.clearInterval(interval);
+      window.clearTimeout(finish);
+    };
+  }, [playerId, roomId]);
+
+  const requestMotionPermission = async () => {
+    if (desktopMode || permissionAsked.current) return;
+    permissionAsked.current = true;
+    const motion = window.DeviceMotionEvent as typeof DeviceMotionEvent & { requestPermission?: () => Promise<string> };
+    if (typeof motion.requestPermission === "function") {
+      const permission = await motion.requestPermission();
+      if (permission !== "granted") setSupported(false);
+    }
+  };
+  if (!supported) return <div className="game-stage unsupported"><Smartphone size={36} /><h2>Bewegung nicht verfügbar</h2><p>Dieses Spiel benötigt auf dem Handy einen Bewegungssensor. Auf dem Desktop kannst du alternativ mit der Maus auf und ab fahren.</p><button className="game-secondary" onClick={onDone}>ZURÜCK</button></div>;
+  return <div className="game-stage shake-stage" onPointerDown={() => void requestMotionPermission()}><div className="stage-title"><span>SHAKE / 02</span><span>{desktopMode ? "MOUSE MOTION" : "DEVICE MOTION"}</span></div><div className="shake-orbit"><div className="shake-count">{count}<small>SHAKES</small></div></div><p className="shake-copy">{desktopMode ? "Bewege die Maus schnell auf und ab." : "Schüttle dein Handy so oft wie möglich."}<br /><span>{seconds > 0 ? `Noch ${seconds} Sekunden · danach ist die Runde automatisch vorbei.` : "Runde beendet · Ergebnisse werden synchronisiert."}</span></p></div>;
 }
 
 export default function Games() {

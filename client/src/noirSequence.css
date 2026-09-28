@@ -506,6 +506,11 @@
   z-index: 18;
   right: clamp(1rem, 3vw, 3.25rem);
   width: clamp(5.5rem, 9vw, 9rem);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  pointer-events: auto;
+  cursor: pointer;
   opacity: .31;
   mix-blend-mode: normal;
 }

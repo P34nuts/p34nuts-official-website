@@ -8,28 +8,42 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { assets } from "@/data/artistData";
+import { useLocation } from "wouter";
 
 /**
  * Decorative P34nuts watermark motion inspired by the user's Oreo reference.
- * The graphic remains non-interactive and never carries essential content.
+ * Twenty clicks unlock the hidden Friends Game Room.
  */
 export function ScrollFollowWatermark() {
   const reduceMotion = useReducedMotion();
+  const [, navigate] = useLocation();
+  const [clicks, setClicks] = useState(0);
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], ["-4vh", "48vh"]);
   const rotate = useTransform(scrollYProgress, [0, 1], [-10, 560]);
   const scale = useTransform(scrollYProgress, [0, 0.45, 1], [0.92, 1.08, 0.96]);
 
   return (
-    <motion.div
+    <motion.button
       className="scroll-follow-watermark"
-      aria-hidden="true"
+      type="button"
+      aria-label={`P34nuts Wasserzeichen, Easteregg ${clicks} von 20 Klicks`}
+      title={clicks > 0 ? `${clicks}/20` : "P34nuts"}
+      onClick={() => {
+        const next = clicks + 1;
+        if (next >= 20) {
+          setClicks(0);
+          navigate("/games");
+        } else {
+          setClicks(next);
+        }
+      }}
       style={reduceMotion ? undefined : { y, rotate, scale }}
     >
       <img src={assets.mark} alt="" />
-    </motion.div>
+    </motion.button>
   );
 }
 
