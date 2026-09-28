@@ -8,7 +8,7 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { assets } from "@/data/artistData";
 import { useLocation } from "wouter";
 
@@ -21,6 +21,29 @@ export function ScrollFollowWatermark() {
   const [, navigate] = useLocation();
   const [clicks, setClicks] = useState(0);
   const clicksRef = useRef(0);
+  const registerEasterEggClick = useCallback(() => {
+    clicksRef.current += 1;
+    const next = clicksRef.current;
+    if (next >= 10) {
+      clicksRef.current = 0;
+      setClicks(0);
+      navigate("/games");
+    } else {
+      setClicks(next);
+    }
+  }, [navigate]);
+
+  useEffect(() => {
+    const handleCapturePointerDown = (event: PointerEvent) => {
+      const target = event.target;
+      const clickedWatermark = target instanceof Element && Boolean(target.closest(".scroll-follow-watermark"));
+      const rightBand = event.clientX >= window.innerWidth - Math.min(280, window.innerWidth * 0.28);
+      const middleHeight = event.clientY >= window.innerHeight * 0.2 && event.clientY <= window.innerHeight * 0.8;
+      if (clickedWatermark || (rightBand && middleHeight)) registerEasterEggClick();
+    };
+    window.addEventListener("pointerdown", handleCapturePointerDown, true);
+    return () => window.removeEventListener("pointerdown", handleCapturePointerDown, true);
+  }, [registerEasterEggClick]);
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], ["-4vh", "48vh"]);
   const rotate = useTransform(scrollYProgress, [0, 1], [-10, 560]);
@@ -32,16 +55,10 @@ export function ScrollFollowWatermark() {
       type="button"
       aria-label={`P34nuts Wasserzeichen, Easteregg ${clicks} von 10 Klicks`}
       title={clicks > 0 ? `${clicks}/10` : "P34nuts"}
-      onPointerDown={(event) => {
-        event.preventDefault();
-        clicksRef.current += 1;
-        const next = clicksRef.current;
-        if (next >= 10) {
-          clicksRef.current = 0;
-          setClicks(0);
-          navigate("/games");
-        } else {
-          setClicks(next);
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          registerEasterEggClick();
         }
       }}
       style={reduceMotion ? undefined : { y, rotate, scale }}
