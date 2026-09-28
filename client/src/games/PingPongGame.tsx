@@ -59,6 +59,10 @@ export default function PingPongGame({ roomId, playerId, players, host, onResult
     const tick = window.setInterval(() => {
       const current = stateRef.current;
       if (current.gameOver) return;
+      if (playersRef.current.length === 2) {
+        const bot = playersRef.current.find(player => player.id === "computer-bot");
+        if (bot) inputsRef.current = { ...inputsRef.current, [bot.id]: clamp((current.y - 7) / 86) };
+      }
       const elapsed = performance.now() - startedAt;
       const speed = 1 + Math.floor(elapsed / 10000) * .16;
       let x = current.x + current.vx * .04 * speed;

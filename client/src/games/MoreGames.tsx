@@ -20,6 +20,11 @@ export function BombPassGame({ roomId, playerId, players, onResult, onDone }: Pr
     const clock = window.setInterval(() => {
       const left = Math.max(0, Number(((expires - Date.now()) / 1000).toFixed(1)));
       setSeconds(Math.ceil(left));
+      if (owner === "computer-bot" && left < 1.2 && left > 0.7) {
+        const index = players.findIndex(player => player.id === "computer-bot");
+        const next = players[(index + 1) % players.length]?.id ?? playerId;
+        send(roomId, "bomb_state", { owner: next, expires: Date.now() + 9000 });
+      }
       if (left <= 0 && owner === playerId && !finishRef.current) { finishRef.current = true; setFinished(true); send(roomId, "result", { playerId, game: "bombpass", value: 0 }); onResult(playerId, 0); window.setTimeout(onDone, 500); }
     }, 100);
     return () => { void removeSubscription(channel); window.clearInterval(clock); };
