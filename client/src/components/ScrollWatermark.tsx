@@ -10,7 +10,6 @@ import {
 } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { assets } from "@/data/artistData";
-import { useLocation } from "wouter";
 
 /**
  * Decorative P34nuts watermark motion inspired by the user's Oreo reference.
@@ -18,7 +17,6 @@ import { useLocation } from "wouter";
  */
 export function ScrollFollowWatermark() {
   const reduceMotion = useReducedMotion();
-  const [, navigate] = useLocation();
   const [clicks, setClicks] = useState(0);
   const clicksRef = useRef(0);
   const registerEasterEggClick = useCallback(() => {
@@ -27,11 +25,12 @@ export function ScrollFollowWatermark() {
     if (next >= 10) {
       clicksRef.current = 0;
       setClicks(0);
-      navigate("/games");
+      const base = String(import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
+      window.location.assign(`${window.location.origin}${base}games`);
     } else {
       setClicks(next);
     }
-  }, [navigate]);
+  }, []);
 
   useEffect(() => {
     const handleCaptureClick = (event: MouseEvent) => {
