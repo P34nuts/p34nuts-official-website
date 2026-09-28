@@ -9,7 +9,8 @@ import {
   useTransform,
 } from "framer-motion";
 import { useRef, useState } from "react";
-import { assets, sitePath } from "@/data/artistData";
+import { assets } from "@/data/artistData";
+import { useLocation } from "wouter";
 
 /**
  * Decorative P34nuts watermark motion inspired by the user's Oreo reference.
@@ -17,7 +18,9 @@ import { assets, sitePath } from "@/data/artistData";
  */
 export function ScrollFollowWatermark() {
   const reduceMotion = useReducedMotion();
+  const [, navigate] = useLocation();
   const [clicks, setClicks] = useState(0);
+  const clicksRef = useRef(0);
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], ["-4vh", "48vh"]);
   const rotate = useTransform(scrollYProgress, [0, 1], [-10, 560]);
@@ -30,10 +33,12 @@ export function ScrollFollowWatermark() {
       aria-label={`P34nuts Wasserzeichen, Easteregg ${clicks} von 10 Klicks`}
       title={clicks > 0 ? `${clicks}/10` : "P34nuts"}
       onClick={() => {
-        const next = clicks + 1;
+        clicksRef.current += 1;
+        const next = clicksRef.current;
         if (next >= 10) {
+          clicksRef.current = 0;
           setClicks(0);
-          window.location.assign(sitePath("/games"));
+          navigate("/games");
         } else {
           setClicks(next);
         }
