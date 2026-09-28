@@ -18,7 +18,9 @@ export default function SnakeGame({ roomId, playerId, players, onResult, onDone 
   const [food, setFood] = useState(() => randomFood(initialSnake()));
   const [score, setScore] = useState(0);
   const [seconds, setSeconds] = useState(0);
+  const [countdown, setCountdown] = useState(5);
   const [finished, setFinished] = useState(false);
+  const startedRef = useRef(false);
   const direction = useRef<Direction>({ x: 1, y: 0 });
   const nextDirection = useRef<Direction>({ x: 1, y: 0 });
   const finishedRef = useRef(false);
@@ -50,13 +52,15 @@ export default function SnakeGame({ roomId, playerId, players, onResult, onDone 
       if (next) { event.preventDefault(); setDirection(next); }
     };
     window.addEventListener("keydown", keyHandler);
-    const clock = window.setInterval(() => setSeconds((value) => value + 1), 1000);
-    return () => { window.removeEventListener("keydown", keyHandler); window.clearInterval(clock); };
+    const countdownClock = window.setInterval(() => setCountdown((value) => Math.max(0, value - 1)), 1000);
+    const start = window.setTimeout(() => { startedRef.current = true; }, 5000);
+    const clock = window.setInterval(() => { if (startedRef.current) setSeconds((value) => value + 1); }, 1000);
+    return () => { window.removeEventListener("keydown", keyHandler); window.clearInterval(countdownClock); window.clearTimeout(start); window.clearInterval(clock); };
   }, [setDirection]);
 
   useEffect(() => {
     const tick = window.setInterval(() => {
-      if (finishedRef.current) return;
+      if (finishedRef.current || !startedRef.current) return;
       direction.current = nextDirection.current;
       setSnake((current) => {
         const head = current[0];
@@ -73,5 +77,5 @@ export default function SnakeGame({ roomId, playerId, players, onResult, onDone 
     return () => window.clearInterval(tick);
   }, [finish, food]);
 
-  return <div className="game-stage snake-stage"><div className="stage-title"><span>SNAKE / 05</span><span>{players.length} PLAYER{players.length === 1 ? "" : "S"}</span></div><div className="snake-board" style={{ gridTemplateColumns: `repeat(${COLS}, 1fr)` }}>{Array.from({ length: COLS * ROWS }, (_, index) => { const cell = { x: index % COLS, y: Math.floor(index / COLS) }; const body = snake.some((part) => same(part, cell)); return <span className={same(food, cell) ? "snake-cell food" : body ? "snake-cell body" : "snake-cell"} key={`${cell.x}-${cell.y}`} />; })}</div><div className="snake-meta"><strong>{score}</strong><span>{finished ? "GAME OVER" : `${seconds}s · +10 PRO APFEL`}</span></div><div className="snake-controls"><button onClick={() => setDirection({ x: 0, y: -1 })}>↑</button><button onClick={() => setDirection({ x: -1, y: 0 })}>←</button><button onClick={() => setDirection({ x: 0, y: 1 })}>↓</button><button onClick={() => setDirection({ x: 1, y: 0 })}>→</button></div><p className="snake-help">Sammle die P34nuts-Punkte. Tastatur, WASD oder Fingersteuerung.</p></div>;
+  return <div className="game-stage snake-stage"><div className="stage-title"><span>SNAKE / 05</span><span>{players.length} PLAYER{players.length === 1 ? "" : "S"}</span></div>{countdown > 0 && <div className="snake-countdown"><strong>{countdown}</strong><span>GLEICH GEHT'S LOS</span></div>}<div className="snake-board" style={{ gridTemplateColumns: `repeat(${COLS}, 1fr)` }}>{Array.from({ length: COLS * ROWS }, (_, index) => { const cell = { x: index % COLS, y: Math.floor(index / COLS) }; const body = snake.some((part) => same(part, cell)); return <span className={same(food, cell) ? "snake-cell food" : body ? "snake-cell body" : "snake-cell"} key={`${cell.x}-${cell.y}`} />; })}</div><div className="snake-meta"><strong>{score}</strong><span>{finished ? "GAME OVER" : countdown > 0 ? "BEREIT MACHEN …" : `${seconds}s · +10 PRO APFEL`}</span></div><div className="snake-controls"><button className="snake-key up" onClick={() => setDirection({ x: 0, y: -1 })}>↑</button><button className="snake-key left" onClick={() => setDirection({ x: -1, y: 0 })}>←</button><button className="snake-key down" onClick={() => setDirection({ x: 0, y: 1 })}>↓</button><button className="snake-key right" onClick={() => setDirection({ x: 1, y: 0 })}>→</button></div><p className="snake-help">Pfeiltasten im Tastatur-Layout, WASD oder Fingersteuerung.</p></div>;
 }
