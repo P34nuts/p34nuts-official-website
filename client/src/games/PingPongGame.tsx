@@ -11,7 +11,7 @@ const BALL = 2.2;
 const PADDLE = .15;
 const clamp = (value: number, min = 0, max = 1) => Math.max(min, Math.min(max, value));
 // Start fast enough to reach the first paddle quickly; the 10-second speed ramp still applies.
-const initialState = (): PingPongState => ({ x: 50, y: 50, vx: 7.2, vy: 4.6, elapsed: 0, eliminated: [], gameOver: false });
+const initialState = (): PingPongState => ({ x: 50, y: 50, vx: 32, vy: 21, elapsed: 0, eliminated: [], gameOver: false });
 const polygon = (sides: number): Point[] => Array.from({ length: sides }, (_, index) => {
   const angle = -Math.PI / 2 + index * (Math.PI * 2 / sides);
   return { x: CENTER.x + 42 * Math.cos(angle), y: CENTER.y + 42 * Math.sin(angle) };

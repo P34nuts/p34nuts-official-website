@@ -60,6 +60,20 @@ export default function MemoryGame({ roomId, playerId, players, onResult, onDone
     return () => { if (channel) void removeSubscription(channel); };
   }, [deck, playerId, players, roomId]);
 
+  useEffect(() => {
+    if (turn !== "computer-bot" || locked || finishedRef.current) return undefined;
+    const timer = window.setTimeout(() => {
+      const available = deck.map((card, index) => index).filter(index => !matchedRef.current.includes(index));
+      if (available.length < 2) return;
+      const first = available[0];
+      const pair = available.find(index => index !== first && deck[index].pair === deck[first].pair);
+      const second = pair ?? available[1];
+      const kind = deck[first].pair === deck[second].pair ? "match" : "mismatch";
+      void emitRoomEvent(roomId, "memory_move", { kind, playerId: "computer-bot", first, second });
+    }, 650);
+    return () => window.clearTimeout(timer);
+  }, [deck, locked, matched, roomId, turn]);
+
   const choose = async (index: number) => {
     if (finishedRef.current || locked || turnRef.current !== playerId || matchedRef.current.includes(index) || flipped.includes(index)) return;
     const next = [...flipped, index];

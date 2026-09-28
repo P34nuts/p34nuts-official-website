@@ -34,7 +34,7 @@ create table if not exists public.room_messages (
 create table if not exists public.room_events (
   id uuid primary key default gen_random_uuid(),
   room_id uuid not null references public.rooms(id) on delete cascade,
-  type text not null check (type in ('start','result','memory_move','round_winner')),
+  type text not null check (type in ('start','result','memory_move','round_winner','bomb_state','bluff_answer','bluff_vote')),
   payload jsonb not null default '{}'::jsonb,
   created_at timestamptz not null default now()
 );
@@ -70,7 +70,7 @@ create policy messages_public_insert on public.room_messages for insert to anon,
 drop policy if exists events_public_read on public.room_events;
 create policy events_public_read on public.room_events for select to anon, authenticated using (true);
 drop policy if exists events_public_insert on public.room_events;
-create policy events_public_insert on public.room_events for insert to anon, authenticated with check (type in ('start','result','memory_move','round_winner'));
+create policy events_public_insert on public.room_events for insert to anon, authenticated with check (type in ('start','result','memory_move','round_winner','bomb_state','bluff_answer','bluff_vote'));
 
 -- Realtime replication for the four shared tables.
 alter publication supabase_realtime add table public.rooms;
