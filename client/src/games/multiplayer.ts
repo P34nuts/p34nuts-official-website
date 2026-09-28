@@ -1,6 +1,6 @@
 import { createClient, type RealtimeChannel, type SupabaseClient } from "@supabase/supabase-js";
 
-export type GameId = "reaction" | "shake";
+export type GameId = "reaction" | "shake" | "pingpong";
 export type RoomStatus = "lobby" | "countdown" | "playing" | "results";
 export type Player = { id: string; room_id: string; nickname: string; avatar: string; joined_at: string };
 export type ChatMessage = { id: string; room_id: string; nickname: string; message: string; created_at: string };
@@ -111,4 +111,16 @@ export function subscribeToRoom(roomId: string, onChange: () => void, onEvent: (
 
 export async function removeSubscription(channel: RealtimeChannel) {
   if (supabase) await supabase.removeChannel(channel);
+}
+
+export function subscribeToRoomBroadcast(roomId: string, onPayload: (payload: Record<string, unknown>) => void): RealtimeChannel {
+  const channel = requiredClient()
+    .channel(`game-room-pingpong:${roomId}`)
+    .on("broadcast", { event: "pingpong" }, (message) => onPayload(message.payload as Record<string, unknown>))
+    .subscribe();
+  return channel;
+}
+
+export async function sendRoomBroadcast(channel: RealtimeChannel, payload: Record<string, unknown>) {
+  await channel.send({ type: "broadcast", event: "pingpong", payload });
 }
