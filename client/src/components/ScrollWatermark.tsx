@@ -32,7 +32,8 @@ export function ScrollFollowWatermark() {
       type="button"
       aria-label={`P34nuts Wasserzeichen, Easteregg ${clicks} von 10 Klicks`}
       title={clicks > 0 ? `${clicks}/10` : "P34nuts"}
-      onClick={() => {
+      onPointerDown={(event) => {
+        event.preventDefault();
         clicksRef.current += 1;
         const next = clicksRef.current;
         if (next >= 10) {
