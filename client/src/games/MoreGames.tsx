@@ -15,7 +15,7 @@ export function BombPassGame({ roomId, playerId, players, onResult, onDone }: Pr
     const channel = subscribeToRoom(roomId, () => undefined, event => {
       if (event.type !== "bomb_state") return;
       setOwner(String(event.payload.owner)); setExpires(Number(event.payload.expires));
-    });
+    }, `bomb-room:${roomId}`);
     if (players[0]?.id === playerId && !started.current) { started.current = true; send(roomId, "bomb_state", { owner: playerId, expires: Date.now() + 12000 }); }
     const clock = window.setInterval(() => {
       const left = Math.max(0, Number(((expires - Date.now()) / 1000).toFixed(1)));
@@ -204,7 +204,7 @@ const questions = [
 export function BluffQuizGame({ roomId, playerId, players, onResult, onDone }: Props) {
   const quiz = useMemo(() => questions[hash(roomId) % questions.length], [roomId]);
   const [text, setText] = useState(""); const [answers, setAnswers] = useState<Record<string, string>>({}); const [votes, setVotes] = useState<Record<string, string>>({}); const [phase, setPhase] = useState<"write" | "vote" | "done">("write"); const [score, setScore] = useState(0); const finished = useRef(false);
-  useEffect(() => { const channel = subscribeToRoom(roomId, () => undefined, event => { if (event.type === "bluff_answer") setAnswers(old => ({ ...old, [String(event.payload.playerId)]: String(event.payload.answer) })); if (event.type === "bluff_vote") setVotes(old => ({ ...old, [String(event.payload.playerId)]: String(event.payload.answer) })); }); return () => { void removeSubscription(channel); }; }, [roomId]);
+  useEffect(() => { const channel = subscribeToRoom(roomId, () => undefined, event => { if (event.type === "bluff_answer") setAnswers(old => ({ ...old, [String(event.payload.playerId)]: String(event.payload.answer) })); if (event.type === "bluff_vote") setVotes(old => ({ ...old, [String(event.payload.playerId)]: String(event.payload.answer) })); }, `bluff-room:${roomId}`); return () => { void removeSubscription(channel); }; }, [roomId]);
   useEffect(() => { if (phase === "write" && Object.keys(answers).length >= players.length) setPhase("vote"); }, [answers, phase, players.length]);
   useEffect(() => { if (phase !== "vote" || Object.keys(votes).length < players.length || finished.current) return; finished.current = true; const correctVotes = Object.values(votes).filter(value => value === quiz.answer).length; const fakeVotes = Object.values(votes).filter(value => value !== quiz.answer).reduce((count, value) => count + (Object.values(answers).filter(answer => answer === value).length ? 1 : 0), 0); const ownAnswer = answers[playerId]; const total = (votes[playerId] === quiz.answer ? 1 : 0) + Object.values(votes).filter(value => value === ownAnswer && ownAnswer !== quiz.answer).length; setScore(total); void correctVotes; void fakeVotes; send(roomId, "result", { playerId, game: "bluffquiz", value: total }); onResult(playerId, total); setPhase("done"); window.setTimeout(onDone, 800); }, [answers, onDone, onResult, phase, playerId, players.length, quiz.answer, roomId, votes]);
   const submit = () => { const value = text.trim().slice(0, 80); if (!value || answers[playerId]) return; send(roomId, "bluff_answer", { playerId, answer: value }); setAnswers(old => ({ ...old, [playerId]: value })); setText(""); };

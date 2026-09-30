@@ -47,7 +47,7 @@ export default function ColonyGame({ roomId, playerId, players, host, onResult, 
     const channel = subscribeToRoom(roomId, () => undefined, event => {
       if (event.type === "colony_state") { const next = event.payload.state as ColonyState; if (next?.players) { stateRef.current = next; setState(next); } }
       if (event.type === "colony_action" && host) applyAction(event.payload as unknown as Action);
-    });
+    }, `colony-room:${roomId}`);
     if (host && !initialized.current) { initialized.current = true; const next = makeInitial(players); publish(next); }
     return () => { void removeSubscription(channel); };
   }, [host, players, roomId]);

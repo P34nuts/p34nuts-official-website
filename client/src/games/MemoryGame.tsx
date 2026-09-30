@@ -56,7 +56,7 @@ export default function MemoryGame({ roomId, playerId, players, onResult, onDone
         onResultRef.current(playerId, Math.max(1, nextMatched.filter((id) => deck[id]?.pair != null).length));
         window.setTimeout(() => onDoneRef.current(), 450);
       }
-    });
+    }, `memory-room:${roomId}`);
     return () => { if (channel) void removeSubscription(channel); };
   }, [deck, playerId, players, roomId]);
 

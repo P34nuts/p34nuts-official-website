@@ -100,9 +100,9 @@ export async function leaveRoom(roomId: string, playerId: string) {
   }
 }
 
-export function subscribeToRoom(roomId: string, onChange: () => void, onEvent: (event: RoomEvent) => void): RealtimeChannel {
+export function subscribeToRoom(roomId: string, onChange: () => void, onEvent: (event: RoomEvent) => void, topic = `game-room:${roomId}`): RealtimeChannel {
   const channel = requiredClient()
-    .channel(`game-room:${roomId}`)
+    .channel(topic)
     .on("postgres_changes", { event: "*", schema: "public", table: "rooms", filter: `id=eq.${roomId}` }, onChange)
     .on("postgres_changes", { event: "*", schema: "public", table: "room_players", filter: `room_id=eq.${roomId}` }, onChange)
     .on("postgres_changes", { event: "INSERT", schema: "public", table: "room_messages", filter: `room_id=eq.${roomId}` }, onChange)
