@@ -1,0 +1,37 @@
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { emitRoomEvent, removeSubscription, subscribeToRoom, type Player } from "@/games/multiplayer";
+
+const COLS = 7;
+const ROWS = 6;
+type Mark = 0 | 1 | 2;
+type ConnectState = { board: Mark[]; moves: number[]; turn: 1 | 2; winner: 0 | 1 | 2 | 3; startedAt: number };
+const emptyState = (): ConnectState => ({ board: Array(COLS * ROWS).fill(0), moves: [], turn: 1, winner: 0, startedAt: Date.now() });
+const lines = [[0,1,2,3],[7,8,9,10],[14,15,16,17],[21,22,23,24],[28,29,30,31],[35,36,37,38],[0,7,14,21],[1,8,15,22],[2,9,16,23],[3,10,17,24],[4,11,18,25],[5,12,19,26],[6,13,20,27],[0,8,16,24],[1,9,17,25],[2,10,18,26],[3,11,19,27],[4,12,20,28],[5,13,21,29],[6,14,22,30],[3,9,15,21],[4,10,16,22],[5,11,17,23],[6,12,18,24],[0,8,16,24],[1,9,17,25],[2,10,18,26],[3,11,19,27],[4,12,20,28],[5,13,21,29],[6,14,22,30]];
+const winnerOf = (board: Mark[]) => { for (const [a,b,c,d] of lines) if (board[a] && board[a] === board[b] && board[a] === board[c] && board[a] === board[d]) return board[a] as 1 | 2; return board.every(Boolean) ? 3 : 0; };
+const drop = (board: Mark[], col: number, mark: 1 | 2) => { for (let row = ROWS - 1; row >= 0; row -= 1) { const index = row * COLS + col; if (!board[index]) { const next = [...board]; next[index] = mark; return next; } } return null; };
+const botMove = (board: Mark[]) => { const playable = Array.from({ length: COLS }, (_, col) => col).filter(col => board[col] === 0); for (const col of playable) { const next = drop(board, col, 2); if (next && winnerOf(next) === 2) return col; } for (const col of playable) { const next = drop(board, col, 1); if (next && winnerOf(next) === 1) return col; } return playable.sort((a, b) => Math.abs(3 - a) - Math.abs(3 - b))[0] ?? 3; };
+
+export default function ConnectFourGame({ roomId, playerId, players, host, onResult, onDone }: { roomId: string; playerId: string; players: Player[]; host: boolean; onResult: (id: string, value: number) => void; onDone: () => void }) {
+  const [game, setGame] = useState<ConnectState>(() => emptyState());
+  const gameRef = useRef(game); gameRef.current = game;
+  const [hover, setHover] = useState<number | null>(null);
+  const initialized = useRef(false); const finished = useRef(false);
+  const me = playerId === "computer-bot" ? 2 : players[0]?.id === playerId ? 1 : 2;
+  const opponent = players.find(player => player.id !== playerId)?.nickname ?? "Wartet auf Gegner";
+  const isSolo = players.length === 2 && players.some(player => player.id === "computer-bot");
+  const publish = useCallback((next: ConnectState) => { gameRef.current = next; setGame(next); void emitRoomEvent(roomId, "connect4_state", { state: next }); }, [roomId]);
+
+  useEffect(() => {
+    const channel = subscribeToRoom(roomId, () => undefined, event => { if (event.type === "connect4_state") { const next = event.payload.state as ConnectState; if (next?.board) { gameRef.current = next; setGame(next); } } if (event.type === "connect4_move" && host) { const col = Number(event.payload.col); const current = gameRef.current; if (current.winner || current.turn !== Number(event.payload.mark) || col < 0 || col >= COLS) return; const nextBoard = drop(current.board, col, current.turn); if (!nextBoard) return; publish({ ...current, board: nextBoard, moves: [...current.moves, col], turn: current.turn === 1 ? 2 : 1, winner: winnerOf(nextBoard) }); } }, `connect4-room:${roomId}`);
+    if (host && !initialized.current) { initialized.current = true; publish(emptyState()); }
+    return () => { void removeSubscription(channel); };
+  }, [host, publish, roomId]);
+
+  useEffect(() => { if (!host || !isSolo || game.winner || game.turn !== 2) return undefined; const timer = window.setTimeout(() => { const col = botMove(gameRef.current.board); const nextBoard = drop(gameRef.current.board, col, 2); if (!nextBoard) return; publish({ ...gameRef.current, board: nextBoard, moves: [...gameRef.current.moves, col], turn: 1, winner: winnerOf(nextBoard) }); }, 650); return () => window.clearTimeout(timer); }, [game, host, isSolo, publish]);
+  useEffect(() => { if (!game.winner || finished.current) return; finished.current = true; const playersWithBot = players.length === 1 ? [...players, { id: "computer-bot", nickname: "Computer", avatar: "◆", room_id: roomId, joined_at: "" }] : players; playersWithBot.forEach(player => onResult(player.id, game.winner === (player.id === playersWithBot[0]?.id ? 1 : 2) ? 1 : 0)); const timer = window.setTimeout(onDone, 1000); return () => window.clearTimeout(timer); }, [game.winner, onDone, onResult, players, roomId]);
+
+  const play = (col: number) => { if (game.winner || game.turn !== me || game.board[col] || (isSolo && me === 2)) return; if (host) { const nextBoard = drop(game.board, col, me as 1 | 2); if (!nextBoard) return; publish({ ...game, board: nextBoard, moves: [...game.moves, col], turn: me === 1 ? 2 : 1, winner: winnerOf(nextBoard) }); } else void emitRoomEvent(roomId, "connect4_move", { col, mark: me }); };
+  const headline = game.winner === 3 ? "Unentschieden" : game.winner ? (game.winner === me ? "Du gewinnst!" : "Runde verloren") : game.turn === me ? "Du bist dran" : `${opponent} ist am Zug`;
+  const board = useMemo(() => Array.from({ length: ROWS * COLS }, (_, index) => game.board[index]), [game.board]);
+  return <div className="game-stage connect4-stage"><div className="stage-title"><span>VIER GEWINNT / LIVE</span><span>{isSolo ? "COMPUTERGEGNER" : `${players.length} SPIELER`}</span></div><div className="connect4-head"><div><strong>{headline}</strong><small>{game.winner ? "Neue Runde über das Spielmenü starten." : "Verbinde vier deiner Steine."}</small></div><div className="connect4-players"><span className={game.turn === 1 ? "active" : ""}><i className="connect4-piece piece-one" />{players[0]?.nickname ?? "Du"}</span><span className={game.turn === 2 ? "active" : ""}><i className="connect4-piece piece-two" />{isSolo ? "Computer" : opponent}</span></div></div><div className="connect4-board" onMouseLeave={() => setHover(null)}>{Array.from({ length: COLS }, (_, col) => <button key={col} type="button" className={`connect4-column ${hover === col ? "hovered" : ""}`} disabled={Boolean(game.winner) || Boolean(game.board[col]) || game.turn !== me || (isSolo && me === 2)} onMouseEnter={() => setHover(col)} onFocus={() => setHover(col)} onClick={() => play(col)} aria-label={`Spalte ${col + 1}`}>{Array.from({ length: ROWS }, (_, row) => { const mark = board[row * COLS + col]; return <span key={row} className={`connect4-cell ${mark === 1 ? "one" : mark === 2 ? "two" : ""}`}>{hover === col && row === 0 && !mark && game.turn === me && <em />}</span>; })}</button>)}</div><div className="connect4-help">Spalten anklicken oder mit den Tasten <b>1–7</b> spielen. Vier Steine waagerecht, senkrecht oder diagonal verbinden.</div></div>;
+}
