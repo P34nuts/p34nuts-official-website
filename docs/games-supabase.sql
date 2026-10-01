@@ -6,7 +6,7 @@ create table if not exists public.rooms (
   code text not null unique check (code ~ '^[A-Z0-9]{5}$'),
   host_id uuid not null,
   status text not null default 'lobby' check (status in ('lobby','countdown','playing','results')),
-  game text check (game is null or game in ('reaction','shake','pingpong','tetris','snake','memory','bombpass','aim','higherlower','bluffquiz','colony','connect4','novastrike')),
+  game text check (game is null or game in ('reaction','shake','pingpong','tetris','snake','memory','bombpass','aim','higherlower','bluffquiz','colony','connect4','novastrike','burgfried')),
   round integer not null default 0 check (round >= 0),
   created_at timestamptz not null default now()
 );
