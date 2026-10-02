@@ -28,3 +28,5 @@
 @media(max-width:600px){.game-navigation{align-items:flex-start;flex-direction:column}.game-navigation>span{text-align:left}.stage-title{font-size:.48rem}.game-stage{padding:.8rem}.game-help{font-size:.58rem}}
 
 .last-drop-option{grid-column:1/-1;border:1px solid rgba(255,190,72,.42)!important;background:linear-gradient(135deg,rgba(255,190,72,.16),rgba(255,67,56,.09))!important;color:#f1eee5;text-decoration:none}.last-drop-option strong{color:#ffd16a}.last-drop-option small{color:rgba(241,238,229,.72)}.last-drop-option:hover{border-color:rgba(255,210,112,.82)!important;box-shadow:0 .8rem 2rem rgba(255,120,24,.16)!important}
+
+.burgfried-public-option{grid-column:1/-1;border:1px solid rgba(210,166,92,.45)!important;background:linear-gradient(135deg,rgba(90,62,30,.33),rgba(30,76,58,.18))!important;color:#f1eee5;text-decoration:none}.burgfried-public-option strong{color:#e9c27b}.burgfried-public-option small{color:rgba(241,238,229,.72)}.burgfried-public-option:hover{border-color:rgba(233,194,123,.9)!important;box-shadow:0 .8rem 2rem rgba(74,47,25,.28)!important}
