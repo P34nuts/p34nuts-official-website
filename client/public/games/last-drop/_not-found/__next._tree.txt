@@ -1,3 +1,3 @@
-:HL["/last-drop/_next/static/chunks/0ms55pzeg2w5c.css","style"]
+:HL["/games/last-drop/_next/static/chunks/0ms55pzeg2w5c.css","style"]
 :HL["https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;600;700&display=swap","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"TH0CgKsoIe88ocjvQ20Md"}
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"pUePK8_ZbnuVc3OZKhP2q"}
