@@ -1,0 +1,6 @@
+1:"$Sreact.fragment"
+2:I[47317,["/games/last-drop/_next/static/chunks/0dbhjjzl8qfwv.js","/games/last-drop/_next/static/chunks/101pd3gh5a7ov.js","/games/last-drop/_next/static/chunks/047jzw89hap0..js"],"default"]
+3:I[97367,["/games/last-drop/_next/static/chunks/0dbhjjzl8qfwv.js"],"OutletBoundary"]
+4:"$Sreact.suspense"
+0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"code":"","mode":"solo"}],[["$","script","script-0",{"src":"/games/last-drop/_next/static/chunks/101pd3gh5a7ov.js","async":true}],["$","script","script-1",{"src":"/games/last-drop/_next/static/chunks/047jzw89hap0..js","async":true}]],["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"gu29xso6BzfJavT6Ju7zR"}
+5:null

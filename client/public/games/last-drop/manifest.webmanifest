@@ -1,0 +1,32 @@
+{
+  "name": "Last Drop — Battle Royale",
+  "short_name": "Last Drop",
+  "description": "A fast top-down battle royale. Stay inside the shrinking pool. Last drop wins.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "fullscreen",
+  "orientation": "any",
+  "background_color": "#06171d",
+  "theme_color": "#06171d",
+  "categories": ["games", "action"],
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
