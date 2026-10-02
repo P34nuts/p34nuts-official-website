@@ -115,14 +115,14 @@ export async function removeSubscription(channel: RealtimeChannel) {
   if (supabase) await supabase.removeChannel(channel);
 }
 
-export function subscribeToRoomBroadcast(roomId: string, onPayload: (payload: Record<string, unknown>) => void): RealtimeChannel {
+export function subscribeToRoomBroadcast(roomId: string, onPayload: (payload: Record<string, unknown>) => void, event = "pingpong"): RealtimeChannel {
   const channel = requiredClient()
-    .channel(`game-room-pingpong:${roomId}`)
-    .on("broadcast", { event: "pingpong" }, (message) => onPayload(message.payload as Record<string, unknown>))
+    .channel(`game-room-${event}:${roomId}`)
+    .on("broadcast", { event }, (message) => onPayload(message.payload as Record<string, unknown>))
     .subscribe();
   return channel;
 }
 
-export async function sendRoomBroadcast(channel: RealtimeChannel, payload: Record<string, unknown>) {
-  await channel.send({ type: "broadcast", event: "pingpong", payload });
+export async function sendRoomBroadcast(channel: RealtimeChannel, payload: Record<string, unknown>, event = "pingpong") {
+  await channel.send({ type: "broadcast", event, payload });
 }

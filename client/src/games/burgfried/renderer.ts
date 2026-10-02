@@ -170,7 +170,7 @@ export class GameRenderer {
     const p = this.local(e);
     this.pointers.set(e.pointerId, { x: p.x, y: p.y, sx: p.x, sy: p.y, type: e.pointerType, button: e.button, moved: false });
     if (this.pointers.size === 2) {
-      const [a, b] = [...this.pointers.values()];
+      const [a, b] = Array.from(this.pointers.values());
       a.moved = b.moved = true;
       this.pinch = { dist: Math.hypot(a.x - b.x, a.y - b.y) || 1, zoom: this.cam.zoom, mx: (a.x + b.x) / 2, my: (a.y + b.y) / 2 };
       this.painting = false;
@@ -190,7 +190,7 @@ export class GameRenderer {
     const dx = p.x - ptr.x, dy = p.y - ptr.y;
     if (this.pointers.size >= 2 && this.pinch) {
       ptr.x = p.x; ptr.y = p.y;
-      const [a, b] = [...this.pointers.values()];
+      const [a, b] = Array.from(this.pointers.values());
       const dist = Math.hypot(a.x - b.x, a.y - b.y) || 1;
       const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
       const target = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, this.pinch.zoom * (dist / this.pinch.dist)));
